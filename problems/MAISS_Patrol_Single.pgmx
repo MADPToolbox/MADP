@@ -1,0 +1,1311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="POMDP">
+    <Comment><![CDATA[<<Double click to add/modify comment>>]]></Comment>
+    <Variables>
+      <Variable name="Robot Position" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="355" y="178" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Elevator Hallway" />
+          <State name="Corridor-West" />
+          <State name="Coffee Room" />
+          <State name="Corridor-South" />
+          <State name="LRM" />
+          <State name="Soccer Field" />
+        </States>
+      </Variable>
+      <Variable name="Robot Position" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="761" y="178" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Elevator Hallway" />
+          <State name="Corridor-West" />
+          <State name="Coffee Room" />
+          <State name="Corridor-South" />
+          <State name="LRM" />
+          <State name="Soccer Field" />
+        </States>
+      </Variable>
+      <Variable name="Phase" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="357" y="261" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Phase 0" />
+          <State name="Phase 1" />
+          <State name="Phase 2" />
+        </States>
+      </Variable>
+      <Variable name="Goose Position" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="761" y="105" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="No Goose" />
+          <State name="Elevator Hallway" />
+          <State name="Corridor-West" />
+          <State name="Coffee Room" />
+          <State name="Corridor-South" />
+          <State name="LRM" />
+          <State name="Soccer Field" />
+        </States>
+      </Variable>
+      <Variable name="Goose Position" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="355" y="105" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="No Goose" />
+          <State name="Elevator Hallway" />
+          <State name="Corridor-West" />
+          <State name="Coffee Room" />
+          <State name="Corridor-South" />
+          <State name="LRM" />
+          <State name="Soccer Field" />
+        </States>
+      </Variable>
+      <Variable name="Phase" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="761" y="261" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Phase 0" />
+          <State name="Phase 1" />
+          <State name="Phase 2" />
+        </States>
+      </Variable>
+      <Variable name="Observation" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="1040" y="178" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="False Negative" />
+          <State name="Elevator Hallway Clear" />
+          <State name="Corridor-West Clear" />
+          <State name="Coffee Room Clear" />
+          <State name="Corridor-South Clear" />
+          <State name="LRM Clear" />
+          <State name="Soccer Field Clear" />
+          <State name="Found Goose" />
+        </States>
+      </Variable>
+      <Variable name="Action" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="321" y="397" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Move Down" />
+          <State name="Move Right" />
+          <State name="Move Up" />
+          <State name="Move Left" />
+          <State name="Catch Goose" />
+          <State name="Spawn Goose" />
+        </States>
+      </Variable>
+      <Variable name="Action" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="1040" y="406" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Move Down" />
+          <State name="Move Right" />
+          <State name="Move Up" />
+          <State name="Move Left" />
+          <State name="Catch Goose" />
+          <State name="Spawn Goose" />
+        </States>
+      </Variable>
+      <Variable name="Reward" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="130" y="105" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Robot Position" timeSlice="0" />
+        <Variable name="Phase" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot Position" timeSlice="0" />
+        <Variable name="Reward" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot Position" timeSlice="0" />
+        <Variable name="Robot Position" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot Position" timeSlice="1" />
+        <Variable name="Phase" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot Position" timeSlice="1" />
+        <Variable name="Observation" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Phase" timeSlice="0" />
+        <Variable name="Phase" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Phase" timeSlice="0" />
+        <Variable name="Robot Position" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Goose Position" timeSlice="1" />
+        <Variable name="Observation" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Goose Position" timeSlice="0" />
+        <Variable name="Goose Position" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Goose Position" timeSlice="0" />
+        <Variable name="Reward" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Phase" timeSlice="1" />
+        <Variable name="Observation" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Observation" timeSlice="1" />
+        <Variable name="Action" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Phase" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Robot Position" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Goose Position" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Reward" timeSlice="0" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot Position" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot Position" timeSlice="1" />
+          <Variable name="Action" timeSlice="0" />
+          <Variable name="Robot Position" timeSlice="0" />
+          <Variable name="Phase" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Phase" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Phase 2" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Robot Position" timeSlice="1" />
+                <Variable name="Action" timeSlice="0" />
+                <Variable name="Robot Position" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Action" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="Catch Goose" />
+                    <State name="Spawn Goose" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Move Left" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Move Up" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>0.0 1.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Move Right" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Move Down" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Phase 0" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Robot Position" timeSlice="1" />
+                <Variable name="Action" timeSlice="0" />
+                <Variable name="Robot Position" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Action" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="Catch Goose" />
+                    <State name="Spawn Goose" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Move Left" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.5 0.0 0.5 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.5 0.5</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Move Up" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>0.5 0.5 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.5 0.5 0.0 0.0 0.0 0.0 0.0 0.5 0.5 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Move Right" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.5 0.0 0.5 0.0 0.0 0.0 0.0 0.0 0.0 0.5 0.5 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Move Down" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot Position" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.5 0.5 0.0 0.0 0.0 0.0 0.0 0.0 0.5 0.5 0.0 0.0 0.0 0.0 0.0 0.5 0.5 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Phase 1" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Robot Position" timeSlice="1" />
+                <Variable name="Robot Position" timeSlice="0" />
+              </Variables>
+              <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Phase" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0 0.0</Values>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Goose Position" timeSlice="1" />
+          <Variable name="Action" timeSlice="0" />
+          <Variable name="Goose Position" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Move Down" />
+              <State name="Move Right" />
+              <State name="Move Up" />
+              <State name="Move Left" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Goose Position" timeSlice="1" />
+                <Variable name="Goose Position" timeSlice="0" />
+              </Variables>
+              <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Catch Goose" />
+              <State name="Spawn Goose" />
+            </States>
+            <Potential type="Uniform">
+              <Variables>
+                <Variable name="Goose Position" timeSlice="1" />
+              </Variables>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Goose Position" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Phase" timeSlice="1" />
+          <Variable name="Robot Position" timeSlice="0" />
+          <Variable name="Robot Position" timeSlice="1" />
+          <Variable name="Action" timeSlice="0" />
+          <Variable name="Phase" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Catch Goose" />
+              <State name="Spawn Goose" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Phase" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Move Down" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Phase" timeSlice="1" />
+                <Variable name="Robot Position" timeSlice="0" />
+                <Variable name="Robot Position" timeSlice="1" />
+                <Variable name="Phase" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Robot Position" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="Elevator Hallway" />
+                    <State name="LRM" />
+                    <State name="Soccer Field" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Corridor-South" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Coffee Room" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Corridor-South" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Coffee Room" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Corridor-South" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Coffee Room" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Corridor-West" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Coffee Room" />
+                          <State name="Corridor-South" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Corridor-West" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Move Right" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Phase" timeSlice="1" />
+                <Variable name="Robot Position" timeSlice="0" />
+                <Variable name="Robot Position" timeSlice="1" />
+                <Variable name="Phase" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Robot Position" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="Elevator Hallway" />
+                    <State name="Corridor-West" />
+                    <State name="Coffee Room" />
+                    <State name="Soccer Field" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="LRM" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Coffee Room" />
+                          <State name="Corridor-South" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="LRM" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Corridor-South" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Coffee Room" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Corridor-South" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Move Up" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Phase" timeSlice="1" />
+                <Variable name="Robot Position" timeSlice="0" />
+                <Variable name="Robot Position" timeSlice="1" />
+                <Variable name="Phase" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Robot Position" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="Corridor-West" />
+                    <State name="Coffee Room" />
+                    <State name="Soccer Field" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="LRM" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Coffee Room" />
+                          <State name="Corridor-South" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="LRM" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Corridor-South" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Coffee Room" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Corridor-South" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Elevator Hallway" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Corridor-West" />
+                          <State name="Coffee Room" />
+                          <State name="Corridor-South" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Move Left" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Phase" timeSlice="1" />
+                <Variable name="Robot Position" timeSlice="0" />
+                <Variable name="Robot Position" timeSlice="1" />
+                <Variable name="Phase" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Robot Position" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="Elevator Hallway" />
+                    <State name="Coffee Room" />
+                    <State name="Corridor-South" />
+                    <State name="LRM" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Soccer Field" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Coffee Room" />
+                          <State name="Corridor-South" />
+                          <State name="LRM" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Corridor-West" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Phase" timeSlice="1" />
+                      <Variable name="Robot Position" timeSlice="0" />
+                      <Variable name="Phase" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Robot Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                          <State name="Coffee Room" />
+                          <State name="Corridor-South" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Corridor-West" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Phase" timeSlice="1" />
+                            <Variable name="Phase" timeSlice="0" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0 1.0 1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Observation" timeSlice="1" />
+          <Variable name="Robot Position" timeSlice="1" />
+          <Variable name="Goose Position" timeSlice="1" />
+          <Variable name="Phase" timeSlice="1" />
+        </Variables>
+        <Values>0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.016667 0.016667 0.016667 0.016667 0.016667 0.016667 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.0 0.02 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.0 0.02 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.0 0.02 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.0 0.02 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.0 0.02 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.9 0.02 0.02 0.02 0.02 0.02 0.0 0.0</Values>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="Reward" timeSlice="0" />
+        <Variables>
+          <Variable name="Robot Position" timeSlice="0" />
+          <Variable name="Action" timeSlice="0" />
+          <Variable name="Goose Position" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Move Down" />
+              <State name="Move Right" />
+              <State name="Move Up" />
+              <State name="Move Left" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Reward" timeSlice="0" />
+              <Values>-0.5</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Spawn Goose" />
+            </States>
+            <Potential type="Tree/ADD">
+              <UtilityVariable name="Reward" timeSlice="0" />
+              <Variables>
+                <Variable name="Robot Position" timeSlice="0" />
+                <Variable name="Goose Position" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Goose Position" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="Elevator Hallway" />
+                    <State name="Corridor-West" />
+                    <State name="Corridor-South" />
+                    <State name="Coffee Room" />
+                    <State name="LRM" />
+                    <State name="Soccer Field" />
+                  </States>
+                  <Potential type="Table">
+                    <UtilityVariable name="Reward" timeSlice="0" />
+                    <Values>-5.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="No Goose" />
+                  </States>
+                  <Potential type="Table">
+                    <UtilityVariable name="Reward" timeSlice="0" />
+                    <Values>10.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Catch Goose" />
+            </States>
+            <Potential type="Tree/ADD">
+              <UtilityVariable name="Reward" timeSlice="0" />
+              <Variables>
+                <Variable name="Robot Position" timeSlice="0" />
+                <Variable name="Goose Position" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Robot Position" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="Elevator Hallway" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <UtilityVariable name="Reward" timeSlice="0" />
+                    <Variables>
+                      <Variable name="Goose Position" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Goose Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="No Goose" />
+                          <State name="Corridor-West" />
+                          <State name="Corridor-South" />
+                          <State name="Coffee Room" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>-5.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Elevator Hallway" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>10.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Corridor-West" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <UtilityVariable name="Reward" timeSlice="0" />
+                    <Variables>
+                      <Variable name="Goose Position" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Goose Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="No Goose" />
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-South" />
+                          <State name="Coffee Room" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>-5.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Corridor-West" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>10.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Corridor-South" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <UtilityVariable name="Reward" timeSlice="0" />
+                    <Variables>
+                      <Variable name="Goose Position" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Goose Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="No Goose" />
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Coffee Room" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>-5.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Corridor-South" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>10.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Coffee Room" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <UtilityVariable name="Reward" timeSlice="0" />
+                    <Variables>
+                      <Variable name="Goose Position" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Goose Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="No Goose" />
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Corridor-South" />
+                          <State name="LRM" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>-5.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Coffee Room" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>10.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="LRM" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <UtilityVariable name="Reward" timeSlice="0" />
+                    <Variables>
+                      <Variable name="Goose Position" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Goose Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="No Goose" />
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Corridor-South" />
+                          <State name="Coffee Room" />
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>-5.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="LRM" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>10.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="Soccer Field" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <UtilityVariable name="Reward" timeSlice="0" />
+                    <Variables>
+                      <Variable name="Goose Position" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Goose Position" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="No Goose" />
+                          <State name="Elevator Hallway" />
+                          <State name="Corridor-West" />
+                          <State name="Corridor-South" />
+                          <State name="Coffee Room" />
+                          <State name="LRM" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>-5.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="Soccer Field" />
+                        </States>
+                        <Potential type="Table">
+                          <UtilityVariable name="Reward" timeSlice="0" />
+                          <Values>10.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties>
+      <Property name="EventDriven" value="1" />
+    </AdditionalProperties>
+  </ProbNet>
+  <Policies>
+    <Potential type="Uniform" role="policy">
+      <Variables>
+        <Variable name="Action" timeSlice="0" />
+      </Variables>
+    </Potential>
+    <Potential type="Uniform" role="policy">
+      <Variables>
+        <Variable name="Action" timeSlice="1" />
+        <Variable name="Observation" timeSlice="1" />
+      </Variables>
+    </Potential>
+  </Policies>
+</ProbModelXML>

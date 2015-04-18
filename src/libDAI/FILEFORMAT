@@ -1,0 +1,88 @@
+This file describes the .fg fileformat used in libDAI to store factor graphs.
+
+Markov Random Fields are special cases of factor graphs, as are Bayesian
+networks. A factor graph can be specified as follows: for each factor, one has
+to specify which variables occur in the factor, what their respective
+cardinalities (i.e., number of possible values) are, and a table listing all
+the values of that factor for all possible configurations of these variables.
+A .fg file is not much more than that. It starts with a line containing the
+number of factors in that graph, followed by an empty line. Then all factors
+are specified, one block for each factor, where the blocks are seperated by
+empty lines. Each variable occurring in the factor graph has a unique
+identifier, its index (which should be a nonnegative integer). Comment lines
+start with #.
+
+Each block starts with a line containing the number of variables in that
+factor. The second line contains the indices of these variables, seperated by
+spaces (indices are nonnegative integers and to avoid confusion, it is
+suggested to start counting at 0). The third line contains the number of
+possible values of each of these variables, also seperated by spaces. Note that
+there is some redundancy here, since if a variable appears in more than one
+factor, the cardinality of that variable appears several times in the .fg file.
+The fourth line contains the number of nonzero entries in the factor table.
+The rest of the lines contain these nonzero entries; each entry consists of a
+table index, followed by white-space, followed by the value corresponding to
+that table index. The most difficult part is getting the indexing right. The
+convention that is used is that the left-most variables cycle through their
+values the fastest (similar to MATLAB indexing of multidimensional arrays). An
+example block describing one factor is:
+
+3
+4 8 7
+3 2 2
+11
+0 0.1
+1 3.5
+2 2.8
+3 6.3
+4 8.4
+6 7.4
+7 2.4
+8 8.9
+9 1.3
+10 1.6
+12 6.4
+11 2.6
+
+which corresponds to the following factor:
+
+x_4 x_8 x_7 | value
+ 0   0   0  |  0.1
+ 1   0   0  |  3.5
+ 2   0   0  |  2.8
+ 0   1   0  |  6.3
+ 1   1   0  |  8.4
+ 2   1   0  |  0.0
+ 0   0   1  |  7.4
+ 1   0   1  |  2.4
+ 2   0   1  |  8.9
+ 0   1   1  |  1.3
+ 1   1   1  |  1.6
+ 2   1   1  |  2.6
+
+Note that the value of x_4 changes fastest, followed by that of x_8, and x_7
+varies the slowest, corresponding to the second line of the block ("4 8 7").
+Further, x_4 can take on three values, and x_8 and x_7 each have two possible
+values, as described in the third line of the block ("3 2 2"). The table
+contains 11 non-zero entries (all except for the fifth entry). Note that the
+eleventh and twelveth entries are interchanged.
+
+A final note: the internal representation in libDAI of the factor above is
+different, because the variables are ordered according to their indices
+(i.e., the ordering would be x_4 x_7 x_8) and the values of the table are
+stored accordingly, with the variable having the smallest index changing
+fastest:
+
+x_4 x_7 x_8 | value
+ 0   0   0  |  0.1
+ 1   0   0  |  3.5
+ 2   0   0  |  2.8
+ 0   1   0  |  7.4
+ 1   1   0  |  2.4
+ 2   1   0  |  8.9
+ 0   0   1  |  6.3
+ 1   0   1  |  8.4
+ 2   0   1  |  0.0
+ 0   1   1  |  1.3
+ 1   1   1  |  1.6
+ 2   1   1  |  2.6

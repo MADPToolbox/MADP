@@ -1,0 +1,4 @@
+The files ending in .gz need to be decompressed before use. See
+http://masplan.org/problem_domains for more problem
+domains. A description of each of the problems can be found in the
+reference that is mentioned in each file.

@@ -1,0 +1,129 @@
+IMORTANT
+
+- Extend the BipartiteGraph class with iterators?
+
+- If you ever do a rewrite, make sure that the graphical properties are
+not entangled with the probabilistic properties. E.g., a factor graph
+really should be represented as a bipartite graph, with a separate array
+of variable labels and dimensions, and a seperate array of (pointers to)
+factor tables. In this way, each factor could be implemented differently,
+e.g., we could have some sparse factors, some noisy-OR factors, some dense
+factors, some arbitrary precision factors, etc. Or we could make more use
+of templates to have a more generic factor graph. Maybe in the end, 
+HasA relations are better than IsA relations...
+Also, the current setup is stupid: I wrote a new function that works
+on FactorGraphs, and I had to write boiler plate code for it in graphicalmodel.h
+and in regiongraph.h (which is stupid).
+
+- Memory usage is very large for large factor graphs, much larger than necessary (why?)
+
+- Clean up 
+
+- Use Expat XML parser for IO and define a XML based fileformat for .fg files
+
+- Clean up TRW
+
+- Use Boost::uBLAS framework to deal with matrices, especially, with
+2D sparse matrices. See http://www.boost.org/libs/numeric/ublas/doc/matrix_sparse.htm
+and tests/errorbounds/errorbounds3
+
+- I envision a generally useful class, called IndexSet.
+It is a bit like a VarSet, but contains indices instead of variables.
+Another one is IndexVec, which is similar but implemented using a
+vector<size_t> instead of a set<size_t>. Conversions between the two
+should be possible.
+These should form the bases for BipartiteGraph and WeightedGraph,
+and possibly for a Tree.
+
+- Introduce naming scheme:
+all Vars and VarSets should be named v_..., e.g. v_i instead of i
+all Factors should be named f_..., e.g. f_I instead of I
+all indices should be named _..., e.g. _k instead of k
+all iterators should be named i_, e.g. i_i is an iterator to i
+all const_iterators should be named ci_, e.g. ci_i is an iterator to i
+
+- Improve weightedgraph or use Boost::Graph
+
+- Iterations and maxDiff are only interesting for iterative inference
+algorithms. Yet, tests/test wants to know these values in a generic
+way. Maybe we have to think of some way (e.g. using a Properties object)
+to return these values from run(). Then we can simply look whether a
+InferenceAlgorithm supports these fields. What other results could
+we return? Time. MaxDiff during initialization for LC methods.
+Or maybe we could use some traits mechanism which we can ask whether the
+object has _iterations and _maxdiff variables.
+
+- Think about whether the cavity initialization belongs to init() or to run().
+
+- Fix LCLin.
+
+- setFactor and setFactors should only change Probs, not Factors.
+
+- Simplify Properties framework: each Property should be a std::string.
+Each DAIAlg should have its own _properties struct and handle conversion.
+
+- Add comments in example.cpp, add documentation.
+
+- Write documentation.
+
+- Improve error handling.
+
+- Find out which methods need connected factor graphs (at least TreeEP and JunctionTree).
+
+
+DIFFICULT
+
+- Bug: TreeEP sometimes returns NANs.
+
+- Bug: TreeEP::logZ() seems to be wrong (?).
+
+- Bug: strange things happen for at least JTree and TreeEP if the factor graph is not connected.
+  Should be fixed by finding out which methods demand connected factor graphs and these
+  methods should check whether the supplied factor graph is connected.
+
+- Kees' trick for preventing NANs in GBP updates:  if quantity smaller than epsilon, replace by epsilon.
+
+- Bug: MF_SEQRANDOM does not work on alarm2.fg (normalization error: Z = 0)
+
+
+OPTIONAL
+
+- Port to GNU autotool chain.
+
+- Another design question that needs to be answered: should a BP object own a
+  FactorGraph, or only store a reference to a FactorGraph (which can optimize
+  memory), or should it be a FactorGraph with additional variables and functions?
+  Probably, the first or second option would be the best. Since FactorGraphs are
+  assumed to be rather static, it would make sense to store *references* to
+  FactorGraphs inside AIAlgs. Or maybe some smart_ptr? It would make sense to 
+  prevent unnecessary copying of FactorGraphs. Also, general marginalization 
+  functions now copy a complete object. Instead, it would make more sense that
+  they construct a new object without copying the FactorGraph. Or they can be made
+  simply methods of the general InfAlg class.
+
+- Forwardport the Bart patch.
+
+- Alternative implementation of undo factor changes: the only things that have to be
+undone are setting a factor to all ones and setting a factor to a Kronecker delta. This
+could also be implemented in the factor itself, which could maintain its state 
+(one/delta/full) and act accordingly.
+
+- Think about the _fac2ind variable: a better implementation of this feature is
+probably possible.
+
+- Changed() methods?
+
+- Optimize GBP with precalculated indices.
+
+- Optimize all indices as follows: keep a cache of all indices that have been
+computed (use a hash). Then, instead of computing on the fly, use the precomputed
+ones.
+
+- Variable elimination should be implemented generically using a function
+  object that tells you which variable to delete.
+
+- Improve general support for graphs and trees.
+
+- Add support for sparse potentials.
+
+- Optimize BP_SEQMAX (it should use a better data structure than a vector for the residuals).

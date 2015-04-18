@@ -1,0 +1,199 @@
+libDAI - A free/open source C++ library for Discrete Approximate Inference methods
+==================================================================================
+
+SNAPSHOT 2008-05-19  PLEASE DO NOT DISTRIBUTE!
+
+
+Copyright (C) 2006,2007  Joris Mooij  [joris at jorismooij dot nl]
+Radboud University Nijmegen, The Netherlands
+    
+
+----------------------------------------------------------------------------------
+This file is part of libDAI.
+
+libDAI is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+libDAI is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with libDAI; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+----------------------------------------------------------------------------------
+
+
+
+SCIENTISTS: please be aware that the fact that this program is released as Free
+Software does not excuse you from scientific propriety, which obligates you to
+give appropriate credit! If you write a scientific paper describing research
+that made substantive use of this program, it is your obligation as a scientist
+to (a) mention the fashion in which this software was used, including the
+version number, with a citation to the literature, in the Methods section, to
+allow replication; (b) mention this software in the Acknowledgements section.
+The appropriate citation is: Joris Mooij (2008) libDAI: library for Discrete
+Approximate Inference, http://www.jorismooij.nl/
+Moreover, as a personal note, I would appreciate it if you would email 
+joris.mooij@tuebingen.mpg.de with citations of papers referencing this work 
+so I can mention them to my funding agent and tenure committee.
+
+
+
+What is libDAI?
+---------------
+libDAI is a free/open source C++ library (licensed under GPL) that provides
+implementations of various (deterministic) approximate inference methods for
+discrete graphical models. libDAI supports arbitrary factor graphs with
+discrete variables (this includes discrete Markov Random Fields and Bayesian
+Networks).
+
+libDAI is not intended to be a complete package for approximate inference.
+Instead, it should be considered as an "inference engine", providing various
+inference methods. In particular, it contains no GUI, currently only supports
+its own file format for input and output (although support for standard file
+formats may be added), and provides no visualization.
+
+Because libDAI is implemented in C++, it is very fast compared with e.g. MatLab
+implementations. libDAI does provide a MatLab interface for easy integration
+with MatLab. Currently, libDAI supports the following deterministic approximate
+inference methods:
+
+    * Mean Field
+    * (Loopy) Belief Propagation
+    * Tree Expectation Propagation
+    * Generalized Belief Propagation
+    * Double-loop GBP
+    * Loop Corrected Approximate Inference
+
+Exact inference by JunctionTree is also provided.
+
+Many of these algorithms are not yet available in similar open source software,
+to the best of the author's knowledge (open source packages supporting both
+directed and undirected graphical models are Murphy's BNT, Intel's PNL and gR.
+
+The library is targeted at researchers; to be able to use the library, a good
+understanding of graphical models is needed. However, the code will hopefully
+find its way into real-world applications as well. 
+
+
+Rationale
+---------
+In my opinion, the lack of open source reference implementations hampers
+progress in research on approximate inference. Methods differ widely in terms
+of quality and performance characteristics, which also depend in different ways
+on various properties of the graphical models. Finding the best approximate
+inference method for a particular application therefore often requires
+empirical comparisons. However, implementing and debugging these methods takes
+a lot of time which could otherwise be spent on research. I hope that this code
+will aid researchers to be able to easily compare various (existing as well as
+new) approximate inference methods, in this way accelerating research and
+stimulating real-world applications of approximate inference.  
+
+
+Releases
+--------
+A first release is planned for December 2006 at
+http://www.mbfys.ru.nl/~jorism/libDAI/ and will be licensed under GPL.
+
+
+Acknowledgments
+---------------
+The development reported here is part of the Interactive Collaborative
+Information Systems (ICIS) project, supported by the Dutch Ministry of Economic
+Affairs, grant BSIK03024. I would like to thank Martijn Leisink for providing
+the basis on which libDAI has been built.
+
+
+Known issues
+------------
+Due to a bug in GCC 3.3.x and earlier (http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20358) 
+it doesn't compile with these versions (it does compile with GCC version 3.4 and higher).
+Workaround: replace the two NAN's in factor.h causing the error messages by -1.
+
+
+Documentation
+-------------
+Almost nonexistant. But I'm working on it. In the meantime, I'll provide limited support
+by email. The following gives an overview of different methods and their properties
+(can be slightly obsolete):
+
+BP
+    updates     UpdateType SEQFIX,SEQRND,SEQMAX,PARALL
+    tol         double
+    maxiter     size_t
+    verbose     size_t
+MF
+    tol         double
+    maxiter     size_t
+    verbose     size_t
+HAK
+    clusters    MIN,DELTA,LOOP
+    loopdepth
+    doubleloop  bool
+    tol         double
+    maxiter     size_t
+    verbose     size_t
+JTREE
+    updates     UpdateType  HUGIN,SHSH
+    verbose     size_t
+MR
+    updates     UpdateType  FULL,LINEAR
+    inits       InitType    RESPPROP,CLAMPING,EXACT
+    verbose     size_t
+TREEEP
+    type        TypeType    ORG,ALT
+    tol         double
+    maxiter     size_t
+    verbose     size_t
+LC
+    cavity      CavityType  FULL,PAIR,PAIR2,UNIFORM
+    updates     UpdateType  SEQFIX,SEQRND(,NONE)
+    reinit      bool
+    cavainame   string
+    cavaiopts   Properties
+    tol         double
+    maxiter     size_t
+    verbose     size_t
+LCBPLIN
+    cavity      CavityType  PAIR,PAIR2,UNIFORM
+    updates     UpdateType  SEQFIX,SEQRND(,NONE)
+    reinit      bool
+    cavainame   string
+    cavaiopts   Properties
+    tol         double
+    maxiter     size_t
+    verbose     size_t
+LCBP2
+    cavity      CavityType  PAIR,UNIFORM
+    updates     UpdateType  SEQFIX,SEQRND
+    reinit      bool
+    cavainame   string
+    cavaiopts   Properties
+    tol         double
+    maxiter     size_t
+    verbose     size_t
+
+
+
+Quick start
+-----------
+You need:
+- a recent version of gcc (version 3.4 at least)
+- the Boost C++ libraries
+- GNU make
+
+To build the source, do:
+    
+    make
+
+If the build was successful, you can test the example program:
+
+    ./example tests/alarm.fg
+
+or the more elaborate test program:
+
+    tests/test --aliases tests/aliases.conf --filename tests/alarm.fg --methods JTREE_HUGIN BP_SEQMAX

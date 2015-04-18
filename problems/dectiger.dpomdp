@@ -1,0 +1,122 @@
+# This is a Dec-POMDP (.dpomdp) file for the Dec-Tiger problem.
+# For more detailed documentation, see example.dpomdp
+
+# Allright, here we go!
+#
+#The agents. 
+#----------
+#Either 1) the number of agents: 
+#   agents: %d
+#or 2) a list of agent identifiers, e.g.:
+#   agents: agent1_name, name-of-agent2, ... 
+agents: 2 
+#   discount: %f 
+discount: 1 
+#.0
+#   values: [ reward, cost ] 
+values: reward
+#   states: [ %d, <list of states> ] 
+states: tiger-left tiger-right     
+#
+#Examples of this are:
+#   start: 0.3 0.1 0.0 0.2 0.5
+#   start: first-state
+#   start: 5
+#   start: uniform
+#   start include: first-state third state
+#   start include: 1 3
+#   start exclude: fifth-state seventh-state
+start: 
+uniform
+#
+#The actions declarations
+#------------------------
+#the  (number/list of) actions for each of the agents on a separate line
+#   actions: 
+#   [ %d, <list of actions> ] 
+#   [ %d, <list of actions> ] 
+#   ...
+#   [ %d, <list of actions> ] 
+actions: 
+listen open-left open-right
+listen open-left open-right
+#the (number/list of) observations for each of the agents on a separate line
+#   observations: 
+#   [ %d, <list of observations> ]
+#   [ %d, <list of observations> ]
+#   ...
+#   [ %d, <list of observations> ]
+observations: 
+hear-left hear-right
+hear-left hear-right
+#Transition probabilities
+#   T: <a1 a2...an> : <start-state> : <end-state> : %f
+#or
+#   T: <a1 a2...an> : <start-state> :
+#   %f %f ... %f			    P(s_1'|ja,s) ... P(s_k'|ja,s)
+#or
+#   T: <a1 a2...an> :			    this is a |S| x |S| matrix
+#   %f %f ... %f			    P(s_1'|ja,s_1) ... P(s_k'|ja,s_1)
+#   %f %f ... %f			    ...
+#   ...					    ...
+#   %f %f ... %f			    P(s_1'|ja,s_k) ... P(s_k'|ja,s_k)
+#or
+#   T: <a1 a2...an> 
+#   [ identity, uniform ]
+T: * :
+uniform
+#T:open-right open-right :
+#uniform
+T: listen listen :
+identity 
+#Observation probabilities
+#    O: <a1 a2...an> : <end-state> : <o1 o2 ... om> : %f
+#or
+#    O: <a1 a2...an> : <end-state> :
+#    %f %f ... %f	    P(jo_1|ja,s') ... P(jo_x|ja,s')
+#or
+#    O:<a1 a2...an> :	    - a |S|x|JO| matrix
+#    %f %f ... %f	    P(jo_1|ja,s_1') ... P(jo_x|ja,s_1') 
+#    %f %f ... %f	    ... 
+#    ...		    ...
+#    %f %f ... %f	    P(jo_1|ja,s_k') ... P(jo_x|ja,s_k') 
+O: * :
+uniform
+O: listen listen : tiger-left : hear-left hear-left : 0.7225
+O: listen listen : tiger-left : hear-left hear-right : 0.1275
+O: listen listen : tiger-left : hear-right hear-left : 0.1275
+O: listen listen : tiger-left : hear-right hear-right : 0.0225
+O: listen listen : tiger-right : hear-right hear-right : 0.7225
+O: listen listen : tiger-right : hear-left hear-right : 0.1275
+O: listen listen : tiger-right : hear-right hear-left : 0.1275
+O: listen listen : tiger-right : hear-left hear-left : 0.0225
+#The rewards
+#or
+#    R: <a1 a2...an> : <start-state> : <end-state> :
+#    %f %f ... %f
+#or
+#    R: <a1 a2...an> : <start-state> :
+#    %f %f ... %f 
+#    %f %f ... %f 
+#    ...
+#    %f %f ... %f
+#
+#Typical problems only use R(s,ja) which is specified by:
+#   R: <a1 a2...an> : <start-state> : * : * : %f
+R: listen listen: * : * : * : -2
+R: open-left open-left : tiger-left : * : * : -50
+R: open-right open-right : tiger-right : * : * : -50
+R: open-left open-left : tiger-right : * : * : +20
+R: open-right open-right : tiger-left : * : * : 20
+R: open-left open-right: tiger-left : * : * : -100
+R: open-left open-right: tiger-right : * : * : -100
+R: open-right open-left: tiger-left : * : * : -100
+R: open-right open-left: tiger-right : * : * : -100
+R: open-left listen: tiger-left : * : * : -101
+R: listen open-right: tiger-right : * : * : -101
+R: listen open-left: tiger-left : * : * : -101
+R: open-right listen: tiger-right : * : * : -101
+R: listen open-right: tiger-left : * : * : 9
+R: listen open-left: tiger-right : * : * : 9
+R: open-right listen: tiger-left : * : * : 9
+R: open-left listen: tiger-right : * : * : 9

@@ -1,0 +1,848 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DEC_POMDP">
+    <Variables>
+      <Variable name="Left_Room" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="244" y="56" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="No_Person_L" />
+          <State name="Non_Auth_Person_L" />
+          <State name="Auth_Person_L" />
+        </States>
+      </Variable>
+      <Variable name="Right_Room" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="234" y="228" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="No_Person_R" />
+          <State name="Non_Auth_Person_R" />
+          <State name="Auth_Person_R" />
+        </States>
+      </Variable>
+      <Variable name="Left_Camera" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="229" y="332" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="On" />
+          <State name="Off" />
+        </States>
+      </Variable>
+      <Variable name="Right_Camera" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="252" y="470" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="On" />
+          <State name="Off" />
+        </States>
+      </Variable>
+      <Variable name="Robot" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="229" y="603" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Left" />
+          <State name="Center" />
+          <State name="Right" />
+        </States>
+      </Variable>
+      <Variable name="Left_Camera" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="705" y="332" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="On" />
+          <State name="Off" />
+        </States>
+      </Variable>
+      <Variable name="Left_Room" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="698" y="56" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="No_Person_L" />
+          <State name="Non_Auth_Person_L" />
+          <State name="Auth_Person_L" />
+        </States>
+      </Variable>
+      <Variable name="Right_Room" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="701" y="228" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="No_Person_R" />
+          <State name="Non_Auth_Person_R" />
+          <State name="Auth_Person_R" />
+        </States>
+      </Variable>
+      <Variable name="Robot" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="697" y="603" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Left" />
+          <State name="Center" />
+          <State name="Right" />
+        </States>
+      </Variable>
+      <Variable name="Right_Camera" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="720" y="470" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="On" />
+          <State name="Off" />
+        </States>
+      </Variable>
+      <Variable name="CLO" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="947" y="56" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Auth_Det_Left" />
+          <State name="NoAuth_Det_Left" />
+          <State name="CL_Failure" />
+          <State name="Idle" />
+        </States>
+      </Variable>
+      <Variable name="CRO" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="928" y="228" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Auth_Det_Right" />
+          <State name="NoAuth_Det_Right" />
+          <State name="CR_Failure" />
+          <State name="Idle" />
+        </States>
+      </Variable>
+      <Variable name="RO" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="918" y="603" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Auth_Det_Right" />
+          <State name="NoAuth_Det_Right" />
+          <State name="Idle_Right" />
+          <State name="Auth_Det_Center" />
+          <State name="Idle_Center" />
+          <State name="Auth_Det_Left" />
+          <State name="NoAuth_Det_Left" />
+          <State name="Idle_Left" />
+        </States>
+      </Variable>
+      <Variable name="Center_Room" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="247" y="143" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="No_Person_C" />
+          <State name="Auth_Person_C" />
+        </States>
+      </Variable>
+      <Variable name="Center_Room" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="695" y="143" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="No_Person_C" />
+          <State name="Auth_Person_C" />
+        </States>
+      </Variable>
+      <Variable name="CCO" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="943" y="143" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Auth_Det_Center" />
+          <State name="Idle" />
+        </States>
+      </Variable>
+      <Variable name="RobotA" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="1096" y="603" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Idle" />
+          <State name="Move_Right" />
+          <State name="Move_Left" />
+        </States>
+      </Variable>
+      <Variable name="RobotA" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="233" y="549" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Idle" />
+          <State name="Move_Right" />
+          <State name="Move_Left" />
+        </States>
+      </Variable>
+      <Variable name="CLA" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="247" y="95" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Idle" />
+          <State name="Reject" />
+          <State name="Auth" />
+        </States>
+      </Variable>
+      <Variable name="CRA" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="244" y="271" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Idle" />
+          <State name="Reject" />
+          <State name="Auth" />
+        </States>
+      </Variable>
+      <Variable name="CRA" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="1130" y="228" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Reject" />
+          <State name="Auth" />
+        </States>
+      </Variable>
+      <Variable name="CLA" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="1128" y="56" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Reject" />
+          <State name="Auth" />
+        </States>
+      </Variable>
+      <Variable name="CCA" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="247" y="188" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Auth" />
+          <State name="Idle" />
+        </States>
+      </Variable>
+      <Variable name="CCA" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="1129" y="143" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="LReward" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="73" y="123" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="RReward" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="76" y="292" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="CReward" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="79" y="206" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Left_Room" timeSlice="0" />
+        <Variable name="Left_Room" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Left_Room" timeSlice="0" />
+        <Variable name="LReward" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Right_Room" timeSlice="0" />
+        <Variable name="Right_Room" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Right_Room" timeSlice="0" />
+        <Variable name="RReward" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Left_Camera" timeSlice="0" />
+        <Variable name="Left_Camera" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Right_Camera" timeSlice="0" />
+        <Variable name="Right_Camera" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot" timeSlice="0" />
+        <Variable name="Robot" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Left_Camera" timeSlice="1" />
+        <Variable name="CLO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Left_Room" timeSlice="1" />
+        <Variable name="CLO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Left_Room" timeSlice="1" />
+        <Variable name="RO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Right_Room" timeSlice="1" />
+        <Variable name="CRO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Right_Room" timeSlice="1" />
+        <Variable name="RO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot" timeSlice="1" />
+        <Variable name="RO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Right_Camera" timeSlice="1" />
+        <Variable name="CRO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CLO" timeSlice="1" />
+        <Variable name="CLA" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CRO" timeSlice="1" />
+        <Variable name="CRA" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="RO" timeSlice="1" />
+        <Variable name="RobotA" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Center_Room" timeSlice="0" />
+        <Variable name="Center_Room" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Center_Room" timeSlice="0" />
+        <Variable name="CReward" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Center_Room" timeSlice="1" />
+        <Variable name="CCO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Center_Room" timeSlice="1" />
+        <Variable name="RO" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CCO" timeSlice="1" />
+        <Variable name="CCA" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="RobotA" timeSlice="0" />
+        <Variable name="Robot" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CLA" timeSlice="0" />
+        <Variable name="LReward" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CRA" timeSlice="0" />
+        <Variable name="RReward" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CCA" timeSlice="0" />
+        <Variable name="CReward" timeSlice="0" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Left_Room" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Right_Room" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Left_Camera" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Right_Camera" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0</Values>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Left_Camera" timeSlice="1" />
+          <Variable name="Left_Camera" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Left_Camera" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Off" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Left_Camera" timeSlice="1" />
+              </Variables>
+              <Values>0.0 1.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="On" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Left_Camera" timeSlice="1" />
+              </Variables>
+              <Values>0.95 0.05</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Left_Room" timeSlice="1" />
+          <Variable name="Left_Room" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Left_Room" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Auth_Person_L" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Left_Room" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="No_Person_L" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Left_Room" timeSlice="1" />
+              </Variables>
+              <Values>0.3333333333 0.3333333333 0.3333333333</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Non_Auth_Person_L" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Left_Room" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Right_Room" timeSlice="1" />
+          <Variable name="Right_Room" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Right_Room" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Non_Auth_Person_R" />
+              <State name="Auth_Person_R" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Right_Room" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="No_Person_R" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Right_Room" timeSlice="1" />
+              </Variables>
+              <Values>0.3333333333 0.3333333333 0.3333333333</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot" timeSlice="1" />
+          <Variable name="Robot" timeSlice="0" />
+          <Variable name="RobotA" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.2 0.8 0.0 0.0 0.2 0.8 0.0 0.0 1.0 1.0 0.0 0.0 0.8 0.2 0.0 0.0 0.8 0.2</Values>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Right_Camera" timeSlice="1" />
+          <Variable name="Right_Camera" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Right_Camera" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Off" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Right_Camera" timeSlice="1" />
+              </Variables>
+              <Values>0.0 1.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="On" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Right_Camera" timeSlice="1" />
+              </Variables>
+              <Values>0.95 0.05</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="CLO" timeSlice="1" />
+          <Variable name="Left_Camera" timeSlice="1" />
+          <Variable name="Left_Room" timeSlice="1" />
+        </Variables>
+        <TopVariable name="Left_Camera" timeSlice="1" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Off" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="CLO" timeSlice="1" />
+              </Variables>
+              <Values>0.0 0.0 1.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="On" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="CLO" timeSlice="1" />
+                <Variable name="Left_Room" timeSlice="1" />
+              </Variables>
+              <Values>0.2 0.2 0.0 0.6 0.2 0.6 0.0 0.2 0.6 0.2 0.0 0.2</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="CRO" timeSlice="1" />
+          <Variable name="Right_Room" timeSlice="1" />
+          <Variable name="Right_Camera" timeSlice="1" />
+        </Variables>
+        <TopVariable name="Right_Camera" timeSlice="1" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Off" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="CRO" timeSlice="1" />
+              </Variables>
+              <Values>0.0 0.0 1.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="On" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="CRO" timeSlice="1" />
+                <Variable name="Right_Room" timeSlice="1" />
+              </Variables>
+              <Values>0.2 0.2 0.0 0.6 0.2 0.6 0.0 0.2 0.6 0.2 0.0 0.2</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="RO" timeSlice="1" />
+          <Variable name="Left_Room" timeSlice="1" />
+          <Variable name="Right_Room" timeSlice="1" />
+          <Variable name="Robot" timeSlice="1" />
+          <Variable name="Center_Room" timeSlice="1" />
+        </Variables>
+        <TopVariable name="Robot" timeSlice="1" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Right" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="RO" timeSlice="1" />
+                <Variable name="Right_Room" timeSlice="1" />
+              </Variables>
+              <Values>0.2 0.2 0.6 0.0 0.0 0.0 0.0 0.0 0.2 0.6 0.2 0.0 0.0 0.0 0.0 0.0 0.6 0.2 0.2 0.0 0.0 0.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Center" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="RO" timeSlice="1" />
+                <Variable name="Center_Room" timeSlice="1" />
+              </Variables>
+              <Values>0.0 0.0 0.0 0.2 0.8 0.0 0.0 0.0 0.0 0.0 0.0 0.8 0.2 0.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Left" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="RO" timeSlice="1" />
+                <Variable name="Left_Room" timeSlice="1" />
+              </Variables>
+              <Values>0.0 0.0 0.0 0.0 0.0 0.2 0.2 0.6 0.0 0.0 0.0 0.0 0.0 0.2 0.6 0.2 0.0 0.0 0.0 0.0 0.0 0.6 0.2 0.2</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Center_Room" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Center_Room" timeSlice="1" />
+          <Variable name="Center_Room" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5 1.0 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="CCO" timeSlice="1" />
+          <Variable name="Center_Room" timeSlice="1" />
+        </Variables>
+        <Values>0.2 0.8 0.8 0.2</Values>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="LReward" timeSlice="0" />
+        <Variables>
+          <Variable name="Left_Room" timeSlice="0" />
+          <Variable name="CLA" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Left_Room" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="No_Person_L" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="LReward" timeSlice="0" />
+              <Variables>
+                <Variable name="CLA" timeSlice="0" />
+              </Variables>
+              <Values>0.0 -1.0 -1.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Non_Auth_Person_L" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="LReward" timeSlice="0" />
+              <Variables>
+                <Variable name="CLA" timeSlice="0" />
+              </Variables>
+              <Values>0.0 5.0 -5.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Auth_Person_L" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="LReward" timeSlice="0" />
+              <Variables>
+                <Variable name="CLA" timeSlice="0" />
+              </Variables>
+              <Values>-1.0 -5.0 5.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="RReward" timeSlice="0" />
+        <Variables>
+          <Variable name="Right_Room" timeSlice="0" />
+          <Variable name="CRA" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Right_Room" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="No_Person_R" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="RReward" timeSlice="0" />
+              <Variables>
+                <Variable name="CRA" timeSlice="0" />
+              </Variables>
+              <Values>0.0 -1.0 -1.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Non_Auth_Person_R" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="RReward" timeSlice="0" />
+              <Variables>
+                <Variable name="CRA" timeSlice="0" />
+              </Variables>
+              <Values>0.0 5.0 -5.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Auth_Person_R" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="RReward" timeSlice="0" />
+              <Variables>
+                <Variable name="CRA" timeSlice="0" />
+              </Variables>
+              <Values>-1.0 -5.0 5.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="CReward" timeSlice="0" />
+        <Variables>
+          <Variable name="CCA" timeSlice="0" />
+          <Variable name="Center_Room" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Center_Room" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Auth_Person_C" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="CReward" timeSlice="0" />
+              <Variables>
+                <Variable name="CCA" timeSlice="0" />
+              </Variables>
+              <Values>5.0 -1.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="No_Person_C" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="CReward" timeSlice="0" />
+              <Variables>
+                <Variable name="CCA" timeSlice="0" />
+              </Variables>
+              <Values>-1.0 0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+  <Policies>
+    <Potential type="Uniform" role="conditionalProbability">
+      <Variables>
+        <Variable name="RobotA" timeSlice="1" />
+        <Variable name="RO" timeSlice="1" />
+      </Variables>
+    </Potential>
+    <Potential type="Uniform" role="conditionalProbability">
+      <Variables>
+        <Variable name="RobotA" timeSlice="0" />
+      </Variables>
+    </Potential>
+    <Potential type="Uniform" role="conditionalProbability">
+      <Variables>
+        <Variable name="CLA" timeSlice="0" />
+      </Variables>
+    </Potential>
+    <Potential type="Uniform" role="conditionalProbability">
+      <Variables>
+        <Variable name="CRA" timeSlice="0" />
+      </Variables>
+    </Potential>
+    <Potential type="Uniform" role="conditionalProbability">
+      <Variables>
+        <Variable name="CRA" timeSlice="1" />
+        <Variable name="CRO" timeSlice="1" />
+      </Variables>
+    </Potential>
+    <Potential type="Uniform" role="conditionalProbability">
+      <Variables>
+        <Variable name="CLA" timeSlice="1" />
+        <Variable name="CLO" timeSlice="1" />
+      </Variables>
+    </Potential>
+    <Potential type="Uniform" role="conditionalProbability">
+      <Variables>
+        <Variable name="CCA" timeSlice="0" />
+      </Variables>
+    </Potential>
+  </Policies>
+</ProbModelXML>

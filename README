@@ -1,0 +1,35 @@
+MultiAgentDecisionProcess (MADP) is a toolbox for scientific research
+in decision-theoretic planning and learning in multiagent systems.  It
+is designed to be rather general, but most effort has been put in
+planning algorithms for discrete Dec-POMDPs.
+
+Comments, bug reports, patches, etc, are welcome. A mailinglist is
+available at madp-users@isr.ist.utl.pt .
+
+Authors:
+Frans Oliehoek,
+Matthijs Spaan,
+João Messias,
+Philipp Robbel
+
+Please refer to the file 'AUTHORS' for contact information and current 
+affiliations. MADP includes other software, for details see COPYING.
+
+========================================================================
+Documentation and Installation Instructions:
+
+See doc/MADPToolbox-0.3.1.pdf, which also includes installation
+instructions.
+
+To (re)generate API documentation from source
+make htmldoc
+
+Open doc/html/index.html in a webbrowser
+
+========================================================================
+Acknowledgments
+
+Please see the AUTHORS file.
+
+Release 0.3.1
+$Id: README 9369 2015-03-09 13:01:53Z mtjspaan $

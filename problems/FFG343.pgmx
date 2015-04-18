@@ -1,0 +1,2251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DEC_POMDP">
+    <Variables>
+      <Variable name="House 1" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="232" y="98" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no fire" />
+          <State name="small fire" />
+          <State name="large fire" />
+        </States>
+      </Variable>
+      <Variable name="House 2" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="235" y="229" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no fire" />
+          <State name="small fire" />
+          <State name="large fire" />
+        </States>
+      </Variable>
+      <Variable name="House 3" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="231" y="366" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no fire" />
+          <State name="small fire" />
+          <State name="large fire" />
+        </States>
+      </Variable>
+      <Variable name="House 4" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="233" y="501" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no fire" />
+          <State name="small fire" />
+          <State name="large fire" />
+        </States>
+      </Variable>
+      <Variable name="House 4" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="697" y="501" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no fire" />
+          <State name="small fire" />
+          <State name="large fire" />
+        </States>
+      </Variable>
+      <Variable name="House 2" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="698" y="229" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no fire" />
+          <State name="small fire" />
+          <State name="large fire" />
+        </States>
+      </Variable>
+      <Variable name="House 1" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="696" y="98" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no fire" />
+          <State name="small fire" />
+          <State name="large fire" />
+        </States>
+      </Variable>
+      <Variable name="House 3" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="695" y="366" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no fire" />
+          <State name="small fire" />
+          <State name="large fire" />
+        </States>
+      </Variable>
+      <Variable name="O1" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="783" y="161" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="flames" />
+          <State name="no flames" />
+        </States>
+      </Variable>
+      <Variable name="O2" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="783" y="300" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="flames" />
+          <State name="no flames" />
+        </States>
+      </Variable>
+      <Variable name="O3" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="783" y="435" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="flames" />
+          <State name="no flames" />
+        </States>
+      </Variable>
+      <Variable name="A1" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="367" y="161" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="left" />
+          <State name="right" />
+        </States>
+      </Variable>
+      <Variable name="A2" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="367" y="300" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="left" />
+          <State name="right" />
+        </States>
+      </Variable>
+      <Variable name="A3" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="366" y="435" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="left" />
+          <State name="right" />
+        </States>
+      </Variable>
+      <Variable name="A2" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="968" y="300" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="left" />
+          <State name="right" />
+        </States>
+      </Variable>
+      <Variable name="A1" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="970" y="161" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="left" />
+          <State name="right" />
+        </States>
+      </Variable>
+      <Variable name="A3" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="968" y="435" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="left" />
+          <State name="right" />
+        </States>
+      </Variable>
+      <Variable name="R1" type="numeric" role="utility" isInput="false">
+        <Coordinates x="967" y="98" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="R2" type="numeric" role="utility" isInput="false">
+        <Coordinates x="969" y="229" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="R3" type="numeric" role="utility" isInput="false">
+        <Coordinates x="968" y="366" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="R4" type="numeric" role="utility" isInput="false">
+        <Coordinates x="972" y="501" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="House 1" timeSlice="0" />
+        <Variable name="House 1" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 1" timeSlice="0" />
+        <Variable name="House 2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 2" timeSlice="0" />
+        <Variable name="House 1" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 2" timeSlice="0" />
+        <Variable name="House 2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 2" timeSlice="0" />
+        <Variable name="House 3" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 3" timeSlice="0" />
+        <Variable name="House 3" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 3" timeSlice="0" />
+        <Variable name="House 2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 3" timeSlice="0" />
+        <Variable name="House 4" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 4" timeSlice="0" />
+        <Variable name="House 3" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 4" timeSlice="0" />
+        <Variable name="House 4" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 4" timeSlice="1" />
+        <Variable name="O3" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 4" timeSlice="1" />
+        <Variable name="R4" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 2" timeSlice="1" />
+        <Variable name="O1" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 2" timeSlice="1" />
+        <Variable name="O2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 2" timeSlice="1" />
+        <Variable name="R2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 1" timeSlice="1" />
+        <Variable name="O1" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 1" timeSlice="1" />
+        <Variable name="R1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 3" timeSlice="1" />
+        <Variable name="O2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 3" timeSlice="1" />
+        <Variable name="O3" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="House 3" timeSlice="1" />
+        <Variable name="R3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="O1" timeSlice="1" />
+        <Variable name="A1" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="O2" timeSlice="1" />
+        <Variable name="A2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="O3" timeSlice="1" />
+        <Variable name="A3" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A1" timeSlice="0" />
+        <Variable name="House 1" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A1" timeSlice="0" />
+        <Variable name="House 2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A1" timeSlice="0" />
+        <Variable name="O1" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A2" timeSlice="0" />
+        <Variable name="House 2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A2" timeSlice="0" />
+        <Variable name="House 3" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A2" timeSlice="0" />
+        <Variable name="O2" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A3" timeSlice="0" />
+        <Variable name="House 3" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A3" timeSlice="0" />
+        <Variable name="House 4" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A3" timeSlice="0" />
+        <Variable name="O3" timeSlice="1" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="House 1" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="House 2" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="House 3" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="House 4" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="House 4" timeSlice="1" />
+          <Variable name="House 4" timeSlice="0" />
+          <Variable name="House 3" timeSlice="0" />
+          <Variable name="A3" timeSlice="0" />
+        </Variables>
+        <TopVariable name="A3" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="right" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="House 4" timeSlice="1" />
+                <Variable name="House 4" timeSlice="0" />
+                <Variable name="House 3" timeSlice="0" />
+              </Variables>
+              <TopVariable name="House 3" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 4" timeSlice="1" />
+                      <Variable name="House 4" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 4" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>0.6 0.4 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.6 0.4</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 4" timeSlice="1" />
+                      <Variable name="House 4" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 4" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                          <State name="small fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="left" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="House 4" timeSlice="1" />
+                <Variable name="House 4" timeSlice="0" />
+                <Variable name="House 3" timeSlice="0" />
+              </Variables>
+              <TopVariable name="House 4" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 4" timeSlice="1" />
+                      <Variable name="House 3" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 3" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>0.2 0.8 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 4" timeSlice="1" />
+                      <Variable name="House 3" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 3" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.2 0.8</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 4" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.6 0.4</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="House 4" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="House 2" timeSlice="1" />
+          <Variable name="House 1" timeSlice="0" />
+          <Variable name="House 2" timeSlice="0" />
+          <Variable name="House 3" timeSlice="0" />
+          <Variable name="A1" timeSlice="0" />
+          <Variable name="A2" timeSlice="0" />
+        </Variables>
+        <TopVariable name="A1" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="left" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="House 2" timeSlice="1" />
+                <Variable name="House 1" timeSlice="0" />
+                <Variable name="House 2" timeSlice="0" />
+                <Variable name="House 3" timeSlice="0" />
+                <Variable name="A2" timeSlice="0" />
+              </Variables>
+              <TopVariable name="A2" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="left" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 2" timeSlice="1" />
+                      <Variable name="House 1" timeSlice="0" />
+                      <Variable name="House 2" timeSlice="0" />
+                      <Variable name="House 3" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 1" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 2" timeSlice="1" />
+                            <Variable name="House 2" timeSlice="0" />
+                            <Variable name="House 3" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 2" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>1.0 0.0 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>0.6 0.4 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.6 0.4</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 2" timeSlice="1" />
+                            <Variable name="House 2" timeSlice="0" />
+                            <Variable name="House 3" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 3" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                  <Variable name="House 2" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 2" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.6 0.4 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.6 0.4</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                  <Variable name="House 2" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 2" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 1.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="right" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 2" timeSlice="1" />
+                      <Variable name="House 1" timeSlice="0" />
+                      <Variable name="House 2" timeSlice="0" />
+                      <Variable name="House 3" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 1" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 2" timeSlice="1" />
+                            <Variable name="House 2" timeSlice="0" />
+                            <Variable name="House 3" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 2" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>0.2 0.8 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.2 0.8</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.0 1.0</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 2" timeSlice="1" />
+                            <Variable name="House 2" timeSlice="0" />
+                            <Variable name="House 3" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 3" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                  <Variable name="House 2" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 2" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.2 0.8 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.2 0.8</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.0 1.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                  <Variable name="House 2" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 2" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.6 0.4</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.0 1.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="right" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="House 2" timeSlice="1" />
+                <Variable name="House 1" timeSlice="0" />
+                <Variable name="House 2" timeSlice="0" />
+                <Variable name="House 3" timeSlice="0" />
+                <Variable name="A2" timeSlice="0" />
+              </Variables>
+              <TopVariable name="A2" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="left" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="House 2" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="right" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 2" timeSlice="1" />
+                      <Variable name="House 1" timeSlice="0" />
+                      <Variable name="House 2" timeSlice="0" />
+                      <Variable name="House 3" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 1" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 2" timeSlice="1" />
+                            <Variable name="House 2" timeSlice="0" />
+                            <Variable name="House 3" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 2" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>1.0 0.0 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>0.6 0.4 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.6 0.4</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 2" timeSlice="1" />
+                            <Variable name="House 2" timeSlice="0" />
+                            <Variable name="House 3" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 3" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                  <Variable name="House 2" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 2" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.6 0.4 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.6 0.4</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 2" timeSlice="1" />
+                                  <Variable name="House 2" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 2" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 2" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 1.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="House 1" timeSlice="1" />
+          <Variable name="House 1" timeSlice="0" />
+          <Variable name="House 2" timeSlice="0" />
+          <Variable name="A1" timeSlice="0" />
+        </Variables>
+        <TopVariable name="A1" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="left" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="House 1" timeSlice="1" />
+                <Variable name="House 1" timeSlice="0" />
+                <Variable name="House 2" timeSlice="0" />
+              </Variables>
+              <TopVariable name="House 2" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 1" timeSlice="1" />
+                      <Variable name="House 1" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 1" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>0.6 0.4 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.6 0.4</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 1" timeSlice="1" />
+                      <Variable name="House 1" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 1" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                          <State name="small fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="right" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="House 1" timeSlice="1" />
+                <Variable name="House 1" timeSlice="0" />
+                <Variable name="House 2" timeSlice="0" />
+              </Variables>
+              <TopVariable name="House 1" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 1" timeSlice="1" />
+                      <Variable name="House 2" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 2" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>0.2 0.8 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 1" timeSlice="1" />
+                      <Variable name="House 2" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 2" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.2 0.8</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="House 1" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.6 0.4</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="House 1" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="House 3" timeSlice="1" />
+          <Variable name="House 2" timeSlice="0" />
+          <Variable name="House 3" timeSlice="0" />
+          <Variable name="House 4" timeSlice="0" />
+          <Variable name="A2" timeSlice="0" />
+          <Variable name="A3" timeSlice="0" />
+        </Variables>
+        <TopVariable name="A2" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="left" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="House 3" timeSlice="1" />
+                <Variable name="House 2" timeSlice="0" />
+                <Variable name="House 3" timeSlice="0" />
+                <Variable name="House 4" timeSlice="0" />
+                <Variable name="A3" timeSlice="0" />
+              </Variables>
+              <TopVariable name="A3" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="left" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 3" timeSlice="1" />
+                      <Variable name="House 2" timeSlice="0" />
+                      <Variable name="House 3" timeSlice="0" />
+                      <Variable name="House 4" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 2" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 3" timeSlice="1" />
+                            <Variable name="House 3" timeSlice="0" />
+                            <Variable name="House 4" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 3" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>1.0 0.0 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>0.6 0.4 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.6 0.4</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 3" timeSlice="1" />
+                            <Variable name="House 3" timeSlice="0" />
+                            <Variable name="House 4" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 4" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                  <Variable name="House 3" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 3" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.6 0.4 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.6 0.4</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                  <Variable name="House 3" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 3" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 1.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="right" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 3" timeSlice="1" />
+                      <Variable name="House 2" timeSlice="0" />
+                      <Variable name="House 3" timeSlice="0" />
+                      <Variable name="House 4" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 2" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 3" timeSlice="1" />
+                            <Variable name="House 3" timeSlice="0" />
+                            <Variable name="House 4" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 3" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>0.2 0.8 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.2 0.8</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.0 1.0</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 3" timeSlice="1" />
+                            <Variable name="House 3" timeSlice="0" />
+                            <Variable name="House 4" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 4" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                  <Variable name="House 3" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 3" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.2 0.8 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.2 0.8</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.0 1.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                  <Variable name="House 3" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 3" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.6 0.4</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.0 1.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="right" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="House 3" timeSlice="1" />
+                <Variable name="House 2" timeSlice="0" />
+                <Variable name="House 3" timeSlice="0" />
+                <Variable name="House 4" timeSlice="0" />
+                <Variable name="A3" timeSlice="0" />
+              </Variables>
+              <TopVariable name="A3" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="left" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="House 3" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="right" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="House 3" timeSlice="1" />
+                      <Variable name="House 2" timeSlice="0" />
+                      <Variable name="House 3" timeSlice="0" />
+                      <Variable name="House 4" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="House 2" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="small fire" />
+                          <State name="large fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 3" timeSlice="1" />
+                            <Variable name="House 3" timeSlice="0" />
+                            <Variable name="House 4" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 3" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>1.0 0.0 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>0.6 0.4 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.6 0.4</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no fire" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="House 3" timeSlice="1" />
+                            <Variable name="House 3" timeSlice="0" />
+                            <Variable name="House 4" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="House 4" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="small fire" />
+                                <State name="large fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                  <Variable name="House 3" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 3" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.6 0.4 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 0.6 0.4</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no fire" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="House 3" timeSlice="1" />
+                                  <Variable name="House 3" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="House 3" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="no fire" />
+                                      <State name="small fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>1.0 0.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="large fire" />
+                                    </States>
+                                    <Potential type="Table">
+                                      <Variables>
+                                        <Variable name="House 3" timeSlice="1" />
+                                      </Variables>
+                                      <Values>0.0 1.0 0.0</Values>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="O1" timeSlice="1" />
+          <Variable name="House 1" timeSlice="1" />
+          <Variable name="House 2" timeSlice="1" />
+          <Variable name="A1" timeSlice="0" />
+        </Variables>
+        <TopVariable name="A1" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="right" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="O1" timeSlice="1" />
+                <Variable name="House 1" timeSlice="1" />
+                <Variable name="House 2" timeSlice="1" />
+              </Variables>
+              <TopVariable name="House 2" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O1" timeSlice="1" />
+                    </Variables>
+                    <Values>0.2 0.8</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O1" timeSlice="1" />
+                    </Variables>
+                    <Values>0.5 0.5</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O1" timeSlice="1" />
+                    </Variables>
+                    <Values>0.8 0.2</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="left" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="O1" timeSlice="1" />
+                <Variable name="House 1" timeSlice="1" />
+                <Variable name="House 2" timeSlice="1" />
+              </Variables>
+              <TopVariable name="House 1" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O1" timeSlice="1" />
+                    </Variables>
+                    <Values>0.2 0.8</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O1" timeSlice="1" />
+                    </Variables>
+                    <Values>0.5 0.5</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O1" timeSlice="1" />
+                    </Variables>
+                    <Values>0.8 0.2</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="O2" timeSlice="1" />
+          <Variable name="House 2" timeSlice="1" />
+          <Variable name="House 3" timeSlice="1" />
+          <Variable name="A2" timeSlice="0" />
+        </Variables>
+        <TopVariable name="A2" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="right" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="O2" timeSlice="1" />
+                <Variable name="House 2" timeSlice="1" />
+                <Variable name="House 3" timeSlice="1" />
+              </Variables>
+              <TopVariable name="House 3" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O2" timeSlice="1" />
+                    </Variables>
+                    <Values>0.2 0.8</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O2" timeSlice="1" />
+                    </Variables>
+                    <Values>0.5 0.5</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O2" timeSlice="1" />
+                    </Variables>
+                    <Values>0.8 0.2</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="left" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="O2" timeSlice="1" />
+                <Variable name="House 2" timeSlice="1" />
+                <Variable name="House 3" timeSlice="1" />
+              </Variables>
+              <TopVariable name="House 2" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O2" timeSlice="1" />
+                    </Variables>
+                    <Values>0.2 0.8</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O2" timeSlice="1" />
+                    </Variables>
+                    <Values>0.5 0.5</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O2" timeSlice="1" />
+                    </Variables>
+                    <Values>0.8 0.2</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="O3" timeSlice="1" />
+          <Variable name="House 3" timeSlice="1" />
+          <Variable name="House 4" timeSlice="1" />
+          <Variable name="A3" timeSlice="0" />
+        </Variables>
+        <TopVariable name="A3" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="right" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="O3" timeSlice="1" />
+                <Variable name="House 3" timeSlice="1" />
+                <Variable name="House 4" timeSlice="1" />
+              </Variables>
+              <TopVariable name="House 4" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O3" timeSlice="1" />
+                    </Variables>
+                    <Values>0.2 0.8</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O3" timeSlice="1" />
+                    </Variables>
+                    <Values>0.5 0.5</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O3" timeSlice="1" />
+                    </Variables>
+                    <Values>0.8 0.2</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="left" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="O3" timeSlice="1" />
+                <Variable name="House 3" timeSlice="1" />
+                <Variable name="House 4" timeSlice="1" />
+              </Variables>
+              <TopVariable name="House 3" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O3" timeSlice="1" />
+                    </Variables>
+                    <Values>0.2 0.8</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O3" timeSlice="1" />
+                    </Variables>
+                    <Values>0.5 0.5</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large fire" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="O3" timeSlice="1" />
+                    </Variables>
+                    <Values>0.8 0.2</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="R1" />
+        <Variables>
+          <Variable name="House 1" timeSlice="1" />
+        </Variables>
+        <Values>0.0 -1.0 -2.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="R2" />
+        <Variables>
+          <Variable name="House 2" timeSlice="1" />
+        </Variables>
+        <Values>0.0 -1.0 -2.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="R3" />
+        <Variables>
+          <Variable name="House 3" timeSlice="1" />
+        </Variables>
+        <Values>0.0 -1.0 -2.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="R4" />
+        <Variables>
+          <Variable name="House 4" timeSlice="1" />
+        </Variables>
+        <Values>0.0 -1.0 -2.0</Values>
+      </Potential>
+    </Potentials>
+    <Agents />
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>

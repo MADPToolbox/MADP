@@ -1,0 +1,59 @@
+2015-02-22 Frans Oliehoek <frans.oliehoek@liverpool.ac.uk>
+	* Release 0.3.1
+
+	* switched to 'c++98' standard.
+
+	* added Max Plus solver for regular (non-graphical) Bayesian games.
+
+	* Improved documentation.
+
+	* Clearer distinction between examples and solvers.
+
+	* More examples added.
+
+
+2014-05-01 Frans Oliehoek <frans.oliehoek@liverpool.ac.uk>
+
+	* Release 0.3
+
+	* Many new features and algorithms:
+
+	    * Support for factored models.
+
+	    * Parsing ProbModelXML models.
+
+	    * GMAA*-ICE, DP-LPC.
+
+	    * Collaborative Graphical Bayesian Games + solvers.
+
+	    * Support for RL.
+
+	    * etc.
+
+
+2010-03-12  Matthijs Spaan  <mtjspaan@isr.ist.utl.pt>
+
+	* Release 0.2.1, bugfix release mainly.
+	
+	* Update code to compile with GCC 4.4.
+
+	* Allow for sparse reward models, and don't add zero
+	entries. Thanks fo Silvano Bonacina for reporting this.
+
+	* Added Clone() functionality to most abstract base classes.
+
+	* Several small bugfixes.
+
+2009-09-07  Matthijs Spaan  <mtjspaan@isr.ist.utl.pt>
+
+	* Release 0.2
+
+	* Many new classes and bugfixes, and some classes were moved to a
+	different library.
+
+	* The portion of the Boost libraries that MADP uses is shipped in
+	the tarball now.
+
+2008-01-21  Matthijs Spaan  <mtjspaan@isr.ist.utl.pt>
+
+	* Release 0.1
