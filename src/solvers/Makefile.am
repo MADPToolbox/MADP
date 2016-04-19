@@ -4,9 +4,9 @@ include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
 # Which programs to build. Only PROGRAMS_NORMAL will be installed.
-PROGRAMS_NORMAL =  Perseus \
- GMAA \
- GMAA_ELSI \
+PROGRAMS_NORMAL =  Perseus\
+ GMAA\
+ GMAA_ELSI\
  JESP \
  DICEPS \
  BFS \

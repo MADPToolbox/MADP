@@ -36,7 +36,13 @@ BayesianGameIdenticalPayoff::BayesianGameIdenticalPayoff(size_t nrAgents,
 
 BayesianGameIdenticalPayoff::~BayesianGameIdenticalPayoff()
 {
-    delete _m_utilFunction;
+    if (_m_utilFunction != 0)
+    {
+        delete _m_utilFunction;
+        _m_utilFunction = 0;
+    }
+    else
+        cerr << "BayesianGameIdenticalPayoff::~BayesianGameIdenticalPayoff() trying to delete this BG twice!" << endl;
 }
 
 BayesianGameIdenticalPayoff& BayesianGameIdenticalPayoff::operator= (const BayesianGameIdenticalPayoff& o)

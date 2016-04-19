@@ -50,6 +50,42 @@ Perseus::Perseus(const boost::shared_ptr<const PlanningUnitDecPOMDPDiscrete> &pu
     UpdateValueFunctionName();
 }
 
+Perseus::Perseus(const PlanningUnitFactoredDecPOMDPDiscrete* pu) :
+    AlphaVectorPlanning(pu),
+    _m_verbose(0),
+    _m_initializeWithImmediateReward(false),
+    _m_initializeWithZero(false),
+    _m_bestValue(-DBL_MAX),
+    _m_beliefsInitialized(false),
+    _m_identification("Perseus"),
+    _m_storeIntermediateValueFunctions(false),
+    _m_storeTimings(false),
+    _m_computeVectorForEachBelief(false),
+    _m_dryrun(false)
+{
+    SetMinimumNumberOfIterations(10);
+    SetMaximumNumberOfIterations(INT_MAX);
+    UpdateValueFunctionName();
+}
+
+Perseus::Perseus(const boost::shared_ptr<const PlanningUnitFactoredDecPOMDPDiscrete> &pu) :
+    AlphaVectorPlanning(pu),
+    _m_verbose(0),
+    _m_initializeWithImmediateReward(false),
+    _m_initializeWithZero(false),
+    _m_bestValue(-DBL_MAX),
+    _m_beliefsInitialized(false),
+    _m_identification("Perseus"),
+    _m_storeIntermediateValueFunctions(false),
+    _m_storeTimings(false),
+    _m_computeVectorForEachBelief(false),
+    _m_dryrun(false)
+{
+    SetMinimumNumberOfIterations(10);
+    SetMaximumNumberOfIterations(INT_MAX);
+    UpdateValueFunctionName();
+}
+
 //Destructor
 Perseus::~Perseus()
 {
@@ -325,6 +361,9 @@ string Perseus::BackupTypeToString(const QAVParameters &params)
     case EVENT_POMDP:
         ss << "EVENT_POMDP";
         break;
+    case FACTORED_POMDP:
+        ss << "FACTORED_POMDP";
+        break;
     default:
         ss << "PerseusBackupType " << params.backup << " is unknown";
         throw(E(ss));
@@ -339,18 +378,21 @@ QAVParameters Perseus::ProcessArguments(const ArgumentHandlers::Arguments &args)
     qavParams.weight=1;
     qavParams.bgBackupType=args.bgBackup;
     
-    qavParams.stationary=true;
 
-    qavParams.backup=args.backup;
+
     switch(args.backup)
     {
     case POMDP:
-    case BG:
     case EVENT_POMDP:
+    case FACTORED_POMDP:
+    case BG:
+        qavParams.stationary=true;
         break;
     default:
         throw(E("PerseusBackupType is unknown"));
     }
+
+    qavParams.backup=args.backup;
 
     return(qavParams);
 }

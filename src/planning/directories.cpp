@@ -36,7 +36,7 @@ string directories::MADPGetResultsDir(const string & method,
 string directories::MADPGetResultsDir(const string & method,
                                       const PlanningUnit &pu)
 {
-    return(MADPGetResultsDir(method,pu.GetProblem()->GetUnixName()));
+    return(MADPGetResultsDir(method, pu.GetProblem()->GetUnixName()));
 }
 
 string
@@ -44,7 +44,7 @@ directories::MADPGetResultsDir(const string & method,
                                const MultiAgentDecisionProcessInterface
                                &problem)
 {
-    return(MADPGetResultsDir(method,problem.GetUnixName()));
+    return(MADPGetResultsDir(method, problem.GetUnixName()));
 }
 
 string directories::MADPGetResultsDir(const string & method,
@@ -206,6 +206,7 @@ string directories::MADPGetProblemFilename(const string & problem)
         vector<string> extensions; //default extensions. Add more here if needed.
         extensions.push_back("pgmx"); 
         extensions.push_back("dpomdp");
+        extensions.push_back("POMDP");
         problemName = problem;
         while(extensions.size() > 0)
         {
@@ -224,7 +225,9 @@ string directories::MADPGetProblemFilename(const string & problem)
 	closedir (d);
     }
 
-    throw(E("Problem file not found."));
+    stringstream ss;
+    ss << "Problem file not found (problem = " << problem << ")";
+    throw(E(ss));
     return(problem);
 }
 

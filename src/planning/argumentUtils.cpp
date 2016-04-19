@@ -58,8 +58,9 @@ DecPOMDPDiscreteInterface* GetDecPOMDPDiscreteInterfaceFromArgs(const Arguments&
         case(ProblemType::FFF):
         {
             ProblemFireFightingFactored* p = 
-                new ProblemFireFightingFactored(args.nrAgents, args.nrHouses, 
-                    args.nrFLs);
+                new ProblemFireFightingFactored(args.nrAgents,
+                                                args.nrHouses,
+                                                args.nrFLs);
             if(args.cache_flat_models)
                 p->CacheFlatModels(args.sparse);
             dp = p;
@@ -68,7 +69,8 @@ DecPOMDPDiscreteInterface* GetDecPOMDPDiscreteInterfaceFromArgs(const Arguments&
         case(ProblemType::FFG):
         {
             ProblemFireFightingGraph* p = 
-                new ProblemFireFightingGraph(args.nrAgents, args.nrFLs);
+                new ProblemFireFightingGraph(args.nrAgents,
+                                             args.nrFLs);
             if(args.cache_flat_models)
                 p->CacheFlatModels(args.sparse);
             dp = p;
@@ -76,9 +78,12 @@ DecPOMDPDiscreteInterface* GetDecPOMDPDiscreteInterfaceFromArgs(const Arguments&
         }
         case(ProblemType::Aloha):
         {
-            ProblemAloha* p = 
-                new ProblemAloha( args.islandConf, args.alohaVariation, 
-                    args.maxBacklog );
+            ProblemAloha* p =
+                new ProblemAloha(   args.islandConf,
+                                    args.alohaVariation,
+                                    args.maxBacklog,
+                                    args.nrAgents );
+
             if(args.cache_flat_models)
                 p->CacheFlatModels(args.sparse);
             dp = p;
@@ -129,7 +134,7 @@ DecPOMDPDiscreteInterface* GetDecPOMDPDiscreteInterfaceFromArgs(const Arguments&
                     DecPOMDPDiscrete* decpomdp = 
                     new DecPOMDPDiscrete("","",dpomdpFile);
                     if(args.sparse)
-                    decpomdp->SetSparse(true);
+                        decpomdp->SetSparse(true);
                     MADPParser parser(decpomdp);
                     dp = decpomdp;
                 }
@@ -156,7 +161,7 @@ FactoredDecPOMDPDiscreteInterface* GetFactoredDecPOMDPDiscreteInterfaceFromArgs(
 
         case(ProblemType::DT):
         case(ProblemType::FF):
-        {   
+        {
             stringstream ss;
             ss << SoftPrint(args.problem_type) << " is not factored."<< endl;
             throw(E(ss));
@@ -164,8 +169,7 @@ FactoredDecPOMDPDiscreteInterface* GetFactoredDecPOMDPDiscreteInterfaceFromArgs(
         }
         case(ProblemType::FFF):
         {
-            dp = new ProblemFireFightingFactored(args.nrAgents, args.nrHouses, 
-                    args.nrFLs);
+            dp = new ProblemFireFightingFactored(args.nrAgents, args.nrHouses, args.nrFLs);
             if(args.cache_flat_models)
                 dp->CacheFlatModels(args.sparse);
             if(args.verbose > 0)
@@ -184,9 +188,10 @@ FactoredDecPOMDPDiscreteInterface* GetFactoredDecPOMDPDiscreteInterfaceFromArgs(
         case(ProblemType::Aloha):
         {
             dp = new ProblemAloha(
-                static_cast<ProblemAloha::IslandConfiguration>(args.islandConf), 
-                static_cast<ProblemAloha::AlohaVariation>(args.alohaVariation), 
-                args.maxBacklog);
+                static_cast<ProblemAloha::IslandConfiguration>(args.islandConf),
+                static_cast<ProblemAloha::AlohaVariation>(args.alohaVariation),
+                args.maxBacklog,
+                args.nrAgents );
             if(args.cache_flat_models)
                 dp->CacheFlatModels(args.sparse);
             break;
@@ -196,13 +201,13 @@ FactoredDecPOMDPDiscreteInterface* GetFactoredDecPOMDPDiscreteInterfaceFromArgs(
         {   
             string dpomdpFile=directories::MADPGetProblemFilename(args);
             FactoredDecPOMDPDiscrete* decpomdp = 
-            new FactoredDecPOMDPDiscrete("", "", dpomdpFile);
+                new FactoredDecPOMDPDiscrete("", "", dpomdpFile);
             
             MADPParser parser(decpomdp);
 
-            if(args.marginalize){
-                decpomdp->MarginalizeStateFactor(args.marginalizationIndex, args.sparse);
-            }else if(args.cache_flat_models)
+            if(args.marginalize)
+                decpomdp->MarginalizeStateFactor(args.marginalizationIndex,args.sparse);
+            else if(args.cache_flat_models)
                 decpomdp->CacheFlatModels(args.sparse);
                 
             dp = decpomdp;
@@ -257,7 +262,7 @@ QFunctionJAOHInterface* GetQheuristicFromArgs(
         break;
     }
     case eQHybrid:
-        q=GetHybridQheuristicFromArgs(pu,args);
+        q = GetHybridQheuristicFromArgs(pu,args);
         break;
     case eQPOMDPhybrid:
     {
@@ -267,7 +272,7 @@ QFunctionJAOHInterface* GetQheuristicFromArgs(
 #if 0 // don't override this any more
         args1.QHybridHorizonLastTimeSteps=0;
 #endif
-        q=GetHybridQheuristicFromArgs(pu,args1);
+        q = GetHybridQheuristicFromArgs(pu,args1);
         break;
     }
     case eQBGhybrid:

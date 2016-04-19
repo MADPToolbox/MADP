@@ -10,7 +10,8 @@
 
 enum PerseusBackupType { POMDP,
                          BG,
-                         EVENT_POMDP
+                         EVENT_POMDP,
+			 FACTORED_POMDP
 };
 
 #endif /* !_PERSEUSBACKUPTYPE_H_ */

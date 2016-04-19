@@ -183,6 +183,8 @@ class BayesianGameCollaborativeGraphical
         /** Prints a description of this  entire BayesianGameIdenticalPayoff 
          * to a string.*/
         std::string SoftPrint() const; 
+        
+        std::string SoftPrintSummary() const; 
 
         void SanityCheckBGCG() const;
     

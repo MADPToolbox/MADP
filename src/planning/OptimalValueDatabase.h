@@ -26,7 +26,9 @@ private:
     /// The database
     std::map<nameDiscountHorizonT, double> _m_optimalValues;
 
-    const PlanningUnitDecPOMDPDiscrete* _m_pu;
+    std::string _m_problemName;
+    double _m_discount;
+    size_t _m_horizon;
 
     /// Add an entry to the database.
     void AddEntry(const std::string &problemName,
@@ -59,6 +61,10 @@ public:
     // Constructor, destructor and copy assignment.
     /// (default) Constructor
     OptimalValueDatabase(const PlanningUnitDecPOMDPDiscrete *pu);
+
+    OptimalValueDatabase(const std::string &problemName,
+                         double discount,
+                         size_t horizon);
 
     /// Add an entry to the database. Saves it to disk.
     void SetOptimalValue(double value);

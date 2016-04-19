@@ -6,7 +6,15 @@
     * Includes new code for pruning POMDP vectors; obviates dependence on 
       Cassandra's code and old LP solve version.
 
+    * Includes new factor graph solution code
 
+    * generalized firefighting CGBG domain aded
+
+    * simulation class for Factored Dec-POMDPs and TOI Dec-MDPs
+
+    * approximate BG clustering methods
+
+    * kGMAA with clustering
 
 
 2015-02-22 Frans Oliehoek <frans.oliehoek@liverpool.ac.uk>

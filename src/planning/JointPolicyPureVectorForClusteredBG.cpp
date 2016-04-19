@@ -346,16 +346,19 @@ JointPolicyPureVectorForClusteredBG::RecursivelyFillPolicyForAgent(
         ///NOTE: this can throw an error if there is no type 
         //for the history (e.g. if the histories prob. is 0)
         Index n_tI = 0;
+        Index n_aI = 0; // ensure that action 0 is selected if exception is thrown
         try{
             n_tI = bg->FindTypeClusterIndex(agI, tc, aI, obsI);
+            n_aI = jpolBG->GetActionIndex(agI, n_tI);
         } catch (E& e) {
             cout << "JointPolicyPureVectorForClusteredBG::RecursivelyFillPolicyForAgent implement catch?\n";
             continue;
         }
-        
+
         const TypeCluster* n_tc =  bg->GetTypeCluster(agI, n_tI);
-        Index n_aI = jpolBG->GetActionIndex(agI, n_tI);
+        
         jpolJPPV->SetAction(agI, n_ohI, n_aI); //<- here something happens
+
         Index h = pu->GetHorizon();
         Index n_ts = ts+1;
         if(n_ts  <= h - 1) // ts + 1 <= h - 1

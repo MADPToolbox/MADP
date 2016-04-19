@@ -310,6 +310,20 @@ string BayesianGameCollaborativeGraphical::SoftPrint() const
     return(ss.str());
 }
 
+string BayesianGameCollaborativeGraphical::SoftPrintSummary() const
+{
+    stringstream ss;
+    ss << BayesianGameBase::SoftPrintSummary();    
+    for(Index e=0; e < _m_nrLRFs; e++)
+    {
+        ss << "LRF function " << e << ":" << endl;
+        ss << "Agent scope " << SoftPrintVector(_m_agentScopes.at(e)) << endl;
+        //ss << _m_LRFs.at(e)->SoftPrint();
+        ss << endl;
+    }
+    return(ss.str());
+}
+
 void BayesianGameCollaborativeGraphical::SanityCheckBGCG() const
 {
     for(Index e=0; e < _m_nrLRFs; e++)

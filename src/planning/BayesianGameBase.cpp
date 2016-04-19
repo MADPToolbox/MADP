@@ -239,7 +239,7 @@ double BayesianGameBase::GetProbability(Index i) const
 
 
 
-string BayesianGameBase::SoftPrint() const
+string BayesianGameBase::SoftPrintSummary() const
 {
     stringstream ss;
     ss << "Bayesian game with "<<_m_nrAgents<<" agents"<<endl;
@@ -249,6 +249,21 @@ string BayesianGameBase::SoftPrint() const
     ss << "\nNumber of types ";
     ss << SoftPrintVector(_m_nrTypes);
     ss << " ("<< _m_nrJTypes <<" joint types)"<<endl;
+    return(ss.str());
+}
+string BayesianGameBase::SoftPrint() const
+{
+    stringstream ss;
+    ss << this->SoftPrintSummary();
+/*  
+    ss << "Bayesian game with "<<_m_nrAgents<<" agents"<<endl;
+    ss << "Number of actions ";
+    ss << SoftPrintVector(_m_nrActions);
+    ss << " ("<< _m_nrJA <<" joint actions)";
+    ss << "\nNumber of types ";
+    ss << SoftPrintVector(_m_nrTypes);
+    ss << " ("<< _m_nrJTypes <<" joint types)"<<endl;
+*/    
     ss << "joint type probs ";
     if(_m_useSparse)
         ss << "(sparse) " << SoftPrintVector(_m_jTypeProbsSparse);

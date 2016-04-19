@@ -305,7 +305,7 @@ void GeneralizedMAAStarPlanner::Plan()
 
     StopTimer("GMAA::Plan");
 
-    if(_m_verboseness >= 0 && _m_max_expanded_childs.size()>0)    
+    if(_m_verboseness >= 0)    
     {
         cout << "Expanded nodes at different stages:\n"<<
             PrintTools::SoftPrintVector(_m_expanded_childs)<<endl;

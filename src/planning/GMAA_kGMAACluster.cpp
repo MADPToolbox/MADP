@@ -36,8 +36,8 @@ GMAA_kGMAACluster::GMAA_kGMAACluster(
     _m_clusteredBGsizes(horizon,vector<int>(0,0)),
     _m_clusterStatsFilename(""),
     _m_clusterAlg(clusterAlg),
-    //_m_thresholdJB(0),
-    //_m_thresholdPjaoh(0),
+    _m_thresholdJB(0),
+    _m_thresholdPjaoh(0),
     _m_dummyBG(new BayesianGameWithClusterInfo(this))
 {
     if(!_m_newBGIP_Solver)
@@ -91,8 +91,8 @@ bool GMAA_kGMAACluster::ConstructAndValuateNextPolicies(
         pP = pPcopy;
 
         bg_ts = BGwCI_sharedPtr(new BayesianGameWithClusterInfo(this, _m_qHeuristic, pP, _m_clusterAlg));
-        //bg_ts->SetThresholdJB(_m_thresholdJB);
-        //bg_ts->SetThresholdPjaoh(_m_thresholdPjaoh);
+        bg_ts->SetThresholdJB(_m_thresholdJB);
+        bg_ts->SetThresholdPjaoh(_m_thresholdPjaoh);
         //cout << "constucted BG for stage 0 "<< endl;
         //cout << bg_ts->SoftPrint() << endl;
     }
