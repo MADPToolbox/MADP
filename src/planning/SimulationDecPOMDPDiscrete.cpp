@@ -262,7 +262,8 @@ GetAction(const vector<AgentLocalObservations*> &agents, Index i,
           Index prevJaI, double &specialR) const
 {
     if(joI==INT_MAX) //first stage: there is no joI
-        return(agents[i]->Act(INT_MAX));
+        //return(agents[i]->Act(INT_MAX)); //<- let's not push magic numbers inside other classes, please!
+        return(agents[i]->ActFirstStage());
     else
     {
         vector<Index> oIs=_m_pu->JointToIndividualObservationIndices(joI);

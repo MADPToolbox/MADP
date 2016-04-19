@@ -61,7 +61,7 @@ DICEPSPlanner::DICEPSPlanner(
     PlanningUnitDecPOMDPDiscrete(horizon, p),
     _m_foundPolicy()
 {
-    _m_nrRestarts = 1;   //nrRestarts; 
+    _m_nrRestarts = 1;//nrRestarts; 
     _m_nrIterations = nrIterations;
     _m_nrSampledJointPolicies = nrSamples;
     _m_nrJointPoliciesForUpdate = nrSamplesForUpdate;

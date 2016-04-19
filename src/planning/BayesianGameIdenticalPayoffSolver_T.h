@@ -14,7 +14,6 @@
 #include <fstream>
 #include "Globals.h"
 
-#include "Referrer.h"
 #include "BayesianGameIdenticalPayoff.h"
 #include "BayesianGameIdenticalPayoffSolver.h"
 #include "JointPolicy.h"

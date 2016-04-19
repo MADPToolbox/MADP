@@ -26,8 +26,8 @@
  * decision problem or Planning unit.
  * This implies that, in order to convert a time-step of a MADP Planning
  * Unit to a Bayesian game, indices of observation(-action) histories have
- * to be converted. This class uses its own indices.
- */
+ * to be converted. This class uses its own indices. 
+ **/
 class BayesianGameBase :
     public Interface_ProblemToPolicyDiscretePure //this class implements the interface
         //used by PolicyPureVector
@@ -180,6 +180,7 @@ class BayesianGameBase :
 
         /** Prints a description of this BayesianGameBase to a string.*/
         std::string SoftPrint() const;
+        std::string SoftPrintSummary() const;
         /**\brief Print this BayesianGameBase to cout.*/
         void Print() const
         {std::cout << SoftPrint();}

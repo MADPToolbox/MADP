@@ -88,6 +88,8 @@ struct Arguments
     // GMAA Cluster options
     int useBGclustering;
     int BGClusterAlgorithm;
+    double thresholdJB;
+    double thresholdPjaoh;
 
     // JESP options
     JESP_t jesp;
@@ -101,7 +103,7 @@ struct Arguments
     int minimumNrIterations;
     int initializeWithImmediateReward;
     int initializeWithZero;
-
+    
     // Perseus belief set sampling options
     int uniqueBeliefs;
     int nrBeliefs;
@@ -188,7 +190,7 @@ struct Arguments
         nrAgents = 2;
         nrHouses = 3;
         nrFLs = 3;
-        islandConf = ProblemAloha::TwoIslands;
+        islandConf = ProblemAloha::InLine;
         alohaVariation = ProblemAloha::NoNewPacket;
         maxBacklog = 2;
 
@@ -217,7 +219,7 @@ struct Arguments
         deadline = 0;
 
         // GMAA
-        gmaa = MAAstarClassic;
+        gmaa = MAAstar;
         nrAMRestarts = 10;
         k = 1;
         saveAllBGs = 0;
@@ -230,7 +232,9 @@ struct Arguments
         // GMAA Cluster
         useBGclustering = 0;
         BGClusterAlgorithm = 0;
- 
+        thresholdJB = 0;
+        thresholdPjaoh = 0;
+
         //JESP options
         jesp = JESPDP;
 
@@ -300,6 +304,7 @@ struct Arguments
         maxplus_damping = 0.5;
         maxplus_nrRestarts = 1;
         maxplus_updateT = std::string("PARALL");
+
         BnBJointTypeOrdering = IdentityMapping;
         BnB_keepAll = false;
         BnB_consistentCompleteInformationHeur = true;

@@ -1,5 +1,3 @@
-# $Id: Makefile.am 9372 2015-03-10 18:27:08Z mtjspaan $
-
 include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
@@ -19,6 +17,8 @@ AM_CXXFLAGS 		= $(CSTANDARD)
 
 SIMULATION_CPPFILES=SimulationResult.cpp\
  SimulationDecPOMDPDiscrete.cpp \
+ SimulationTOIDecPOMDPDiscrete.cpp \
+ SimulationFactoredDecPOMDPDiscrete.cpp \
  AgentPOMDP.cpp\
  AgentBG.cpp\
  AgentQMDP.cpp\
@@ -65,6 +65,7 @@ POMDP_CPPFILES=\
  BeliefSetNonStationary.cpp\
  AlphaVector.cpp \
  AlphaVectorPlanning.cpp\
+ AlphaVectorPruning.cpp\
  Perseus.cpp \
  AlphaVectorPOMDP.cpp\
  AlphaVectorConstrainedPOMDP.cpp\
@@ -82,10 +83,11 @@ POMDP_CPPFILES=\
  QBGPlanner_TreeIncPruneBnB.cpp\
  QTreeIncPruneBG.cpp\
  PerseusBGPOMDPPlanner.cpp \
+ AlphaVectorWeighted.cpp\
+ PerseusWeightedPlanner.cpp \
  PerseusQFunctionPlanner.cpp\
  PerseusStationary.cpp
 
-# needed? AlphaVectorWeighted.cpp  PerseusWeightedPlanner.cpp 
 
 POMDP_HFILES=$(POMDP_CPPFILES:.cpp=.h)\
  ValueFunctionPOMDPDiscrete.h\
@@ -105,6 +107,7 @@ PLANNING_CPPFILES=\
  MaxPlusSolver.cpp\
  MaxPlusSolverForBGs.cpp\
  BGIP_SolverBruteForceSearch.cpp\
+ BGIP_SolverBFSNonIncremental.cpp\
  BGIP_SolverBranchAndBound.cpp\
  BGIP_BnB_Node.cpp\
  BnB_JointTypeOrdering.cpp\
@@ -120,8 +123,14 @@ PLANNING_CPPFILES=\
  BGCG_SolverMaxPlus.cpp\
  BGCG_SolverRandom.cpp\
  BGCG_SolverCreator.cpp \
+ BGCG_SolverFG.cpp\
+ BG_FactorGraphCreator.cpp\
+ FG_Solver.cpp\
+ FG_SolverMaxPlus.cpp\
+ FG_SolverNDP.cpp\
  QFunction.cpp\
  QFunctionForDecPOMDP.cpp\
+ QFunctionForFactoredDecPOMDP.cpp\
  QFunctionJAOHInterface.cpp\
  QFunctionJAOH.cpp\
  QFunctionJAOHTree.cpp\
@@ -157,9 +166,6 @@ PLANNING_CPPFILES=\
  argumentHandlers.cpp\
  argumentUtils.cpp\
  directories.cpp 
- 
-# BGCGWrapperForBGIP.cpp
-# BGCG_SolverFG.cpp
 
 PLANNING_HFILES=$(PLANNING_CPPFILES:.cpp=.h) \
  argumentHandlersPostChild.h\
@@ -180,10 +186,12 @@ PLANNING_HFILES=$(PLANNING_CPPFILES:.cpp=.h) \
  BGIP_SolverCreator_MP.h\
  BGIP_SolverCreator_CE.h\
  BGIP_SolverCreator_BFS.h\
+ BGIP_SolverCreator_BFSNonInc.h\
  BGIP_SolverCreator_BnB.h\
  BGIP_SolverCreator_Random.h\
  BGCG_SolverCreator_NDP.h \
  BGCG_SolverCreator_MP.h \
+ BGCG_SolverCreator_FG.h \
  BGCG_SolverCreator_Random.h \
  BayesianGameIdenticalPayoffInterface.h \
  BGIP_IncrementalSolverInterface_T.h \

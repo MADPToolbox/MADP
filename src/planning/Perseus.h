@@ -158,6 +158,8 @@ public:
     /// (default) Constructor
     Perseus(const PlanningUnitDecPOMDPDiscrete* pu);
     Perseus(const boost::shared_ptr<const PlanningUnitDecPOMDPDiscrete> &pu);
+    Perseus(const PlanningUnitFactoredDecPOMDPDiscrete* pu);
+    Perseus(const boost::shared_ptr<const PlanningUnitFactoredDecPOMDPDiscrete> &pu);
     /// Destructor.
     virtual ~Perseus();
 

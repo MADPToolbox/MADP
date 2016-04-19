@@ -12,9 +12,9 @@
 
 namespace GMAAtype {
 
-enum GMAA_t {MAAstar, kGMAA, FSPC, MAAstarClassic };
+    enum GMAA_t {MAAstar, kGMAA, FSPC, MAAstarClassic };
 
-std::string SoftPrint(GMAA_t type);
+    std::string SoftPrint(GMAA_t type);
 
 }
 

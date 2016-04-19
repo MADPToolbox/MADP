@@ -60,7 +60,7 @@ class GMAA_kGMAACluster : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
         void SaveClusterStats(std::string filename) const;
 
         BayesianGameWithClusterInfo::BGClusterAlgorithm _m_clusterAlg;
-        /*double _m_thresholdJB, _m_thresholdPjaoh;*/
+        double _m_thresholdJB, _m_thresholdPjaoh;
     
         /// Used in NewJpol()
         boost::shared_ptr<BayesianGameWithClusterInfo> _m_dummyBG;
@@ -144,8 +144,8 @@ class GMAA_kGMAACluster : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
             GetThisFromMostDerivedPU()
         { return this; }
 
-//        void SetTresholdJB(double threshold) { _m_thresholdJB=threshold; }
-//        void SetTresholdPjaoh(double threshold) { _m_thresholdPjaoh=threshold; }
+        void SetTresholdJB(double threshold) { _m_thresholdJB=threshold; }
+        void SetTresholdPjaoh(double threshold) { _m_thresholdPjaoh=threshold; }
 
         std::string SoftPrintClusteringStats() const;
         void PrintClusteringStats() const {

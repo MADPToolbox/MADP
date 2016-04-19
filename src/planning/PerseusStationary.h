@@ -40,6 +40,8 @@ public:
     /// (default) Constructor
     PerseusStationary(const PlanningUnitDecPOMDPDiscrete* pu);
     PerseusStationary(const boost::shared_ptr<const PlanningUnitDecPOMDPDiscrete> &pu);
+    PerseusStationary(const PlanningUnitFactoredDecPOMDPDiscrete* pu);
+    PerseusStationary(const boost::shared_ptr<const PlanningUnitFactoredDecPOMDPDiscrete> &pu) ;
     /// Destructor.
     virtual ~PerseusStationary();
 

@@ -23,6 +23,19 @@ PerseusStationary::PerseusStationary(const boost::shared_ptr<const PlanningUnitD
 {
 }
 
+PerseusStationary::PerseusStationary(const PlanningUnitFactoredDecPOMDPDiscrete* pu) :
+    AlphaVectorPlanning(pu),
+    Perseus(pu)
+{
+}
+
+PerseusStationary::PerseusStationary(const boost::shared_ptr<const PlanningUnitFactoredDecPOMDPDiscrete> &pu) :
+    AlphaVectorPlanning(pu),
+    Perseus(pu)
+{
+}
+
+
 //Destructor
 PerseusStationary::~PerseusStationary()
 {

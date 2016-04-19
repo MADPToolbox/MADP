@@ -14,7 +14,6 @@
 #include <map>
 #include "Globals.h"
 #include "ValueFunction.h"
-#include "Referrer.h"
 #include "PlanningUnitDecPOMDPDiscrete.h"
 #include "JointPolicyDiscretePure.h"
 #include "boost/numeric/ublas/matrix.hpp"
@@ -23,9 +22,7 @@
  * value function of a (pure) joint policy for a discrete Dec-POMDP.
  */
 class ValueFunctionDecPOMDPDiscrete : 
-    public ValueFunction,
-    public Referrer<PlanningUnitDecPOMDPDiscrete>,
-    public Referrer<JointPolicyDiscretePure>
+    public ValueFunction
 {
     private:
     PlanningUnitDecPOMDPDiscrete* _m_pu;
@@ -37,6 +34,10 @@ class ValueFunctionDecPOMDPDiscrete :
     size_t _m_nrS;
     size_t _m_h;
     bool _m_V_initialized;
+
+    PlanningUnitDecPOMDPDiscrete* _m_planningUnitDecPOMDPDiscrete;
+    JointPolicyDiscretePure* _m_jointPolicyDiscretePure;
+
     typedef boost::numeric::ublas::matrix<double> Matrix;
 
     Matrix* _m_p_V; //stores V(sI, JOHistI)

@@ -22,6 +22,7 @@
 #include "GMAA_MAAstarClassic.h"
 #include "GMAA_MAAstarCluster.h"
 #include "GMAA_kGMAA.h"
+#include "GMAA_kGMAACluster.h"
 
 #include "QBG.h"
 #include "QPOMDP.h"
@@ -40,6 +41,7 @@
 #include "BGIP_SolverCreator_MP.h"
 #include "BGIP_SolverCreator_BnB.h" 
 #include "BGIP_SolverCreator_Random.h" 
+#include "BGIP_SolverCreator_BFSNonInc.h" 
 
 #include "argumentHandlers.h"
 #include "argumentUtils.h"
@@ -610,6 +612,8 @@ void InitializeOutput(ArgumentHandlers::Arguments &args,
         if(args.useBGclustering)
         {
             ss << "_Cluster";
+            if(args.BGClusterAlgorithm != BayesianGameWithClusterInfo::Lossless)
+                ss << "_tJB" << args.thresholdJB << "_tPjaoh" << args.thresholdPjaoh;
         }
         switch(args.gmaa)
         {
@@ -633,6 +637,7 @@ void InitializeOutput(ArgumentHandlers::Arguments &args,
             switch(args.bgsolver)
             {
             case BFS:
+            case BFSNonInc:
                 // BFS has no parameters
                 break;
             case AM:
@@ -746,7 +751,14 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
         case FSPC:
             args.k=1; // fall through on purpose
         case kGMAA:
-            throw E("kGMAA not implemented for clustered version");
+        {
+            GMAA_kGMAACluster *gmaaCluster=
+                new GMAA_kGMAACluster(params, bgipsc_p,
+                                      args.horizon, decpomdp, args.k,
+                                      static_cast<BayesianGameWithClusterInfo::BGClusterAlgorithm>(args.BGClusterAlgorithm));
+            gmaaCluster->SetTresholdJB(args.thresholdJB);
+            gmaaCluster->SetTresholdPjaoh(args.thresholdPjaoh);
+            gmaa=gmaaCluster;
             break;
         case MAAstarClassic:
             throw E("MAAstarClassic not implemented for clustered version");
@@ -830,6 +842,15 @@ void GetBGIPSolverCreatorInstances(
                         args.verbose, args.k);
             else
                 bgipsc_p = new BGIP_SolverCreator_BFS<JointPolicyPureVector>(args.verbose, args.k);
+            break;
+        case BFSNonInc:
+            if(args.useBGclustering)
+                bgipsc_p = 
+                    new BGIP_SolverCreator_BFSNonInc<JointPolicyPureVectorForClusteredBG>(
+                        args.verbose, args.k);
+            else
+                bgipsc_p = new BGIP_SolverCreator_BFSNonInc<JointPolicyPureVector>(
+                    args.verbose, args.k);
             break;
         case AM:
             if(args.useBGclustering)
