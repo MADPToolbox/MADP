@@ -28,6 +28,7 @@
 #define CACHE_IMPLIED_JPOL 0
 
 #define INITIALIZE_LB_TO_BESTFOUND 1
+#define BAILOUT_WHEN_CBG_LOWERBOUND_IS_HIT 0
 
 
 #define DEBUG_VALID_ACTIONS 0
@@ -140,7 +141,7 @@ private:
         if(this->GetNrFoundSolutions()>0)
         {
             _m_maxLowerBound=this->GetPayoff();
-            if(_m_verbosity>=0)
+            if(_m_verbosity>=1)
                 std::cout << "Initialized max lower bound to value of best solution (out of "
                           << this->GetNrFoundSolutions() << " already found): "
                           << _m_maxLowerBound << std::endl;
@@ -168,6 +169,13 @@ private:
                 _m_nrNodesFullySpecified++;
                 break;
             }
+#if BAILOUT_WHEN_CBG_LOWERBOUND_IS_HIT
+            if(top->GetF() < _m_CBGlowerBound)
+            {
+                std::cout << "Hit CBG lowerbound, bailing out" << std::endl;
+                return(-DBL_MAX);
+            }
+#endif
             if(top->GetF() < _m_maxLowerBound &&
                top->IsFullySpecifiedPolicy(_m_maxDepth)) // we still need to check
                                               // whether this is a fully

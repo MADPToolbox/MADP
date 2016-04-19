@@ -167,7 +167,7 @@ EXTRA_DIST = COPYING FILEFORMAT README tree
 # the LTLIBRARIES (LibTool-libraries)
 
 # the library to be build...
-lib_LTLIBRARIES =  
+lib_LTLIBRARIES = 
 noinst_LTLIBRARIES =  libDAI.la
 
 # sources for the library:

@@ -62,7 +62,7 @@ example_decTigerJESP_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 example_decTigerJESP_CXXFLAGS= $(CSTANDARD)
 example_decTigerJESP_CFLAGS=
 
-# Build GMAA
+# Build example_GMAA
 example_GMAA_SOURCES = example_GMAA.cpp
 example_GMAA_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
 example_GMAA_LDFLAGS = $(AM_LDFLAGS) 

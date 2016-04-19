@@ -41,25 +41,31 @@ TwoStageDynamicBayesianNetwork::~TwoStageDynamicBayesianNetwork()
     for(Index i=0;i!=_m_O_CPDs.size();++i)
         delete _m_O_CPDs.at(i);
 
-    for(Index y=0; y < _m_nrY; y++)
-    {
-        delete _m_X_restr_perY[y];
-        delete _m_A_restr_perY[y];
-        delete _m_Y_restr_perY[y];
-    }
+    // delete by iterator, as temporary data may not be allocated when
+    // reading from disk
+    { std::vector<std::vector<Index>* >::iterator it;
+        for (it=_m_X_restr_perY.begin();it!=_m_X_restr_perY.end();it++)
+            delete *it;
+        for (it=_m_A_restr_perY.begin();it!=_m_A_restr_perY.end();it++)
+            delete *it;
+        for (it=_m_Y_restr_perY.begin();it!=_m_Y_restr_perY.end();it++)
+            delete *it;
 
-    for(Index o=0; o < _m_nrO; o++)
-    {
-        delete _m_X_restr_perO[o];
-        delete _m_A_restr_perO[o];
-        delete _m_Y_restr_perO[o];
-        delete _m_O_restr_perO[o];
+        for (it=_m_X_restr_perO.begin();it!=_m_X_restr_perO.end();it++)
+            delete *it;
+        for (it=_m_A_restr_perO.begin();it!=_m_A_restr_perO.end();it++)
+            delete *it;
+        for (it=_m_Y_restr_perO.begin();it!=_m_Y_restr_perO.end();it++)
+            delete *it;
+        for (it=_m_O_restr_perO.begin();it!=_m_O_restr_perO.end();it++)
+            delete *it;
     }
-
-    for(Index yI=0; yI < _m_nrY; yI++)
-        delete [] _m_nrVals_SoI_Y_stepsize.at(yI);
-    for(Index oI=0; oI < _m_nrO; oI++)
-        delete [] _m_nrVals_SoI_O_stepsize.at(oI);
+    { std::vector<size_t*>::iterator it;
+        for (it=_m_nrVals_SoI_Y_stepsize.begin();it!=_m_nrVals_SoI_Y_stepsize.end();it++)
+            delete [] *it;
+        for (it=_m_nrVals_SoI_O_stepsize.begin();it!=_m_nrVals_SoI_O_stepsize.end();it++)
+            delete [] *it;
+    }
 
     delete _m_IndividualToJointYiiIndices_catVector;
     delete _m_IndividualToJointOiiIndices_catVector;

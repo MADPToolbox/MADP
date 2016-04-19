@@ -78,24 +78,24 @@ int main(int argc, char **argv)
 
     try
     {
-        cout << "Instantiating the problem..."<<endl;
-        DecPOMDPDiscreteInterface* decpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
-        cout << "...done."<<endl;
+    cout << "Instantiating the problem..."<<endl;
+    DecPOMDPDiscreteInterface* decpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
+    cout << "...done."<<endl;
 
-        PlanningUnitDecPOMDPDiscrete *np = new NullPlanner(args.horizon, decpomdp);
-        MDPValueIteration vi(*np);
-        vi.Plan();
-        QTable q = vi.GetQTable(0); //<- infinite horizon, so get 1 value function of stage 0
+    PlanningUnitDecPOMDPDiscrete *np = new NullPlanner(args.horizon, decpomdp);
+    MDPValueIteration vi(*np);
+    vi.Plan();
+    QTable q = vi.GetQTable(0); //<- infinite horizon, so get 1 value function of stage 0
 
-        int nrRuns = args.nrRuns; //500;
-        int seed = args.randomSeed;
-        SimulationDecPOMDPDiscrete sim(*np, nrRuns, seed);
-        vector<double> avgRewards;
+    int nrRuns = args.nrRuns; //500;
+    int seed = args.randomSeed;
+    SimulationDecPOMDPDiscrete sim(*np, nrRuns, seed);
+    vector<double> avgRewards;
 
-        double r;
-        r = runOneSimulation(q, np, sim );
-        avgRewards.push_back(r);
-        cout << "Avg rewards: " << SoftPrintVector(avgRewards) << endl;
+    double r;
+    r = runOneSimulation(q, np, sim );
+    avgRewards.push_back(r);
+    cout << "Avg rewards: " << SoftPrintVector(avgRewards) << endl;
 
     }
     catch(E& e){ e.Print(); }

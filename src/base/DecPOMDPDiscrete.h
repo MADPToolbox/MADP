@@ -146,7 +146,13 @@ class DecPOMDPDiscrete :
         double GetRewardForAgent(Index agentI, Index sI, Index jaI) const
         {return GetReward(sI, jaI);}
 
+        static void CompareModels(
+            const DecPOMDPDiscreteInterface& d1, 
+            const DecPOMDPDiscreteInterface& d2
+            );
+
         RGet* GetRGet() const;
+
         /// Returns a pointer to a copy of this class.
         virtual DecPOMDPDiscrete* Clone() const
         { return new DecPOMDPDiscrete(*this); }

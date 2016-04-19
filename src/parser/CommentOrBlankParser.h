@@ -61,7 +61,7 @@ using namespace boost::spirit;
 #define DEBUG_COMPARS 0
 #define DEBUG_COBP 0
 
-namespace comment_cbop {
+namespace comment_cobp {
     typedef char                    char_t;
     //typedef file_iterator<char_t>   iterator_t;
     typedef file_iterator<char_t>   iterator_t_fi;
@@ -72,15 +72,15 @@ namespace comment_cbop {
 namespace{    
     void    cp_eol(iterator_t, iterator_t)
     { if(DEBUG_COMPARS)	std::cout << "EOL\n"; }
-    void    cp_endinput(iterator_t, iterator_t)
-    { if(DEBUG_COMPARS)	std::cout << "END OF INPUT\n"; }
+    //void    cp_endinput(iterator_t, iterator_t)
+    //{ if(DEBUG_COMPARS)	std::cout << "END OF INPUT\n"; }
     void    cp_startcomment(char_t)
     { if(DEBUG_COMPARS) std::cout<< "#-STARTCOMMENT\n"; }
 
-    void    cobp_blank(char_t)    {if(DEBUG_COBP)
-	std::cout << "SKIPPED BLANK\n";};
-    void    cobp_emptyline(iterator_t str, iterator_t end)    
-	{ if(DEBUG_COBP) std::cout << "SKIPPED EMPTYLINE\n"; };
+    void    cobp_blank(char_t)    
+    {if(DEBUG_COBP) std::cout << "SKIPPED BLANK\n";};
+    //void    cobp_emptyline(iterator_t str, iterator_t end)    
+    //{ if(DEBUG_COBP) std::cout << "SKIPPED EMPTYLINE\n"; };
     void    cobp_comment(iterator_t str, iterator_t end)
     {
         std::string  s(str, end);
@@ -93,7 +93,7 @@ namespace{
 struct CommentParser : public sub_grammar<CommentParser>
 {    
     typedef
-	sequence<sequence<action<chlit<char>, void (*)(comment_cbop::char_t)>, kleene_star<alternative<print_parser, blank_parser> > >, kleene_star<action<eol_parser, void (*)(comment_cbop::iterator_t, comment_cbop::iterator_t)> > >
+	sequence<sequence<action<chlit<char>, void (*)(comment_cobp::char_t)>, kleene_star<alternative<print_parser, blank_parser> > >, kleene_star<action<eol_parser, void (*)(comment_cobp::iterator_t, comment_cobp::iterator_t)> > >
     start_t;
 
     CommentParser() 
@@ -116,7 +116,7 @@ struct CommentOrBlankParser : public sub_grammar<CommentOrBlankParser>
 {
 
     typedef
-	alternative<action<blank_parser, void (*)(comment_cbop::char_t)>, action<comment_cbop::CommentParser, void (*)(comment_cbop::iterator_t, comment_cbop::iterator_t)> >
+	alternative<action<blank_parser, void (*)(comment_cobp::char_t)>, action<comment_cobp::CommentParser, void (*)(comment_cobp::iterator_t, comment_cobp::iterator_t)> >
     start_t;
 
     CommentOrBlankParser()
@@ -131,6 +131,7 @@ struct CommentOrBlankParser : public sub_grammar<CommentOrBlankParser>
     start_t start;
 
 };
+CommentOrBlankParser const commentOrBlankParser_p = CommentOrBlankParser();
 
 }
 #endif /* !_COMMENTORBLANKPARSER_H_ */

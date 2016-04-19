@@ -17,6 +17,7 @@
 #include "QAV.h"
 
 class PerseusBGPlanner;
+class PerseusBGNSPlanner;
 class JointBeliefInterface;
 class JointPolicyPureVector;
 class BayesianGameIdenticalPayoff;
@@ -27,6 +28,7 @@ class AgentBG : public AgentDelayedSharedObservations
 private:    
     
     QAV<PerseusBGPlanner> *_m_QBGstationary;
+    QAV<PerseusBGNSPlanner> *_m_QBGnonStationary;
 
     size_t _m_t;
 
@@ -49,6 +51,8 @@ public:
     /// (default) Constructor
     AgentBG(const PlanningUnitDecPOMDPDiscrete *pu, Index id,
             QAV<PerseusBGPlanner> *QBG);
+    AgentBG(const PlanningUnitDecPOMDPDiscrete *pu, Index id,
+            QAV<PerseusBGNSPlanner> *QBG);
 
     /// Copy constructor.
     AgentBG(const AgentBG& a);

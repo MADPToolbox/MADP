@@ -17,8 +17,8 @@
 #include "ParserInterface.h"
 
 
-/**\brief ParserPOMDPDiscrete is a parser for
- * POMDPDiscrete. */
+/**\brief \deprecated ParserPOMDPDiscrete is a parser for
+ * POMDPDiscrete that makes use of Tony Cassandra's POMDPsolve to do the parsing.*/
 class ParserPOMDPDiscrete :
     public ParserInterface
 {

@@ -6,7 +6,7 @@
  */
 
 #include "ParserTOIDecPOMDPDiscrete.h"
-#include "ParserDecPOMDPDiscrete.h"
+#include "ParserDPOMDPFormat_Spirit.h"
 #include <fstream>
 
 using namespace std;
@@ -87,7 +87,7 @@ void ParserTOIDecPOMDPDiscrete::ParseAgent(Index id)
     decpomdp=new DecPOMDPDiscrete("", "", madp->GetProblemFile());
     decpomdp->SetSparse(madp->GetSparse());
 
-    ParserDecPOMDPDiscrete parser(decpomdp);
+    DPOMDPFormatParsing::ParserDPOMDPFormat_Spirit parser(decpomdp);
     parser.Parse();
 
     if(decpomdp->GetNrAgents()!=1)

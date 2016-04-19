@@ -15,15 +15,16 @@ POMDPDiscrete::POMDPDiscrete(const std::string &name,
                              const std::string &pf) :
     DecPOMDPDiscrete(name,descr,pf)
 {
+    this->SetNrAgents(1);
 }
 //Copy constructor.    
 // POMDPDiscrete::POMDPDiscrete(const POMDPDiscrete& o) 
 // {
 // }
 //Destructor
-POMDPDiscrete::~POMDPDiscrete()
-{
-}
+//POMDPDiscrete::~POMDPDiscrete()
+//{
+//}
 //Copy assignment operator
 // POMDPDiscrete& POMDPDiscrete::operator= (const POMDPDiscrete& o)
 // {

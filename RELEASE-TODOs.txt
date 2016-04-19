@@ -1,0 +1,49 @@
+====/====
+COPYING:
+
+still lists this:
+"src/libpomdp-solve - POMDP-solve
+http://pomdp.org/code/index.shtml
+POMDP solve is licensed under GNU GENERAL PUBLIC LICENSE Version 2.
+It includes old versions of the LP_SOLVE toolkit. (Newer version available from
+http://lpsolve.sourceforge.net/5.0/Intro.htm)"
+
+
+Changelog:
+-edit the date
+-other features?
+
+README:
+-the required software?
+
+
+configure.ac
+-delete disabled files
+
+
+
+====/src:====
+
+boost? update? 
+-> check if compiles
+
+
+====/src/base:====
+
+DecPOMDPDiscrete.cpp:
+-should we include 
+void DecPOMDPDiscrete::ConvertFiniteToInfiniteHorizon(size_t horizon)
+?
+
+done
+====/src/examples:====
+done
+====/src/include:====
+done
+====/src/parser:====
+done
+====/src/XXX:====
+====/src/XXX:====
+====/src/XXX:====
+====/src/XXX:====
+

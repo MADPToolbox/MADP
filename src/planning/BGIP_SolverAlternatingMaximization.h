@@ -14,7 +14,6 @@
 #include "Globals.h"
 #include "TimeTools.h"
 #include <float.h>
-#include "Referrer.h"
 
 #include "BGIP_IncrementalSolverInterface_T.h"
 #include "JPPVValuePair.h"

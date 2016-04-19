@@ -12,8 +12,6 @@
 #include <iostream>
 #include "Globals.h"
 #include "FactoredDecPOMDPDiscrete.h"
-#include "boost/bind.hpp"
-#include "boost/function.hpp"
 
 class FactoredMMDPDiscrete : public FactoredDecPOMDPDiscrete
 {
@@ -48,17 +46,6 @@ FactoredMMDPDiscrete(
 
     void Initialize2DBN();
 
-protected:  
-
-private:
-    /**\brief Check whether models appear valid probability 
-     * distributions.  
-     *
-     * Different from the version in the parent class, observations 
-     * are not exhaustively checked here.*/
-    bool SanityCheckObservations() const
-    {return true;}
-
     // Called in MultiAgentDecisionProcessDiscreteFactoredStates::Initialize2DBN CPT initialization but not utilized in FactoredMMDPDiscrete.
     // Intentionally breaks inheritance chain (no fully-observable subclass
     // can re-implement this and hope to get this executed)
@@ -72,22 +59,22 @@ private:
         // could first check whether GetYSoI_O(o) is full state space scope
         return oVal == IndexTools::IndividualToJointIndices(Ys, GetNrValuesPerFactor()) ? 1.0 : 0.0;
     }
-
-    // This default constructed boost::function is empty().
-    // Test in MultiAgentDecisionProcessDiscreteFactoredStates::Initialize2DBN
-    // (via if(f.empty()) or if(f)) to avoid initialization of observation CPTs.
-    boost::function<double (
-        Index o,
-        Index oVal,
-        const std::vector< Index>& Xs,
-        const std::vector< Index>& As,
-        const std::vector< Index>& Ys,
-        const std::vector< Index>& Os ) > EmptyComputeObservationProb;
   
     // Intentionally breaks inheritance chain
     void SetScopes() //reimplemented from base class
     {SetYScopes(); SetOScopes();}
     void SetOScopes();
+        
+protected:  
+
+private:
+    /**\brief Check whether models appear valid probability 
+     * distributions.  
+     *
+     * Different from the version in the parent class, observations 
+     * are not exhaustively checked here.*/
+    bool SanityCheckObservations() const
+    {return true;}
 
     /// Construct all the observations for fully-observable case.
     void ConstructObservations();

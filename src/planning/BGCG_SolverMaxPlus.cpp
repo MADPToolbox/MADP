@@ -36,6 +36,8 @@ BGCG_SolverMaxPlus::BGCG_SolverMaxPlus(
 
 double BGCG_SolverMaxPlus::Solve()
 {
+    if(_m_verbosity >= 1)
+        cout << "BGCG_SolverMaxPlus::Solve(), starting..." << endl;
     BGCG_constPtr bgcg = GetBGCG();
 
     //an assignment of variables (v3, v8, v14) corresponds to an assignment

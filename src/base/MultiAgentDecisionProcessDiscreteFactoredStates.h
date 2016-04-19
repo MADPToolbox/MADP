@@ -19,8 +19,6 @@
 #include "MADPComponentDiscreteActions.h"
 #include "MADPComponentDiscreteObservations.h"
 #include "TwoStageDynamicBayesianNetwork.h"
-#include "boost/bind.hpp"
-#include "boost/function.hpp"
 #include "FSDist_COF.h"
 
 #define MADP_DFS_WARNINGS 0
@@ -81,7 +79,7 @@ private:
     virtual void SetOScopes() = 0;
     virtual void SetScopes()
     {SetYScopes(); SetOScopes();}
-
+    
     virtual double ComputeTransitionProb(
         Index y,
         Index yVal,
@@ -134,54 +132,7 @@ public:
     /// Copy assignment operator
     MultiAgentDecisionProcessDiscreteFactoredStates& operator= (const MultiAgentDecisionProcessDiscreteFactoredStates& o);
 
-    virtual void Initialize2DBN();
 
-    /**(Joao Messias, 25/9/12): 
-     * I've added optional function pointer arguments in Initialize2DBN() to
-     * allow the implementation of SetScopes and Compute(...)Prob to be
-     * located outside of the MultiAgentDecisionProcessDiscreteFactoredStates
-     * class (and its derived classes such as FactoredDecPOMDPDiscrete),
-     * which allows those functions, which used to be pure virtual, to be
-     * handled by other classes instead (i.e. parsers). This is necessary if
-     * we want to extract information on scopes and probabilities "as we read
-     * it" from problem files, instead of loading all of that into memory
-     * first. The alternative would be to have a pointer to a parser class
-     * inside FactoredDecPOMDPDiscrete, but since the parser itself already
-     * refers to a FactoredDecPOMDPDiscrete at construction, that
-     * interdependency would be a bit of a mess. With the current approach,
-     * functions which are not local to either the parser or the factored
-     * model class act as intermediaries between the two (and both class
-     * pointers are bound to them when they are sent to the Initialize2DBN
-     * function). The fact that these functions are not local to the parser
-     * class either is more of a matter of choice, since I think that the
-     * parser interface should not depend on the particularities of what's
-     * inside the factored model classes.
-     *  
-     * Also, since the function arguments are optional, this means that the
-     * already existing implementation of all Factored DecPOMDP problems
-     * (Aloha, FFG, etc) remains valid, since they have their own
-     * implementation of the required functions.
-     *  
-     * Although std already supported function pointers and argument binds,
-     * it only allowed binds of functions with two arguments, which, as you
-     * can see in those code snippets, would be insufficient in that
-     * particular form. The boost version of bind is more general, and
-     * overall easier to use. The use of the boost::function type is a
-     * consequence of using boost::bind.
-     */
-
-    virtual void Initialize2DBN(boost::function<void () > SetScopes,
-                                boost::function<double (Index, 
-                                                        Index,
-                                                        const std::vector< Index>&,
-                                                        const std::vector< Index>&,
-                                                        const std::vector< Index>&) > ComputeTransitionProb,
-                                boost::function<double (Index o,
-                                                        Index oVal,
-                                                        const std::vector< Index>& Xs,
-                                                        const std::vector< Index>& As,
-                                                        const std::vector< Index>& Ys,
-                                                        const std::vector< Index>& Os) > ComputeObservationProb);
     size_t GetNrStates() const { return(_m_S.GetNrStates()); }
     const State* GetState(Index i) const { return(_m_S.GetState(i)); }
     std::string SoftPrintState(Index sI) const { return(_m_S.SoftPrintState(sI)); }
@@ -433,7 +384,7 @@ public:
     //problematic...
     //However, they can simply return 0
     const TransitionModelDiscrete* GetTransitionModelDiscretePtr() const
-    { 
+    {
         if(_m_cached_FlatTM)
             return _m_p_tModel;
         else
@@ -454,7 +405,157 @@ public:
      * NS dependencies, and which do not directly influence any LRF
      * */
     void MarginalizeTransitionObservationModel(const Index sf, bool sparse);
+    
+    /**
+     * \brief This is the base class for functors that set the scopes of the 2-DBN.
+     */
+    class ScopeFunctor
+    {
+    public:
+        virtual void operator()(void) = 0;
+    };
+
+    /**
+     * \brief This is the base class for functors that return the transition probability for a given (s,a,s') tuple.
+     */
+    class TransitionProbFunctor
+    {
+    public:
+        virtual double operator()(Index y,
+                                  Index yVal,
+                                  const std::vector< Index>& Xs,
+                                  const std::vector< Index>& As,
+                                  const std::vector< Index>& Ys) const = 0;
+    };
+    
+    /**
+     * \brief This is the base class for functors that return the observation probability for a given (s,a,s',o) tuple.
+     */
+    class ObservationProbFunctor
+    {
+    public:
+        ObservationProbFunctor(bool isEmpty = false) :
+        _m_isEmpty(isEmpty){}
+        
+        virtual double operator()(Index o,
+                                  Index oVal,
+                                  const std::vector< Index>& Xs,
+                                  const std::vector< Index>& As,
+                                  const std::vector< Index>& Ys,
+                                  const std::vector< Index>& Os) const
+                                  {return 0;}
+                                  
+        bool isEmpty()
+        {return _m_isEmpty;}
+                                
+    private:  
+        bool _m_isEmpty;
+    };
+    
+    /**
+     * \brief The BoundScopeFunctor class binds the "SetScopes" function to a templated object.
+     */
+    template <class SF> class BoundScopeFunctor : public ScopeFunctor
+    {
+    private:
+        SF* _m_sf;
+        void (SF::*_m_func)();
+    public:
+        BoundScopeFunctor(SF* sf_ptr, void (SF::*func_ptr) (void)):
+        _m_sf(sf_ptr),
+        _m_func(func_ptr){};
+      
+        void operator()(void)
+        {(*_m_sf.*_m_func) ();};
+    };
+    
+    /**
+     * \brief The BoundTransitionProbFunctor class binds the "ComputeTransitionProb" function to a templated object.
+     */    
+    template <class TF> class BoundTransitionProbFunctor : public TransitionProbFunctor
+    {
+    private:
+        TF* _m_tf;
+        double (TF::*_m_func)(Index,
+                              Index,
+                              const std::vector< Index>&,
+                              const std::vector< Index>&,
+                              const std::vector< Index>&) const;
+    public:
+        BoundTransitionProbFunctor(TF* tf_ptr, double (TF::*func_ptr) (Index,
+                                                                       Index,
+                                                                       const std::vector< Index>&,
+                                                                       const std::vector< Index>&,
+                                                                       const std::vector< Index>&) const):
+                                                                       _m_tf(tf_ptr),
+                                                                       _m_func(func_ptr){};
+                                                                     
+        double operator()(Index y,
+                          Index yVal,
+                          const std::vector< Index>& Xs,
+                          const std::vector< Index>& As,
+                          const std::vector< Index>& Ys) const
+                          {return (*_m_tf.*_m_func) (y,yVal,Xs,As,Ys);};
+    };
+    
+    /**
+     * \brief The BoundObservationProbFunctor class binds the "ComputeObservationProb" function to a templated object.
+     */     
+    template <class OF> class BoundObservationProbFunctor : public ObservationProbFunctor
+    {
+    private:
+        OF* _m_of;
+        double (OF::*_m_func)(Index,
+                              Index,
+                              const std::vector< Index>&,
+                              const std::vector< Index>&,
+                              const std::vector< Index>&,
+                              const std::vector< Index>&) const;
+    public:
+        BoundObservationProbFunctor(OF* of_ptr, double (OF::*func_ptr) (Index,
+                                                                        Index,
+                                                                        const std::vector< Index>&,
+                                                                        const std::vector< Index>&,
+                                                                        const std::vector< Index>&,
+                                                                        const std::vector< Index>&) const):
+                                                                        _m_of(of_ptr),
+                                                                        _m_func(func_ptr){};
+        
+        double operator()(Index o,
+                          Index oVal,
+                          const std::vector< Index>& Xs,
+                          const std::vector< Index>& As,
+                          const std::vector< Index>& Ys,
+                          const std::vector< Index>& Os) const
+                          {return (*_m_of.*_m_func) (o,oVal,Xs,As,Ys,Os);};
+    };
+    
+    /**
+     * The EmptyObservationProbFunctor class can be used by fully-observable subclasses of
+     * MultiAgentDecisionProcessDiscreteFactoredStates, in order to initialize the 2DBN without
+     * requiring an actual observation function.
+     */
+    class EmptyObservationProbFunctor : public ObservationProbFunctor
+    {          
+    public:     
+        EmptyObservationProbFunctor() :
+        ObservationProbFunctor(true){};
+    };
+    
+    virtual void Initialize2DBN();
+    /**
+     * This signature allows us to initialize the 2DBN using externally supplied functors to
+     * set the scopes, and compute transition and observation probabilities in a discrete factored
+     * model. This is useful, for example, if we want to read these from a file 
+     * (e.g. as done by ParserProbModelXML) instead of creating ad-hoc implementations of each
+     * of these functions for each specific planning problem.
+     */
+    virtual void Initialize2DBN(ScopeFunctor& SetScopes,
+                                TransitionProbFunctor& ComputeTransitionProb,
+                                ObservationProbFunctor& ComputeObservationProb);
 };
+
+
 
 
 #endif /* !_MULTIAGENTDECISIONPROCESSDISCRETEFACTOREDSTATES_H_ */

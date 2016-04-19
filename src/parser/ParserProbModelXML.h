@@ -1,6 +1,7 @@
 /* REPLACE_MADP_HEADER */
 /* REPLACE_CONTRIBUTING_AUTHORS_START
  * Joao Messias 
+ * Frans Oliehoek
  * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
@@ -223,8 +224,7 @@ class ParserProbModelXML :
         std::vector<std::size_t> _m_ASizes;
 };
 
-
-#endif /* !_PARSERDECPOMDPDISCRETE_H_ */
+#endif 
 
 // Local Variables: ***
 // mode:c++ ***

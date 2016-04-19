@@ -177,8 +177,8 @@ public:
     bool SetStatesInitialized(bool b) { return(_m_S.SetInitialized(b)); }
 
     void SetNrObservations(Index AI, size_t nrO) { _m_O.SetNrObservations(AI,nrO); }
-    void AddObservation(Index AI, const std::string &name,
-                        const std::string &description="") { _m_O.AddObservation(AI,name, description); }
+    void AddObservation(Index AI, const std::string &name, const std::string &description="") 
+        { _m_O.AddObservation(AI,name, description); }
     const ObservationDiscrete* GetObservationDiscrete(Index agentI, 
                                                       Index a) const
         { return(_m_O.GetObservationDiscrete(agentI,a)); }
@@ -188,8 +188,8 @@ public:
     bool SetObservationsInitialized(bool b) { return(_m_O.SetInitialized(b)); }
 
     void SetNrActions(Index AI, size_t nrA) { _m_A.SetNrActions(AI,nrA); }
-    void AddAction(Index AI, const std::string &name,
-                   const std::string &description="") { _m_A.AddAction(AI,name, description); }
+    void AddAction(Index AI, const std::string &name, const std::string &description="") 
+        { _m_A.AddAction(AI,name, description); }
     const ActionDiscrete* GetActionDiscrete(Index agentI, Index a) const
         { return(_m_A.GetActionDiscrete(agentI,a)); }
     size_t ConstructJointActions() { return(_m_A.ConstructJointActions()); }

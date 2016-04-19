@@ -148,7 +148,11 @@ Index Scope::GetPositionForIndex(Index i) const
         pos++;
         it++;
         if(it == this->end())
-            throw E("Scope::GetPositionForIndex(Index i) i not found!");
+        {
+            stringstream ss;
+            ss << "Scope::GetPositionForIndex(Index i=" << i <<") not found!";
+            throw E(ss);
+        }
 
     }
     // *it == i, so...

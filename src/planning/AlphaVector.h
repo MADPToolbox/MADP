@@ -99,6 +99,7 @@ public:
     AlphaVector Add(const AlphaVector& B) const;
     /// Add B to this (in place Add)
     void IAdd(const AlphaVector& B);
+
 };
 
 #endif /* !_ALPHAVECTOR_H_ */

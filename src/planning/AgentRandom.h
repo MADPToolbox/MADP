@@ -38,6 +38,8 @@ public:
 
     /// Returns an individual action uniformly at random.
     Index Act();
+    Index ActFirstStage()
+    {return Act();}
     Index Act(Index joI)
     {return Act();}
     Index Act(Index sI, Index joI, double reward) 

@@ -13,9 +13,11 @@
 #define USE_ARBITRARY_PRECISION_INDEX 0
 
 // Indicates whether to use the pomdp-solve library, or call an external program.
-#if !DARWIN
-#define USE_POMDPSOLVE_LIBRARY 1
-#else // on OSX the pomdpsolve library doesn't get compiled in, so this
-      // should always be set to 0
+//  #if !DARWIN
+//  #define USE_POMDPSOLVE_LIBRARY 1
+//  #else // on OSX the pomdpsolve library doesn't get compiled in, so this
+//        // should always be set to 0
+//  #define USE_POMDPSOLVE_LIBRARY 0
+//  #endif
+//FAO: we don't want to use it anymore...
 #define USE_POMDPSOLVE_LIBRARY 0
-#endif

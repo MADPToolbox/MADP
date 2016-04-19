@@ -6,12 +6,12 @@
  */
 
 #include "MADPParser.h"
-#include "ParserDecPOMDPDiscrete.h"
+#include "ParserDPOMDPFormat_Spirit.h"
 #include "ParserTOIDecPOMDPDiscrete.h"
 #include "ParserTOIDecMDPDiscrete.h"
 #include "ParserTOIFactoredRewardDecPOMDPDiscrete.h"
 #include "ParserTOICompactRewardDecPOMDPDiscrete.h"
-#include "ParserPOMDPDiscrete.h"
+#include "ParserPOMDPFormat_Spirit.h"
 #include "ParserProbModelXML.h"
 #include "DecPOMDPDiscrete.h"
 #include "TOIDecPOMDPDiscrete.h"
@@ -22,7 +22,7 @@
 
 void MADPParser::Parse(DecPOMDPDiscrete *model)
 {
-    ParserDecPOMDPDiscrete parser(model);
+    DPOMDPFormatParsing::ParserDPOMDPFormat_Spirit parser(model);
     parser.Parse();
 }
 
@@ -58,6 +58,6 @@ void MADPParser::Parse(FactoredDecPOMDPDiscrete *model)
 
 void MADPParser::Parse(POMDPDiscrete *model)
 {
-    ParserPOMDPDiscrete parser(model);
+    POMDPFormatParsing::ParserPOMDPFormat_Spirit parser(model);
     parser.Parse();
 }

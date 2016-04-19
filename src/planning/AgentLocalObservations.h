@@ -40,9 +40,10 @@ public:
     /// Destructor.
     ~AgentLocalObservations(){};
 
-    /** \brief Return an individual action index based on an
-     *  individual observation index. */
+    /** \brief Return an individual action index based on an individual observation index. */
     virtual Index Act(Index oI) = 0;
+    /** \brief Return an individual action index for the first stage. */
+    virtual Index ActFirstStage() = 0;
 };
 
 

@@ -32,7 +32,7 @@ class MADPParser
 {
 private:    
 
-    /// Parse a DecPOMDPDiscrete using ParserDecPOMDPDiscrete.
+    /// Parse a DecPOMDPDiscrete using ParserDPOMDPFormat_Spirit.
     void Parse(DecPOMDPDiscrete *model);
     void Parse(TOIDecPOMDPDiscrete *model);
     void Parse(TOIDecMDPDiscrete *model);

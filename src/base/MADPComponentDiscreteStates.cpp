@@ -78,6 +78,15 @@ bool MADPComponentDiscreteStates::SetInitialized(bool b)
         if(abs(sum-1)>PROB_PRECISION)
             validISD=false;
 
+        // but if it sums to 0, this means the ISD simply has not been set.
+        // in this case, we set to uniform:
+        if(abs(sum) < PROB_PRECISION)
+        {
+            cerr << "Warning, initial state distribution was not set, assuming uniform..." << endl;
+            this->SetUniformISD();
+            validISD = true;
+        }
+
         // check whether the size is correct
         if(_m_initialStateDistribution->size()!=_m_nrStates)
             validISD=false;

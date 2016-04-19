@@ -57,7 +57,8 @@ class BGCG_SolverCreator
             boost::shared_ptr<const BayesianGameCollaborativeGraphical> bgcg =
                 boost::dynamic_pointer_cast<const BayesianGameCollaborativeGraphical> (bg);
             //return this->operator()(bgcg);
-            return this->Create_BGCG_Solver(bgcg);
+            BayesianGameIdenticalPayoffSolver* temp = this->Create_BGCG_Solver(bgcg);
+            return temp;
         }
 
         //data manipulation (set) functions:

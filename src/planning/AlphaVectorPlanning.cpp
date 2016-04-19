@@ -8,6 +8,7 @@
 #include "AlphaVectorPlanning.h"
 #include <float.h>
 #include <fstream>
+#include <limits>
 #include <sys/times.h>
 
 // for fork() and waitpid()
@@ -32,26 +33,7 @@
 #include "State.h"
 #include "argumentHandlers.h"
 #include "QMDP.h"
-
-#if USE_POMDPSOLVE_LIBRARY
-namespace pomdpsolve {
-
-extern "C" {
-
-
-#include "common.h"
-#include "lp-interface.h"
-#include "parsimonious.h"
-
-#include "global.h"
-#include "params.h"
-#include "pomdp.h"
-#include "utils.h"
-    
-}
-
-}
-#endif
+#include "AlphaVectorPruning.h"
 
 #define DEBUG_AlphaVectorPlanning_BeliefSampling 0
 #define DEBUG_AlphaVectorPlanning_BackProject 0
@@ -61,6 +43,8 @@ extern "C" {
 #define DEBUG_AlphaVectorPlanning_CrossSum 0
 #define DEBUG_AlphaVectorPlanning_ValueFunctionToQ 0
 #define DEBUG_AlphaVectorPlanning_ImportValueFunction 0
+#define DEBUG_AlphaVectorPlanning_ImportValueFunction 0
+#define DEBUG_AlphaVectorPlanning_CheckPruning 0
 
 #define AlphaVectorPlanning_CheckForDuplicates 1
 #define AlphaVectorPlanning_UseUBLASinBackProject 1
@@ -299,23 +283,6 @@ void AlphaVectorPlanning::Initialize()
         }
     }
 
-#if USE_POMDPSOLVE_LIBRARY
-
-    // this is a global variable that needs to be set for Tony's code
-    // to work
-    pomdpsolve::gNumStates=GetPU()->GetNrStates();
-    pomdpsolve::gStdErrFile = stdout;
-
-    // the following was adapted from pomdp-tools-main.c
-    pomdpsolve::initCommon();
-    pomdpsolve::initGlobal();
-    
-    _m_solve_params = pomdpsolve::newPomdpSolveParams();
-    
-    pomdpsolve::initLpInterface( _m_solve_params );
-
-#endif
-
     _m_initialized=true;
 }
 
@@ -375,25 +342,6 @@ void AlphaVectorPlanning::DeInitialize()
     }
     _m_TsOsForBackup.clear();
 
-
-#if USE_POMDPSOLVE_LIBRARY
-
-#if DEBUG_AlphaVectorPlanning_Prune
-    // this printouts numerical instability errors from lp-solve
-    pomdpsolve::cleanUpLpInterface();
-#endif
-
-#if 0 // this sometimes leads to a segfault...
-    /* Undo whatever initCommon() does. */
-    pomdpsolve::cleanUpCommon();
-#endif    
-    /* Undo whatever initGlobal() does. */
-    pomdpsolve::cleanUpGlobal();
-    
-    
-    destroyPomdpSolveParams(_m_solve_params);
-
-#endif
 }
 
 GaoVectorSet
@@ -1036,122 +984,128 @@ ValueFunctionPOMDPDiscrete
 AlphaVectorPlanning::
 Prune(const ValueFunctionPOMDPDiscrete &V) const
 {
-#if !USE_POMDPSOLVE_LIBRARY
-    stringstream filenameBefore, filenameAfter;
-    filenameBefore << "/tmp/beforeCassandaPruning" << getpid();
-    filenameAfter << "/tmp/afterCassandaPruning" << getpid();
-#endif
     ValueFunctionPOMDPDiscrete V1;
 
     Timing time;
 
-    // don't waste time calling the external program for 1 vector
-    if(V.size()==1)
-        V1=V;
-    else if(V.size()>0)
+    if(V.size()>1000)
     {
-        if(V.size()>1000)
-        {
-            cout << "AlphaVectorPlanning::Prune() pruning a set of " << V.size()
-                 << " vectors";
-            cout.flush();
-            time.Start("Prune");
-        }
-#if 0        
-        if(V.size()>10000)
-        {
-            stringstream ss;
-            ss << "AlphaVectorPlanning::Prune() pruning a set of " << V.size()
-               << " vectors, bailing out...";
-            throw(E(ss));
-        }
-#endif
-
-#if USE_POMDPSOLVE_LIBRARY
-        V1=PruneValueFunctionPOMDPSolve(V);
-#else
-
-#if 0 // instead of calling system(), it is better to fork(), because
-      // in that way resource limits are inherited
-        
-        ExportValueFunction(filenameBefore.str(),V,false);
-        
-        stringstream ss;
-        ss << "/usr/local/bin/pomdp-tools -tool purge_alphas "
-           << "-alpha1 "
-           << filenameBefore.str()
-           << " -o "
-           << filenameAfter.str()
-           << " -states " 
-           << V[0].GetNrValues()
-           << " > /dev/null";
-        
-        system(ss.str().c_str());
-        
-        V1=ImportValueFunction(filenameAfter.str());
-
-#endif
-            
-        ExportValueFunction(filenameBefore.str(),V,false);
-        
-        pid_t pID = fork();
-        if (pID == 0)                // child
-        {
-            // Code only executed by child process
-            stringstream ss;
-            ss << V[0].GetNrValues();
-            
-            char *const pruneArgv[]={
-                "/usr/local/bin/pomdp-tools",
-                "-tool",
-                "purge_alphas",
-                "-alpha1",
-                const_cast<char *>(filenameBefore.str().c_str()),
-                "-o",
-                const_cast<char *>(filenameAfter.str().c_str()),
-                "-states",
-                const_cast<char *>(ss.str().c_str()),
-                " > /dev/null",
-                NULL};
-            
-            execvp(pruneArgv[0],
-                   pruneArgv);
-        }
-        else if(pID < 0)            // failed to fork
-            throw(E("AlphaVectorPlanning::Prune failed to fork"));
-        else                                   // parent
-        {
-            // parent waits for pruning to finish
-            int status;
-//                cout << "starting to wait" << endl;
-            waitpid(pID,&status,0);
-//                cout << "done waiting" << endl;
-        }
-
-        V1=ImportValueFunction(filenameAfter.str());
-
-#endif
-
-        // because Cassandra's code does not know about BGPolicy
-        // indices, we need to recover them now by looking up the
-        // vector in the un-pruned value function
-        for(Index k=0;k!=V1.size();++k)
-            for(Index j=0;j!=V.size();++j)
-            {
-                if(V[j].EqualValues(V1[k]))
-                {
-                    V1[k].SetBetaI(V[j].GetBetaI());
-                    continue;
-                }
-            }
-
-        if(V.size()>1000)
-        {
-            time.Stop("Prune");
-            vector<double> times=time.GetEventDurations("Prune");
-            cout << " (took " << times[0] << "s)." << endl;
-        }
+        cout << "AlphaVectorPlanning::Prune() pruning a set of " << V.size()
+             << " vectors";
+        cout.flush();
+        time.Start("Prune");
     }
+
+    V1=AlphaVectorPruning::Prune(V);
+       
+#if DEBUG_AlphaVectorPlanning_CheckPruning
+
+    ValueFunctionPOMDPDiscrete V1test;
+
+    ExportValueFunction("/tmp/beforePruning",V,false);
+
+    pid_t pID = fork();
+    if (pID == 0)                // child
+    {
+        // Code only executed by child process
+        stringstream ss;
+        ss << V[0].GetNrValues();
+        
+        char *const pruneArgv[]={
+            "/usr/local/bin/pomdp-tools",
+            "-tool",
+            "purge_alphas",
+            "-alpha1",
+            "/tmp/beforePruning",
+            "-o",
+            "/tmp/afterPruning",
+            "-states",
+            const_cast<char *>(ss.str().c_str()),
+//            " > /dev/null",
+            NULL};
+
+        execvp(pruneArgv[0],
+               pruneArgv);
+    }
+    else if(pID < 0)            // failed to fork
+        throw(E("AlphaVectorPlanning::Prune failed to fork"));
+    else                                   // parent
+    {
+        // parent waits for pruning to finish
+        int status;
+        wait(&status);
+    }
+
+    V1test=ImportValueFunction("/tmp/afterPruning");
+
+    // because Cassandra's code does not know about BGPolicy
+    // indices, we need to recover them now by looking up the
+    // vector in the un-pruned value function
+    for(Index k=0;k!=V1test.size();++k)
+        for(Index j=0;j!=V.size();++j)
+        {
+            if(V[j].EqualValues(V1test[k]))
+            {
+                V1test[k].SetBetaI(V[j].GetBetaI());
+                continue;
+            }
+        }
+
+#if 0
+    cout << "Value function MADP Pruning: " << endl;
+    for(VFPDcit j=V1.begin();j!=V1.end();++j)
+        cout << " a " << j->GetAction() << " bI " << j->GetBetaI() << " "
+             << SoftPrintVector(j->GetValues());
+    cout << endl;
+    cout << "Value function POMDP-Tools Pruning: " << endl;
+    for(VFPDcit j=V1test.begin();j!=V1test.end();++j)
+        cout << " a " << j->GetAction() << " bI " << j->GetBetaI() << " "
+             << SoftPrintVector(j->GetValues());
+    cout << endl;
+#endif
+
+    // check if the value functions contains the same vectors, taking
+    // into account that the order might be different
+    if(V1.size()!=V1test.size())
+    {
+        cout << "MADP pruning: " << V1.size()
+             << " vectors, pomdp-tools pruning: "
+             << V1test.size() << " vectors" << endl;
+        abort();
+    }
+    vector<bool> vectorMarked(V1test.size(),false);
+    for(Index k=0;k!=V1test.size();++k)
+    {
+        bool vectorFound=false;
+        for(Index j=0;j!=V1.size();++j)
+        {
+            if(vectorMarked[j]) // only match a vector a single time
+                continue;
+            if(vectorFound) // vector found, can stop looping
+                break;
+
+            if(V1test[k].GetAction() == V1[j].GetAction() &&
+               V1test[k].GetBetaI() == V1[j].GetBetaI() && 
+               V1test[k].EqualValues(V1[j]))
+            {
+                vectorFound=true;
+                vectorMarked[j]=true;
+            }
+        }
+
+        if(!vectorFound)
+            abort();
+    }
+
+#endif
+
+    if(V.size()>1000)
+    {
+        time.Stop("Prune");
+        vector<double> times=time.GetEventDurations("Prune");
+        cout << " (took " << times[0] << "s)." << endl;
+    }
+
     return(V1);
 }
 
@@ -1195,118 +1149,6 @@ VectorSet AlphaVectorPlanning::Prune(const VectorSet &V) const
                Prune(
                    VectorSetToValueFunction(V))));
 }
-
-
-
-#if USE_POMDPSOLVE_LIBRARY
-double* 
-AlphaVectorPlanning::
-AlphaVectorToDoubleP(const AlphaVector & v)
-{
-    size_t nrStates = v.GetNrValues(); 
-    double *alpha = pomdpsolve::newAlpha();
-    for(Index i = 0; i < nrStates; i++)
-        alpha[i] = v.GetValue(i);
-    return alpha;
-}
-
-pomdpsolve::AlphaList //output argument. note that an AlphaList is a pointer!
-AlphaVectorPlanning::
-AlphaVectorsToAlphaList(const ValueFunctionPOMDPDiscrete &V)
-{
-    pomdpsolve::AlphaList list;
-    list = pomdpsolve::newAlphaList();
-    if(V.size()==0)
-        return list; //hope that this works?! (that this list actually acts as an empty list
-
-    for(Index vectorI=0; vectorI!=V.size(); ++vectorI)
-    {
-        double *alpha = AlphaVectorToDoubleP(V[vectorI]);
-            //pomdpsolve::newAlpha();
-        //for ( Index i = 0; i < nrStates; i++ )
-            //alpha[i]=V[vectorI].GetValue(i);
-#if 0
-        cout << V[vectorI].SoftPrint() << endl;
-        pomdpsolve::showAlpha(alpha);
-#endif
-        pomdpsolve::appendAlphaList( list, alpha, V[vectorI].GetAction() );
-    }
-    return list;
-}
-#endif
-
-ValueFunctionPOMDPDiscrete
-AlphaVectorPlanning::
-PruneValueFunctionPOMDPSolve(
-        const ValueFunctionPOMDPDiscrete &V
-        ) const
-{
-    // this function calls the relevant parts from Tony Cassandra's
-    // pomdp-solve software, which does the hard work of the vector
-    // pruning
-
-#if USE_POMDPSOLVE_LIBRARY
-
-    // return empty
-    if(V.size()==0)
-        return(ValueFunctionPOMDPDiscrete());
-    // in this case we can save us the hassle of calling pomdp-solve
-    if(V.size()==1)
-        return(V);
-
-    size_t nrStates=V[0].GetNrValues();
-
-    pomdpsolve::AlphaList list = AlphaVectorsToAlphaList(V);
-    //pomdpsolve::AlphaList list = NULL;
-    //list = pomdpsolve::newAlphaList();
-    //for(Index vectorI=0; vectorI!=V.size(); ++vectorI)
-    //{
-        //double *alpha = pomdpsolve::newAlpha();
-        //for ( Index i = 0; i < nrStates; i++ )
-            //alpha[i]=V[vectorI].GetValue(i);
-
-//#if 0
-        //cout << V[vectorI].SoftPrint() << endl;
-        //pomdpsolve::showAlpha(alpha);
-//#endif
-
-        //pomdpsolve::appendAlphaList( list, alpha, V[vectorI].GetAction() );
-    //}
-
-    pomdpsolve::dominationCheck( list ); 
-    pomdpsolve::normalPrune( list, 
-                             _m_solve_params);
-
-    pomdpsolve::sortAlphaList( list );
-
-    ValueFunctionPOMDPDiscrete Vpruned;
-
-    pomdpsolve::AlphaList listToCopy = list->head;
-    while( listToCopy != NULL ) {
-        AlphaVector vec(nrStates);
-        vec.SetAction(listToCopy->action);
-    
-        for (Index i = 0; i < nrStates; i++ )
-            vec.SetValue(listToCopy->alpha[i], i );
-
-        Vpruned.push_back(vec);
-
-        listToCopy = listToCopy->next;
-    }  /* while */
-    
-    pomdpsolve::destroyAlphaList( list);
-
-    return(Vpruned);
-
-#else
-
-    throw(E("AlphaVectorPlanning::PruneValueFunctionPOMDPSolve for this to work USE_POMDPSOLVE_LIBRARY needs to be enabled"));
-
-    return(ValueFunctionPOMDPDiscrete());
-#endif
-}
-
-
 
 void AlphaVectorPlanning::ExportValueFunction(const string & filename,
                                               const QFunctionsDiscrete &Q,
@@ -1367,7 +1209,9 @@ AlphaVectorPlanning::ExportValueFunction(const string & filename,
              << "open file " << filename << endl;            
     }
 
-    fp.precision(32);
+    // floating point precision must be digits10 + 2, to ensure that conversions are correct
+    int maxPrecision = numeric_limits<double>::digits10 + 2;
+    fp.precision(maxPrecision);
 
     for(unsigned int i=0;i!=V.size();i++)
     {
@@ -1575,20 +1419,36 @@ void AlphaVectorPlanning::ExportPOMDPFile(const string & filename,
         fp << "values: cost" << endl;
     }
 
+    // Tony's parser chokes on "_" in names of
+    // states/actions/observations, so we just remove them from the
+    // strings.
+    // Also, we have to ensure that strings don't start with a number,
+    // which we solve by prepending each string with s/a/o.
     fp << "states:";
     for(int s=0;s<nrS;s++)
-        fp << " "  << decpomdp->GetState(s)->SoftPrintBrief();
+    {
+        string state="s" + decpomdp->GetState(s)->SoftPrintBrief();
+        state.erase(remove(state.begin(), state.end(), '_'),state.end());
+        fp << " "  << state;
+    }
     fp << endl;
 
     fp << "actions:";
     for(int a=0;a<nrA;a++)
-        fp << " "  << decpomdp->GetJointAction(a)->SoftPrintBrief();
+    {
+        string action="a" + decpomdp->GetJointAction(a)->SoftPrintBrief();
+        action.erase(remove(action.begin(), action.end(), '_'),action.end());
+        fp << " "  << action;
+    }
     fp << endl;
 
     fp << "observations:";
     for(int o=0;o<nrO;o++)
-        fp << " "  << decpomdp->GetJointObservation(o)->
-            SoftPrintBrief();
+    {
+        string obs="o" + decpomdp->GetJointObservation(o)->SoftPrintBrief();
+        obs.erase(remove(obs.begin(), obs.end(), '_'),obs.end());
+        fp << " "  << obs;
+    }
     fp << endl;
 
 

@@ -56,7 +56,13 @@ class MADPComponentDiscreteStates
         //operators:
 
         //data manipulation (set) functions:
-        /// Sets _m_initialized to b.
+        /// 
+        /** \brief Sets _m_initialized to b.
+         *
+         * If no initial state distribution had been set, this function
+         * will call SetUniformISD(). (To accomodate .pomdp files where
+         * specification of ISD is optional.)
+         */
         bool SetInitialized(bool b);
 
         /// Adds a new state.

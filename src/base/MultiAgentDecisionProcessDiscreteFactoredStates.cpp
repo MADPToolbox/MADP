@@ -548,31 +548,15 @@ void MultiAgentDecisionProcessDiscreteFactoredStates::CacheFlatObservationModel(
 
 void MultiAgentDecisionProcessDiscreteFactoredStates::Initialize2DBN()
 {
-    boost::function<double (Index o,
-                            Index oVal,
-                            const std::vector< Index>& Xs,
-                            const std::vector< Index>& As,
-                            const std::vector< Index>& Ys,
-                            const std::vector< Index>& Os) > ComputeObservationProb
-      = boost::bind( &MultiAgentDecisionProcessDiscreteFactoredStates::ComputeObservationProb, this, _1, _2, _3, _4, _5, _6);
-    //This needs to be done due to the ambiguity of the overloaded ComputeObservationProb functions. Otherwise boost::bind can't tell the difference.
-    Initialize2DBN(boost::bind( &MultiAgentDecisionProcessDiscreteFactoredStates::SetScopes, this),
-                        boost::bind( &MultiAgentDecisionProcessDiscreteFactoredStates::ComputeTransitionProb, this, _1, _2, _3, _4, _5),
-                        ComputeObservationProb);
+    BoundScopeFunctor<MultiAgentDecisionProcessDiscreteFactoredStates> sf(this, &MultiAgentDecisionProcessDiscreteFactoredStates::SetScopes);
+    BoundTransitionProbFunctor<MultiAgentDecisionProcessDiscreteFactoredStates> tf(this, &MultiAgentDecisionProcessDiscreteFactoredStates::ComputeTransitionProb);
+    BoundObservationProbFunctor<MultiAgentDecisionProcessDiscreteFactoredStates> of(this, &MultiAgentDecisionProcessDiscreteFactoredStates::ComputeObservationProb);
+    Initialize2DBN(sf,tf,of);
 }
 
-void MultiAgentDecisionProcessDiscreteFactoredStates::Initialize2DBN(boost::function<void () > SetScopes,
-                                                                     boost::function<double (Index y, 
-                                                                                             Index yVal,
-                                                                                             const std::vector< Index>& Xs,
-                                                                                             const std::vector< Index>& As,
-                                                                                             const std::vector< Index>& Ys) > ComputeTransitionProb,
-                                                                     boost::function<double (Index o,
-                                                                                             Index oVal,
-                                                                                             const std::vector< Index>& Xs,
-                                                                                             const std::vector< Index>& As,
-                                                                                             const std::vector< Index>& Ys,
-                                                                                             const std::vector< Index>& Os) > ComputeObservationProb)                                                                                     
+void MultiAgentDecisionProcessDiscreteFactoredStates::Initialize2DBN(ScopeFunctor& SetScopes,
+                                                                     TransitionProbFunctor& ComputeTransitionProb,
+                                                                     ObservationProbFunctor& ComputeObservationProb)
 {
 //Initialize storage in the 2DBN
     _m_2dbn.InitializeStorage(); 
@@ -681,7 +665,7 @@ void MultiAgentDecisionProcessDiscreteFactoredStates::Initialize2DBN(boost::func
     }//end (for y)
 
     //Only continue if an initialization function for observation probabilities is given
-    if(ComputeObservationProb)
+    if(!ComputeObservationProb.isEmpty())
     {
         const vector<size_t>& nroVals = GetNrObservations();
 //Create the observation model    

@@ -45,20 +45,6 @@ typedef boost::multi_array<VectorSet*,2> GaoVectorSet;
 /// An index for a GaoVectorSet.
 typedef GaoVectorSet::index GaoVectorSetIndex;
 
-#if USE_POMDPSOLVE_LIBRARY
-// we should not include any of Tony Cassandra's header files in one
-// of our headers, otherwise the macros in that code (such as Equal())
-// mess up our functions
-namespace pomdpsolve {
-
-    struct PomdpSolveParamStruct;
-    struct AlphaListType;
-    typedef struct AlphaListType *AlphaList;
-
-
-}
-#endif
-
 /**AlphaVectorPlanning provides base functionality for alpha-vector based
  * POMDP or BG techniques.  */
 class AlphaVectorPlanning : public TimedAlgorithm
@@ -94,22 +80,7 @@ private:
 
     void DeInitialize();
 
-    ValueFunctionPOMDPDiscrete PruneValueFunctionPOMDPSolve(const ValueFunctionPOMDPDiscrete &V) const;
-
-
 protected:
-
-#if USE_POMDPSOLVE_LIBRARY
-    ///Tony's magical parameter structure...
-    pomdpsolve::PomdpSolveParamStruct *_m_solve_params;
-
-    ///Convert a AlphaVector to a double * as used by pomdp-solve
-    static double* AlphaVectorToDoubleP(const AlphaVector & v);
-
-    ///Convert a vector of AlphaVectors to a AlphaList  as used by pomdp-solve 
-    //An AlphaList is a pointer, so no problem to return by value.
-    static pomdpsolve::AlphaList AlphaVectorsToAlphaList(const ValueFunctionPOMDPDiscrete &V);
-#endif
 
 public:
     // Constructor, destructor and copy assignment.

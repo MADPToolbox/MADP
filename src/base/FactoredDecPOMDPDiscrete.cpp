@@ -394,8 +394,13 @@ Index FactoredDecPOMDPDiscrete::RestrictedActionVectorToJointIndex(
 void FactoredDecPOMDPDiscrete::CacheFlatRewardModel(bool sparse)
 {
     if(_m_cached_FlatRM)
+    {
+        _m_cached_FlatRM=false; // set to false, otherwise GetReward()
+                                // call below will wrongly assume the
+                                // rewards have already been cached
+                                // and return only zeroes
         delete(_m_p_rModel);
-
+    }
     _m_sparse_FlatRM = sparse;
     if(sparse)
         _m_p_rModel=new RewardModelMappingSparse(GetNrStates(),
