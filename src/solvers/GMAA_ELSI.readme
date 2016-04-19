@@ -1,0 +1,6 @@
+runs GMAA ELSI - that exploits structure in the last time step (Oliehoek et al. 2008 AAMAS).
+Usage, e.g.:
+./GMAA_ELSI FFG --agents=3 -h3 -QQBG
+
+if it gives an error, that is likely because it cannot write results, try a dry run using:
+./GMAA_ELSI FFG --agents=3 -h3 -QQBG -d
