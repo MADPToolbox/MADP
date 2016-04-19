@@ -16,20 +16,38 @@ Please refer to the file 'AUTHORS' for contact information and current
 affiliations. MADP includes other software, for details see COPYING.
 
 ========================================================================
-Documentation and Installation Instructions:
+Installation:
 
-See doc/MADPToolbox-0.3.1.pdf, which also includes installation
-instructions.
+Execute the following
 
-To (re)generate API documentation from source
-make htmldoc
+sh autogen.sh
+./configure
+make
+
+Problem descriptions can be loaded without specifying a path if
+~/.madp/problems is a symlink to the problems subdir in the MADP tree.
+Similarly, results are saved in (subdirs of) ~/.madp/results, so will
+be convenient to make a symlink to the desired results locations.
+This can be accomplished as follows:
+
+mkdir ~/.madp
+cd ~/.madp
+ln -s ~/<PATHTOMADP>/problems
+ln -s ~/<PATHTOMADP>/results
+
+========================================================================
+Documentation:
+
+To generate documentation from source
+cd src && make htmldoc
 
 Open doc/html/index.html in a webbrowser
+
+More docs can be found in doc/manually_maintained/
+
 
 ========================================================================
 Acknowledgments
 
 Please see the AUTHORS file.
 
-Release 0.3.1
-$Id: README 9369 2015-03-09 13:01:53Z mtjspaan $

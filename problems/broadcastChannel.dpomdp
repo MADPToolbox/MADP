@@ -1,5 +1,5 @@
 # This is a Dec-POMDP (.dpomdp) file for the broadcast channel problem.
-# For more detailed documentation, see ../src/parser/test.dpomdp
+# For more detailed documentation, see example.dpomdp
 
 # Allright, here we go!
 #

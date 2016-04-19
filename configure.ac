@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([MADP],[0.3.1],[madp-users@omni.isr.ist.utl.pt])
+AC_INIT([MADP],[0.4],[madp-users@omni.isr.ist.utl.pt])
 # subdir-objects is used in src/libpomdp-solve
 AM_INIT_AUTOMAKE([1.9 tar-pax subdir-objects])
 #old
@@ -70,6 +70,15 @@ AC_PROG_LIBTOOL
 #        [lpsolve/lp_types.h],
 #        [AC_DEFINE([HAVE_LPSOLVE], [],[lpsolve available])])
 #        [AC_DEFINE([HAVE_LPSOLVE], [],[lpsolve available]) LPSOLVE_LIB="/usr/lib/liblpsolve55_pic.a" LPSOLVE_LD="-lcolamd -ldl"])
+
+# check for lpsolve
+AC_CHECK_HEADER(
+        [lpsolve/lp_lib.h],
+        [],
+        [AC_MSG_ERROR([lpsolve headers not installed])])
+AC_CHECK_LIB(dl, dlopen)
+AC_CHECK_LIB(colamd, colamd)
+AC_CHECK_LIB([lpsolve55_pic], [make_lp])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -189,6 +198,7 @@ AC_SEARCH_LIBS([argp_parse], [argp], [], [
   AC_MSG_ERROR([unable to find the argp_parse() function])
 ])
 
+
 #Check for libxml2 (required for ParserProbModelXML)
 AC_CHECK_LIB([xml2], [xmlInitParser])
 AC_CHECK_HEADER([libxml2/libxml/xmlexports.h])
@@ -196,8 +206,6 @@ AM_CONDITIONAL(FOUND_LIBXML2, [test "x$ac_cv_header_libxml2_libxml_xmlexports_h"
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
-                 src/libpomdp-solve/Makefile
-                 src/libpomdp-solve/src/Makefile
                  src/parser/Makefile
                  src/base/Makefile
                  src/support/Makefile
@@ -211,6 +219,8 @@ AC_CONFIG_FILES([Makefile
 #avoid ": compiling `test_gsl.c' with per-target flags requires `AM_PROG_CC_C_O' in `configure.ac'"
 
 # skip these? (they are disabled from compilation by default...?)
+#                 src/libpomdp-solve/Makefile
+#                 src/libpomdp-solve/src/Makefile
 #                 src/libDAI/utils/Makefile
 #                 src/libDAI/tests/Makefile
 #                 src/libDAI/MADP-integr-tests/Makefile

@@ -1,3 +1,14 @@
+2016-04-xx Frans Oliehoek <frans.oliehoek@liverpool.ac.uk>
+    * Release 0.4
+
+    * Includes spirit parser for .pomdp files
+    
+    * Includes new code for pruning POMDP vectors; obviates dependence on 
+      Cassandra's code and old LP solve version.
+
+
+
+
 2015-02-22 Frans Oliehoek <frans.oliehoek@liverpool.ac.uk>
 	* Release 0.3.1
 
