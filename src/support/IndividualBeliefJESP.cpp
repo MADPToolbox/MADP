@@ -137,67 +137,75 @@ double IndividualBeliefJESP::Update(
 
     for(Index prev_eI=0; prev_eI < b_prev.Size(); prev_eI++)
     {
-        Index prev_sI = b_prev.GetStateIndex(prev_eI);
-        vector<Index> prev_oHist_others = b_prev.
-            GetOthersObservationHistIndex(prev_eI);
-        vector<Index> actions(_m_nrAgents);
-        actions.at(_m_agentI) = lastAI;
-        for(Index j=0; j < otherAgentIndices.size(); j++)
+        double probPrev_eI=b_prev.Get(prev_eI);
+        if(probPrev_eI>0)// only need to do this if this previous eI is possible
         {
-            Index ag_j = otherAgentIndices[j];
-            Index prev_oHist_j = prev_oHist_others[j];//not ag_j!!!
-            Index act_j = jpol->GetActionIndex(ag_j, prev_oHist_j);
-            actions.at(ag_j) = act_j;
-        }
-        Index jaI = _m_pumadp->IndividualToJointActionIndices(actions);
-
-        for(Index next_sI=0; next_sI < _m_pumadp->GetNrStates(); next_sI++)
-        {
-            //note we do not loop over all possible next_eI, because *a lot*
-            //of transitions will be 0 ( if next_oHistJ != (prev_oHistJ, oJ) )
-            //
-            //rather we now loop over all possible oJ (observations of others)
-            double Ps_as = _m_pumadp->
-                GetTransitionProbability(prev_sI, jaI, next_sI);
-
-            for(Index JO_o=0; JO_o < nrJO_others; JO_o++)
+            Index prev_sI = b_prev.GetStateIndex(prev_eI);
+            vector<Index> prev_oHist_others = b_prev.
+                GetOthersObservationHistIndex(prev_eI);
+            vector<Index> actions(_m_nrAgents);
+            actions.at(_m_agentI) = lastAI;
+            for(Index j=0; j < otherAgentIndices.size(); j++)
             {
-                vector<Index> oIs(_m_nrAgents);
-                oIs.at(_m_agentI) = newOI; // `our' observation is fixed
-                vector<Index> oIs_others = IndexTools::JointToIndividualIndices(
-                        JO_o, nrO_others);
-                for(Index j=0; j < otherAgentIndices.size(); j++)
-                    oIs.at( otherAgentIndices.at(j) ) = oIs_others.at(j);
-
-                Index joI = _m_pumadp->IndividualToJointObservationIndices(oIs);
-                //compute P(joI | jaI,s')
-                double Po_as = _m_pumadp->GetObservationProbability(
-                        jaI, next_sI, joI);
-                
-                //prob of next_eI = <next_sI, (oHist_others, oIs_others)>
-                //AND prev_sI can now be computed.
+                Index ag_j = otherAgentIndices[j];
+                Index prev_oHist_j = prev_oHist_others[j];//not ag_j!!!
+                Index act_j = jpol->GetActionIndex(ag_j, prev_oHist_j);
+                actions.at(ag_j) = act_j;
+            }
+            Index jaI = _m_pumadp->IndividualToJointActionIndices(actions);
+            
+            for(Index next_sI=0; next_sI < _m_pumadp->GetNrStates(); next_sI++)
+            {
+                //note we do not loop over all possible next_eI, because *a lot*
+                //of transitions will be 0 ( if next_oHistJ != (prev_oHistJ, oJ) )
                 //
-                //first, however, lets find the index, next_eI, for 
-                // <next_sI, (oHist_others, oIs_others)>
+                //rather we now loop over all possible oJ (observations of others)
+                double Ps_as = _m_pumadp->
+                    GetTransitionProbability(prev_sI, jaI, next_sI);
                 
-                // first find the next_oHist_others indices.
-                vector<Index> next_oHist_others;
-                for(Index j=0; j < otherAgentIndices.size(); j++)
+                if(Ps_as>0) // only need to do this if this transition can occur
                 {
-                    Index next_oHist_j = _m_pumadp->GetSuccessorOHI(j, 
-                        prev_oHist_others[j], oIs_others[j] );
-                    next_oHist_others.push_back(next_oHist_j);
-                }
-                Index next_eI = GetAugmentedStateIndex(next_sI, 
-                        next_oHist_others);
+                    for(Index JO_o=0; JO_o < nrJO_others; JO_o++)
+                    {
+                        vector<Index> oIs(_m_nrAgents);
+                        oIs.at(_m_agentI) = newOI; // `our' observation is fixed
+                        vector<Index> oIs_others = IndexTools::JointToIndividualIndices(
+                            JO_o, nrO_others);
+                        for(Index j=0; j < otherAgentIndices.size(); j++)
+                            oIs.at( otherAgentIndices.at(j) ) = oIs_others.at(j);
+                        
+                        Index joI = _m_pumadp->IndividualToJointObservationIndices(oIs);
+                        //compute P(joI | jaI,s')
+                        double Po_as = _m_pumadp->GetObservationProbability(
+                            jaI, next_sI, joI);
+                        
+                        //prob of next_eI = <next_sI, (oHist_others, oIs_others)>
+                        //AND prev_sI can now be computed.
+                        //
+                        //first, however, lets find the index, next_eI, for 
+                        // <next_sI, (oHist_others, oIs_others)>
+                    
+                        // first find the next_oHist_others indices.
+                        vector<Index> next_oHist_others;
+                        for(Index j=0; j < otherAgentIndices.size(); j++)
+                        {
+                            Index next_oHist_j = _m_pumadp->GetSuccessorOHI(otherAgentIndices.at(j), 
+                                                                            prev_oHist_others[j],
+                                                                            oIs_others[j] );
+                            next_oHist_others.push_back(next_oHist_j);
+                        }
+                        Index next_eI = GetAugmentedStateIndex(next_sI, 
+                                                               next_oHist_others);
 
-                //p += P(oi | ai, <s',oH'>) * P(<s',oH'>|<s,oH>,ai) * b(<s,oH>)
-                //      = P(oi, <s',oH'>|<s,oH'>,ai) * b(<s,oH>)
-                //      = P(s', jo | s, ja) b(<s,oH>)  //ja=<ai, aj>,aj=pol(oHj)
-                //      = P(jo|ja,s')*P(s'|s,ja)
-                double Pso_sa =  Po_as * Ps_as * b_prev.Get(prev_eI);
-                _m_b.at(next_eI) += Pso_sa;
-                Po_ba += Pso_sa; //running sum of P(oi|b,ai)
+                        //p += P(oi | ai, <s',oH'>) * P(<s',oH'>|<s,oH>,ai) * b(<s,oH>)
+                        //      = P(oi, <s',oH'>|<s,oH'>,ai) * b(<s,oH>)
+                        //      = P(s', jo | s, ja) b(<s,oH>)  //ja=<ai, aj>,aj=pol(oHj)
+                        //      = P(jo|ja,s')*P(s'|s,ja)
+                        double Pso_sa =  Po_as * Ps_as * probPrev_eI;
+                        _m_b.at(next_eI) += Pso_sa;
+                        Po_ba += Pso_sa; //running sum of P(oi|b,ai)
+                    }
+                }
             }
         }
     }

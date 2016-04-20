@@ -1,4 +1,3 @@
-# $Id: Makefile.custom 9370 2015-03-10 10:42:38Z mtjspaan $
 # Contains several project-wide Makefile options
 
 #####################################################################
@@ -10,33 +9,43 @@
 #GMP_LD=-lgmpxx -lgmp
 
 #----------- POMDP SOLVE stuff ---------------
-if !DARWIN
-#lp-solve-old
-LIBLPSOLVEOLD_NORMAL = #   $(top_builddir)/src/libpomdp-solve/src/lp-solve-old/libLPSolveOld.a
-#mdp
-LIBMDP_NORMAL =  #  $(top_builddir)/src/libpomdp-solve/src/mdp/libmdp.a
-LIBMDP_INCLUDES =  -I$(top_srcdir)/src/libpomdp-solve/src/mdp/
-#laspack
-LIBLASPACK_NORMAL =  #  $(top_builddir)/src/libpomdp-solve/src/laspack/liblaspack.a
-LIBLASPACK_INCLUDES = # -I$(top_srcdir)/src/libpomdp-solve/src/laspack/
+#if !DARWIN
+##lp-solve-old
+#LIBLPSOLVEOLD_NORMAL =    $(top_builddir)/src/libpomdp-solve/src/lp-solve-old/libLPSolveOld.a
+#LIBLPSOLVEOLD_DEBUG =     $(top_builddir)/src/libpomdp-solve/src/lp-solve-old/libLPSolveOldDebug.a
+#LIBLPSOLVEOLD_INCLUDES =  -I$(top_srcdir)/src/libpomdp-solve/src/lp-solve-old/
+##mdp
+#LIBMDP_NORMAL =    $(top_builddir)/src/libpomdp-solve/src/mdp/libmdp.a
+#LIBMDP_INCLUDES =  -I$(top_srcdir)/src/libpomdp-solve/src/mdp/
+##laspack
+#LIBLASPACK_NORMAL =    $(top_builddir)/src/libpomdp-solve/src/laspack/liblaspack.a
+#LIBLASPACK_INCLUDES =  -I$(top_srcdir)/src/libpomdp-solve/src/laspack/
+##pomdp-solve itself
+#LIBPOMDPSOLVE_NORMAL =  $(top_builddir)/src/libpomdp-solve/src/libPOMDPSolve.la
+#LIBPOMDPSOLVE_PROFILE = $(top_builddir)/src/libpomdp-solve/src/libPOMDPSolveProfile.la
+#LIBPOMDPSOLVE_DEBUG =   $(top_builddir)/src/libpomdp-solve/src/libPOMDPSolveDebug.a
+#LIBPOMDPSOLVE_INCLUDES =-I$(top_srcdir)/src/libpomdp-solve/src
+#endif
 
-#pomdp-solve itself
-LIBPOMDPSOLVE_NORMAL =  $(top_builddir)/src/libpomdp-solve/src/libPOMDPSolve.la
-LIBPOMDPSOLVE_INCLUDES =-I$(top_srcdir)/src/libpomdp-solve/src
-endif # !DARWIN
+LPSOLVE_LD = -llpsolve55 -lcolamd -ldl
 #----------- end POMDP SOLVE stuff ---------------
 
 LIBDAI_NORMAL = $(top_builddir)/src/libDAI/libDAI.la
 LIBDAI_INCLUDES =  -I$(top_srcdir)/src/libDAI
 
+if FOUND_LIBXML2
+  XML2_CFLAGS = `xml2-config --cflags`		#not sure why this was called 'CFLAGS'...?
+  XML2_CXXFLAGS = `xml2-config --cflags`	#...but we also need it for g++, so making it CXXFLAGS...
+endif
 #####################################################################
 # Compiler flags
+
 
 # the debug flags used - according to 
 # http://sourceware.org/gdb/current/onlinedocs/gdb_13.html#SEC111
 # dwarf-2 is best for c++ and gdb
 # -fno-inline should make things easier to debug
-DEBUG_FLAGS = -gdwarf-2 -fno-inline
+DEBUG_FLAGS = -O0 -gdwarf-2 -fno-inline
 
 # Optimization flags used for building normal and profiling libraries.
 # -DNDEBUG speeds up the boost::numeric::ublas operations
@@ -48,9 +57,11 @@ CPP_OPTIMIZATION_FLAGS = -O3 -DNDEBUG
 # too old to support this?
 MARCH_FLAGS = -march=native  # automatically picks the correct settings for your system
 
-if FOUND_LIBXML2
-  XML2_CFLAGS = `xml2-config --cflags`
-endif
+
+#default flags throughout all MADP:
+MADP_CXXFLAGS = -Wall -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
+MADP_CPPFLAGS = 
+MADP_CFLAGS =  
 
 #####################################################################
 # The final include path
@@ -58,35 +69,16 @@ endif
 MADP_INCLUDES = \
  $(INCLUDE) \
  $(LIBDAI_INCLUDES)\
- $(LIBPOMDPSOLVE_INCLUDES)\
  -I$(top_srcdir)/src/boost
 
-MADP_LD = 
- #$(MATLAB_LD)\
- #$(LPSOLVE_LD) \
- #$(PNL_LD)\
- #$(UMFPACK_LD)\
- #$(GMP_LD)
+MADP_LD = $(LPSOLVE_LD) 
 
 #####################################################################
 # Lists of libs to be linked with binaries.
 # Note that the linking order matters, in order to correctly resolve symbols
-###MADPLIBS_NORMAL_NOPARSER_NOPLANNING = \
-###$(top_builddir)/src/base/libMADPBase.la
-###
-###MADPLIBS_NORMAL_NOPARSER = \
-### $(top_builddir)/src/planning/libMADPPlanning.la\
-### $(top_builddir)/src/support/libMADPSupport.la\
-### $(MADPLIBS_NORMAL_NOPARSER_NOPLANNING)
-###
-###MADPLIBS_NORMAL_NOPLANNING = \
-### $(top_builddir)/src/parser/libMADPParser.la\
-### $(MADPLIBS_NORMAL_NOPARSER_NOPLANNING)
-###
-###MADPLIBS_NORMAL = \
-### $(MADPLIBS_NORMAL_NOPARSER) \
-### $(top_builddir)/src/parser/libMADPParser.la 
-
+#
+#
+# normal: 
 MADPLIBS_NORMAL_BASE = \
  $(top_builddir)/src/base/libMADPBase.la
 

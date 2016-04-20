@@ -74,7 +74,7 @@ bool PlanningUnitDecPOMDPDiscrete::SanityCheck() const
        abs(GetDiscount()-1) < PROB_PRECISION)
     {
         sane=false;
-        throw(E("PlanningUnitDecPOMDPDiscrete::SanityCheck() failed, in the infinite-horizon case the discount should be less than one (add --discount on the command line)"));
+        throw(E("PlanningUnitDecPOMDPDiscrete::SanityCheck() failed, in the infinite-horizon case the discount should be less than one"));
     }
 
     return(sane);

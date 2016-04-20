@@ -24,30 +24,46 @@ using namespace std;
 
 ProblemFireFightingFactored::ProblemFireFightingFactored(
         size_t nrAgents, size_t nrHouses, size_t nrFLs,
-        double costOfMove, bool forcePositionRepres, bool initialize)
+        double costOfMove, bool forcePositionRepres,
+        double multipleAgentExtinguishProb, bool initialize)
     :
         FactoredDecPOMDPDiscrete(
-                SoftPrintBriefDescription(nrAgents, nrHouses, nrFLs),
-                SoftPrintDescription(nrAgents, nrHouses, nrFLs),
+                "temp-name",
+                "temp-description",
                 "none"),
         _m_nrAgents(nrAgents),
         _m_nrHouses(nrHouses),
         _m_nrFireLevels(nrFLs),
         _m_costOfMove(costOfMove),
-        _m_forcePositionRepres(forcePositionRepres)
+        _m_forcePositionRepres(forcePositionRepres),
+        _m_multipleAgentExtinguishProb(multipleAgentExtinguishProb)
 {
+    if(_m_multipleAgentExtinguishProb<0 ||
+       _m_multipleAgentExtinguishProb>1)
+           throw(E("ProblemFireFightingFactored::ctor multipleAgentExtinguishProb should be >=0 and <=1"));
+
     if(initialize)
         InitializePFFF();
 }
 
 void ProblemFireFightingFactored::InitializePFFF()
 {
-    SetName(SoftPrintBriefDescription(_m_nrAgents, _m_nrHouses,
+    std::string name =  this->SoftPrintBriefDescription();
+    std::string desc =  this->SoftPrintDescription();
+    /*cout << "ProblemFireFightingFactored::InitializePFFF... " << endl;
+    cout << "this (brief): " << name << endl;
+    cout << "this        : " << desc << endl;*/
+    
+    SetName(name);
+    SetDescription(desc);
+    SetUnixName(name);
+
+    /*SetName(SoftPrintBriefDescription(_m_nrAgents, _m_nrHouses,
                                       _m_nrFireLevels));
     SetDescription(SoftPrintDescription(_m_nrAgents, _m_nrHouses,
                                         _m_nrFireLevels));
     SetUnixName(SoftPrintBriefDescription(_m_nrAgents, _m_nrHouses,
-                                          _m_nrFireLevels));
+                                          _m_nrFireLevels));*/
     SetSparse(true);
     SetNrAgents(_m_nrAgents);
 
@@ -142,7 +158,7 @@ void ProblemFireFightingFactored::InitializePFFF()
         this->SetISD(isd);
         */
         this->SetUniformISD();
-        //still to be done: set probability of position factors to 1 for all start positions
+        //TODO:set probability of position factors to 1 for all start positions
         throw E("ProblemFireFightingFactored - initialization of ISD with positions not implemented yet");
     }
     else
@@ -204,6 +220,9 @@ void ProblemFireFightingFactored::InitializePFFF()
         const Scope& agSC = GetAgentScopeForLRF(e);
         string sf_descr = sfSC.SoftPrint();
         string ag_descr = agSC.SoftPrint();
+
+        //cout << "State factors: " << sf_descr << "\n Agent: " << ag_descr << endl;
+
         //the number of X instantiations (the size of the 'local' state space)
         size_t nrXIs = GetNrXIs(e);
         size_t nrAIs = GetNrAIs(e);
@@ -232,24 +251,23 @@ void ProblemFireFightingFactored::InitializePFFF()
     FactoredDecPOMDPDiscrete::SetInitialized(true);
 }
 
-std::string ProblemFireFightingFactored::SoftPrintBriefDescription(
-        size_t nrAgents, size_t nrHouses, size_t nrFLs) const
+std::string ProblemFireFightingFactored::SoftPrintBriefDescription() const
 {
     stringstream ss;
-    ss << "FireFightingFactored_" << nrAgents << 
-        "_" << nrHouses <<
-        "_" << nrFLs;
+    ss << "FireFightingFactored_" << _m_nrAgents << 
+        "_" << _m_nrHouses <<
+        "_" << _m_nrFireLevels
+       << GetMultipleAgentExtinguishProbString();
     return ss.str();
 }
 
-std::string ProblemFireFightingFactored::SoftPrintDescription(size_t nrAgents,
-        size_t nrHouses, size_t nrFLs) const
+std::string ProblemFireFightingFactored::SoftPrintDescription() const
 {
     stringstream ss;
     ss << "The factored (but non-graph) FireFighting problem with " 
-        << nrAgents << 
-        " Agents, " << nrHouses << " houses and "
-        << nrFLs << " fire levels for each house.\n" <<
+        << _m_nrAgents << " Agents, " 
+        << _m_nrHouses << " houses and "
+        << _m_nrFireLevels << " fire levels for each house.\n" <<
 "Factored means that the state space is factored, and thus that the \
 transition, observation and reward models are represented in a factored way \
 (by a 2DBN and a collection of reward functions).\n\
@@ -503,11 +521,18 @@ double ProblemFireFightingFactored::ComputeTransitionProb(
         }
         default: 
         {
+#if 1
             //more than 1 agent: fire is extinguished
             if(0 == nextLevel)
                 p2=1.0;
             else //not possible so we can quit...
                 p2=0.0;
+#else // made it depend on multipleAgentExtinguishProb
+            if(0 == nextLevel)
+                p2+=(GetMultipleAgentExtinguishProb());
+            if(nextLevel == lowerLevel)
+                p2+=(1-GetMultipleAgentExtinguishProb());
+#endif
         }
 
         
@@ -667,4 +692,30 @@ void ProblemFireFightingFactored::SetOScopes()
                   Scope("<>") // no interdependencies between next-stage Os
             );
     }
+}
+
+double ProblemFireFightingFactored::GetMultipleAgentExtinguishProb() const
+{
+    return(_m_multipleAgentExtinguishProb);
+}
+
+string ProblemFireFightingFactored::GetMultipleAgentExtinguishProbString() const
+{
+    string extension="";
+
+    // we only want to add this probability to the filename if it is
+    // not equal to 1 (which is the default value)
+    if(GetMultipleAgentExtinguishProb()<1)
+    {
+        // convert the probability to a string without .
+        stringstream prob;
+        prob << _m_multipleAgentExtinguishProb;
+        string probString=prob.str();
+        probString.erase(remove(probString.begin(), probString.end(), '.'),
+                         probString.end());
+
+        extension=string("_") + probString;
+    }
+
+    return(extension);
 }

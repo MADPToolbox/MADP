@@ -144,7 +144,7 @@ AC_ARG_ENABLE(dmalloc,
 AC_PROG_YACC
 AC_PROG_CC
 AM_PROG_LEX
-#AC_PROG_RANLIB  # - libtoolize: `AC_PROG_RANLIB' is rendered obsolete by `LT_INIT'
+
 
 
 # Checks for libraries.

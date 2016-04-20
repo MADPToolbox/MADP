@@ -11,40 +11,44 @@ using namespace std;
 
 //Default constructor
 ProblemFireFightingGraph::ProblemFireFightingGraph(size_t nrAgents,
-                                                   size_t nrFireLevels) :
+                                                   size_t nrFireLevels,
+                                                   double multipleAgentExtinguishProb,
+                                                   bool initialize
+                                                   ) :
     // number of houses is one more than the number of agents
     ProblemFireFightingFactored(nrAgents,nrAgents+1,nrFireLevels,
                                 // no move cost for Graph version
                                 0.0,
                                 // dont include positions of agents in state
                                 false,
+                                multipleAgentExtinguishProb,
                                 // don't initialize PFFF, need to do
                                 // that after PFFG has been
                                 // constructed
                                 false)
 {
-    InitializePFFF();
+    if(initialize)
+        InitializePFFF();
 }
 
-string ProblemFireFightingGraph::SoftPrintBriefDescription(
-    size_t nrAgents, size_t nrHouses, size_t nrFLs) const
+string ProblemFireFightingGraph::SoftPrintBriefDescription() const
 {
     stringstream ss;
-    ss << "FireFightingGraph_" << nrAgents << 
-        "_" << nrHouses <<
-        "_" << nrFLs;
+    ss << "FireFightingGraph_" << _m_nrAgents << 
+        "_" << _m_nrHouses <<
+        "_" << _m_nrFireLevels
+       << GetMultipleAgentExtinguishProbString();
+    
     return ss.str();
 }
 
-string ProblemFireFightingGraph::SoftPrintDescription(size_t nrAgents,
-                                                      size_t nrHouses,
-                                                      size_t nrFLs) const
+string ProblemFireFightingGraph::SoftPrintDescription() const
 {
     stringstream ss;
     ss << "The factored graph FireFighting problem with " 
-        << nrAgents << 
-        " Agents, " << nrHouses << " houses and "
-        << nrFLs << " fire levels for each house.\n" <<
+        << _m_nrAgents << 
+        " Agents, " << _m_nrHouses << " houses and "
+        << _m_nrFireLevels << " fire levels for each house.\n" <<
 "Factored means that the state space is factored, and thus that the \
 transition, observation and reward models are represented in a factored way \
 (by a 2DBN and a collection of reward functions).\n\

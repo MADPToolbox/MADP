@@ -21,7 +21,7 @@ public:
                                ThreeIslandsInLine, ThreeIslandsClustered,
                                SmallBigSmallInLine, FiveIslandsInLine,
                                FourIslandsInLine, FourIslandsInSquare,
-                               SixIslandsInLine, SevenIslandsInLine};
+                               SixIslandsInLine, SevenIslandsInLine, InLine};
 
     enum AlohaVariation { NoNewPacket, NewPacket, NewPacketSendAll,
                           NewPacketProgressivePenalty };
@@ -32,24 +32,12 @@ private:
     AlohaVariation _m_variation;
     size_t _m_maxBacklog;
     size_t _m_nrIslands;
+    size_t _m_nrAgentsPassedOnCommandline;
 
-    std::string SoftPrintBriefDescription(
-        IslandConfiguration islands) const;
-    std::string SoftPrintDescription(IslandConfiguration islands) const;
-    std::string SoftPrintVariation(AlohaVariation variation) const;
-
-    void InitializeAloha();
-    
     void ConstructActions();
     void ConstructObservations();
 
-    enum { SEND, IDLEa };
-    enum { SUCCESS, IDLEo, COLLISION };
 
-
-    bool successFullySendPackage(Index y,
-                                 const std::vector< Index>& Xs,
-                                 const std::vector< Index>& As) const;
     bool areNeighbors(Index x1, Index x2) const;
     double GetNewPacketProb(Index y) const;
     double backlogToReward(Index backlog) const;
@@ -64,6 +52,19 @@ private:
 
 
 protected:
+
+    enum { SEND, IDLEa };
+    enum { SUCCESS, IDLEo, COLLISION };
+
+    void InitializeAloha();
+    
+    virtual std::string SoftPrintBriefDescription() const;
+    virtual std::string SoftPrintDescription() const;
+    virtual std::string SoftPrintVariation(AlohaVariation variation) const;
+
+    virtual bool successFullySendPackage(Index y,
+                                         const std::vector< Index>& Xs,
+                                         const std::vector< Index>& As) const;
 
     //overide scope functions
     virtual void SetYScopes();
@@ -84,12 +85,15 @@ protected:
         const std::vector< Index>& Os
         ) const;
 
+
 public:
     // Constructor, destructor and copy assignment.
     /// (default) Constructor
     ProblemAloha(IslandConfiguration islands,
                  AlohaVariation variation,
-                 size_t maxBacklog=2);
+                 size_t maxBacklog=2,
+                 size_t nrAgents=2,
+                 bool initialize=true);
 
     /// Destructor.
     virtual ~ProblemAloha(){};
@@ -99,6 +103,10 @@ public:
     /// Returns a pointer to a copy of this class.
     virtual ProblemAloha* Clone() const
         { return new ProblemAloha(*this); }
+
+    AlohaVariation GetVariation() const { return(_m_variation); }
+    size_t GetMaxBacklog() const { return(_m_maxBacklog); }
+    IslandConfiguration GetIslandConfiguration() const { return(_m_islandConf); }
 
 };
 

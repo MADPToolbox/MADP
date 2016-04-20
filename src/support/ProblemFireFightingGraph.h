@@ -19,13 +19,12 @@
 class ProblemFireFightingGraph : public ProblemFireFightingFactored
 {
 private:    
-    
-    std::string SoftPrintBriefDescription(
-        size_t nrAgents, size_t nrHouses, size_t nrFLs) const;
-    std::string SoftPrintDescription(size_t nrAgents,
-                                     size_t nrHouses,
-                                     size_t nrFLs) const;
-    
+
+protected:
+    ///used to set the problem name for output files, etc. (in ProblemFireFightingFactored.cpp)
+    virtual std::string SoftPrintBriefDescription() const;
+    virtual std::string SoftPrintDescription() const;
+
     ///Construct all the Actions and actionSets (the vector _m_actionVecs).
     void ConstructActions();
 
@@ -36,7 +35,6 @@ private:
 
     virtual Scope GetHousesAgentInfluences(Index agI) const;
 
-protected:
 
     //overide scope functions
     virtual void SetYScopes();
@@ -46,7 +44,10 @@ public:
     // Constructor, destructor and copy assignment.
     /// (default) Constructor
     ProblemFireFightingGraph(size_t nrAgents,
-                             size_t nrFireLevels);
+                             size_t nrFireLevels,
+                             double multipleAgentExtinguishProb=1.0,
+                             bool initialize=true //<- if FFG is the most derived class, it is in charge of 'initializing'
+                             );
 
     /// Destructor.
     virtual ~ProblemFireFightingGraph(){};

@@ -22,7 +22,7 @@ namespace ProblemType
      * line, you also need to add them to the argumentHandler (in
      * argumentHandler.cpp).
      */
-    enum Problem_t {PARSE, DT, FF, FFF, FFG, Aloha, DTcreak}; //FFG, DT, etc.
+    enum Problem_t {PARSE, DT, FF, FFF, FFG, FFGOpt, Aloha, AlohaOpt, DTcreak, TCP, Random}; //FFG, DT, etc.
 
     std::string SoftPrint(Problem_t t);
 };

@@ -17,7 +17,7 @@ using namespace std;
 
 //Default constructor
 JointObservationHistory::JointObservationHistory(PlanningUnitMADPDiscrete& pu) :
-    Referrer<PlanningUnitMADPDiscrete>(pu)
+    _m_planningUnitMADPDiscrete(&pu)
 {
     SetLength(0);
     _m_jointObservationI = 0;
@@ -32,7 +32,7 @@ JointObservationHistory::JointObservationHistory(PlanningUnitMADPDiscrete& pu) :
   * observation and pred as the preceeding JointObservationHistory.*/
 JointObservationHistory::JointObservationHistory(Index joI,
            JointObservationHistory* pred) :
-     Referrer<PlanningUnitMADPDiscrete>( pred->GetReferred() )
+    _m_planningUnitMADPDiscrete(pred->_m_planningUnitMADPDiscrete)
 {
     SetLength(pred->GetLength() + 1);
     _m_jointObservationI = joI;
@@ -40,7 +40,7 @@ JointObservationHistory::JointObservationHistory(Index joI,
     _m_pred = pred;
     size_t nrAgents = pred->_m_individualObservationHistories.size();
     
-    const vector<Index>& indivOIndices = GetReferred()->
+    const vector<Index>& indivOIndices = _m_planningUnitMADPDiscrete->
         JointToIndividualObservationIndices(joI);
 
     //we also maintain the indices of the individual observation histories
@@ -49,7 +49,7 @@ JointObservationHistory::JointObservationHistory(Index joI,
     {
         //get the individual observation history for the predecessor
         Index predOHindex_ai = pred->_m_individualObservationHistories[aI];
-        ObservationHistoryTree* oht_ai = GetReferred()->
+        ObservationHistoryTree* oht_ai = _m_planningUnitMADPDiscrete->
             GetObservationHistoryTree(aI, predOHindex_ai);
         Index ai_last_observation = indivOIndices[aI];
         Index sucOHindex_ai = 
@@ -95,7 +95,7 @@ string JointObservationHistory::SoftPrint() const
    
     if (!_m_containsEmptyJOI) // don't print the empty observation
     {
-        ss << GetReferred()->GetJointObservation(
+        ss << _m_planningUnitMADPDiscrete->GetJointObservation(
             _m_jointObservationI)->SoftPrintBrief() << ", ";
     }
     else

@@ -14,7 +14,6 @@
 #include <vector>
 #include "Globals.h"
 #include "E.h"
-#include "Referrer.h"
 #include "JointHistory.h"
 
 class PlanningUnitMADPDiscrete; //forward declaration to avoid including each other
@@ -24,7 +23,7 @@ class PlanningUnitMADPDiscrete; //forward declaration to avoid including each ot
  * This consists of a joint observation history index, the last joint
  * observation (index) a pointer to the predecessor JOH.  and a vector
  * of indexes to the individual observation histories.  */
-class JointObservationHistory : public Referrer<PlanningUnitMADPDiscrete>,
+class JointObservationHistory :
     public JointHistory
 {
     private:
@@ -45,6 +44,9 @@ class JointObservationHistory : public Referrer<PlanningUnitMADPDiscrete>,
          * ObservationHistories this gives an alternate description of the 
          * current JointObservation History. */
         std::vector<Index> _m_individualObservationHistories;
+
+        ///ref to the pu
+        PlanningUnitMADPDiscrete* _m_planningUnitMADPDiscrete;
 
     protected:
     

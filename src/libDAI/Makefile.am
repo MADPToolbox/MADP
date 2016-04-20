@@ -140,10 +140,10 @@ CCFLAGS= -DWITH_BP -DWITH_TRW -DWITH_MF -DWITH_HAK -DWITH_LC -DWITH_LCLIN -DWITH
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I. $(MADP_INCLUDES)
+INCLUDEPATH		= -I. $(MADP_INCLUDES)
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(CCFLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(CCFLAGS) $(INCLUDEPATH)
 AM_CXXFLAGS 		= $(CSTANDARD)
 
 

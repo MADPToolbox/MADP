@@ -19,7 +19,7 @@ using namespace std;
 
 //Default constructor
 JointActionObservationHistory::JointActionObservationHistory(PlanningUnitMADPDiscrete& pu) :
-     Referrer<PlanningUnitMADPDiscrete>(pu)
+    _m_planningUnitMADPDiscrete(&pu)
 {    
     SetLength(0);
     _m_pred = 0;
@@ -27,12 +27,12 @@ JointActionObservationHistory::JointActionObservationHistory(PlanningUnitMADPDis
     _m_joI = 0; 
     Index individualInitialAOHIndex = 0;//HARDCODED 
     _m_individualActionObservationHistories = vector<Index>(
-            GetReferred()->GetNrAgents(), individualInitialAOHIndex);
+            _m_planningUnitMADPDiscrete->GetNrAgents(), individualInitialAOHIndex);
 
 }
 JointActionObservationHistory::JointActionObservationHistory(Index jaI, Index 
         joI, JointActionObservationHistory* pred) :
-    Referrer<PlanningUnitMADPDiscrete>(pred->GetReferred())
+    _m_planningUnitMADPDiscrete(pred->_m_planningUnitMADPDiscrete)
 {
     SetLength(pred->GetLength() + 1);
     _m_pred = pred;
@@ -41,14 +41,12 @@ JointActionObservationHistory::JointActionObservationHistory(Index jaI, Index
     _m_joI = joI; 
 
     //calculate the new individual ActionObservationHistory indices...
-    vector<Index> iA = GetReferred()->JointToIndividualActionIndices(jaI);
-    vector<Index> iO = GetReferred()->JointToIndividualObservationIndices(joI);
+    vector<Index> iA = _m_planningUnitMADPDiscrete->JointToIndividualActionIndices(jaI);
+    vector<Index> iO = _m_planningUnitMADPDiscrete->JointToIndividualObservationIndices(joI);
     vector<Index> pred_iAOH= pred->GetIndividualActionObservationHistoryIndices();
-    for(Index agentI = 0; agentI < GetReferred()->GetNrAgents(); agentI++)
+    for(Index agentI = 0; agentI < _m_planningUnitMADPDiscrete->GetNrAgents(); agentI++)
     {
-        Index next_indivIndex = 
-            GetReferred() //=PlanningUnitMADPDiscrete
-            -> GetSuccessorAOHI(agentI, 
+        Index next_indivIndex = _m_planningUnitMADPDiscrete->GetSuccessorAOHI(agentI, 
                     pred_iAOH[agentI], iA[agentI], iO[agentI] ) ;
         //Index next_indivIndex = 
             //GetReferred() //=PlanningUnitMADPDiscrete
@@ -81,9 +79,9 @@ string JointActionObservationHistory::SoftPrint() const
     if (_m_length >= 1) 
     {
         ss << "< ";    
-        ss << GetReferred()->GetJointAction(_m_jaI)->SoftPrintBrief();
+        ss << _m_planningUnitMADPDiscrete->GetJointAction(_m_jaI)->SoftPrintBrief();
         ss << ", ";    
-        ss << GetReferred()->GetJointObservation(_m_joI)->SoftPrintBrief();
+        ss << _m_planningUnitMADPDiscrete->GetJointObservation(_m_joI)->SoftPrintBrief();
         ss << " >";    
     }
     else
@@ -117,8 +115,8 @@ string JointActionObservationHistory::SoftPrintJointIndices() const
         ss << "jaoI=" <<
             IndexTools::ActionAndObservation_to_ActionObservationIndex(
             _m_jaI, _m_joI, 
-            GetReferred()->GetNrJointActions(), 
-            GetReferred()->GetNrJointObservations() );
+            _m_planningUnitMADPDiscrete->GetNrJointActions(), 
+            _m_planningUnitMADPDiscrete->GetNrJointObservations() );
         ss << "(jaI=";    
         ss << _m_jaI;
         ss << ",joI=";    

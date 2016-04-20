@@ -12,7 +12,6 @@
 /* the include directives */
 #include <iostream>
 #include "Globals.h"
-#include "Referrer.h"
 #include "E.h"
 #include "IndividualHistory.h"
 
@@ -23,7 +22,7 @@ class PlanningUnitMADPDiscrete; //forward declaration to avoid including each ot
  * It does so by storing an index and a pointer to a preceeding
  * action history.
  */
-class ActionHistory  : public Referrer<PlanningUnitMADPDiscrete>,
+class ActionHistory  :
     public IndividualHistory
 {
     private:
@@ -38,6 +37,9 @@ class ActionHistory  : public Referrer<PlanningUnitMADPDiscrete>,
          * action(_m_actionI) this gives a full description of 
          * this joint action history.*/   
         ActionHistory* _m_pred;
+
+        PlanningUnitMADPDiscrete* _m_planningUnitMADPDiscrete;
+
     protected:
     
     public:

@@ -1,16 +1,15 @@
-# $Id: Makefile.am 9372 2015-03-10 18:27:08Z mtjspaan $
-
 include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I$(top_srcdir)/src/base\
+INCLUDEPATH		= -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/include -I$(top_srcdir)/src/support \
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
+
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif

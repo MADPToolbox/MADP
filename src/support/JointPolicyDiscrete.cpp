@@ -17,7 +17,6 @@ JointPolicyDiscrete::JointPolicyDiscrete(const Interface_ProblemToPolicyDiscrete
     ,_m_PTPD(iptpd),
     _m_PTPDshared()
 {
-    _m_nrAgents = iptpd->GetNrAgents();
 }
 //Default constructor
 JointPolicyDiscrete::JointPolicyDiscrete(const I_PtPD_constPtr &iptpd,
@@ -27,7 +26,6 @@ JointPolicyDiscrete::JointPolicyDiscrete(const I_PtPD_constPtr &iptpd,
     ,_m_PTPD(0)
     ,_m_PTPDshared(iptpd)
 {
-    _m_nrAgents = iptpd->GetNrAgents();
 }
 //Copy  constructor.    
 JointPolicyDiscrete::JointPolicyDiscrete(const JointPolicyDiscrete& o) 

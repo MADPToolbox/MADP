@@ -727,8 +727,6 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
     const PlanningUnitMADPDiscreteParameters &params,
     const string &filename,
     BGIP_SolverCreatorInterface * bgipsc_p
-    //BGIP_SolverCreatorInterface_T<JointPolicyPureVector> * bgsc_p,
-    //BGIP_SolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG> * bgscCluster_p
     )
 {
     GeneralizedMAAStarPlannerForDecPOMDPDiscrete *gmaa=0;
@@ -760,6 +758,7 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
             gmaaCluster->SetTresholdPjaoh(args.thresholdPjaoh);
             gmaa=gmaaCluster;
             break;
+        }
         case MAAstarClassic:
             throw E("MAAstarClassic not implemented for clustered version");
             break;
