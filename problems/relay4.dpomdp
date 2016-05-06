@@ -1,0 +1,117 @@
+# 4-state Relay DEC-POMDP description
+#
+#
+# Maze layout:
+# 01    03
+# 02 || 04
+# Maze layout using state names:
+# l1      r1
+# l2  ||  r2
+# Total number of states is 4
+#
+agents: 2
+discount: 0.95
+values: reward
+states: l1_r1 l1_r2 l2_r1 l2_r2
+start include: l2_r2
+actions:
+shuffle exchange sense
+shuffle exchange sense
+observations:
+door noDoor idle
+door noDoor idle
+T: shuffle exchange : l1_r1 : l1_r1 : 0.5
+T: shuffle exchange : l1_r1 : l2_r1 : 0.5
+T: shuffle exchange : l2_r1 : l2_r1 : 0.5
+T: shuffle exchange : l2_r1 : l1_r1 : 0.5
+T: shuffle exchange : l1_r2 : l1_r2 : 0.5
+T: shuffle exchange : l1_r2 : l2_r2 : 0.5
+T: shuffle exchange : l2_r2 : l2_r2 : 0.5
+T: shuffle exchange : l2_r2 : l1_r2 : 0.5
+T: shuffle sense : l1_r1 : l1_r1 : 0.5
+T: shuffle sense : l1_r1 : l2_r1 : 0.5
+T: shuffle sense : l2_r1 : l2_r1 : 0.5
+T: shuffle sense : l2_r1 : l1_r1 : 0.5
+T: shuffle sense : l1_r2 : l1_r2 : 0.5
+T: shuffle sense : l1_r2 : l2_r2 : 0.5
+T: shuffle sense : l2_r2 : l2_r2 : 0.5
+T: shuffle sense : l2_r2 : l1_r2 : 0.5
+T: exchange shuffle : l1_r1 : l1_r1 : 0.5
+T: exchange shuffle : l1_r1 : l1_r2 : 0.5
+T: exchange shuffle : l2_r1 : l2_r1 : 0.5
+T: exchange shuffle : l2_r1 : l2_r2 : 0.5
+T: exchange shuffle : l1_r2 : l1_r2 : 0.5
+T: exchange shuffle : l1_r2 : l1_r1 : 0.5
+T: exchange shuffle : l2_r2 : l2_r2 : 0.5
+T: exchange shuffle : l2_r2 : l2_r1 : 0.5
+T: sense shuffle : l1_r1 : l1_r1 : 0.5
+T: sense shuffle : l1_r1 : l1_r2 : 0.5
+T: sense shuffle : l2_r1 : l2_r1 : 0.5
+T: sense shuffle : l2_r1 : l2_r2 : 0.5
+T: sense shuffle : l1_r2 : l1_r2 : 0.5
+T: sense shuffle : l1_r2 : l1_r1 : 0.5
+T: sense shuffle : l2_r2 : l2_r2 : 0.5
+T: sense shuffle : l2_r2 : l2_r1 : 0.5
+T: shuffle shuffle : * : * : 0.25
+T: exchange exchange : l1_r1 : l1_r1 : 0.25
+T: exchange exchange : l1_r1 : l1_r2 : 0.25
+T: exchange exchange : l1_r1 : l2_r1 : 0.25
+T: exchange exchange : l1_r1 : l2_r2 : 0.25
+T: exchange exchange : l1_r2 : l1_r2 : 1.0
+T: exchange exchange : l2_r1 : l2_r1 : 1.0
+T: exchange exchange : l2_r2 : l2_r2 : 1.0
+T: exchange sense : l1_r1 : l1_r1 : 1.0
+T: exchange sense : l1_r2 : l1_r2 : 1.0
+T: exchange sense : l2_r1 : l2_r1 : 1.0
+T: exchange sense : l2_r2 : l2_r2 : 1.0
+T: sense exchange : l1_r1 : l1_r1 : 1.0
+T: sense exchange : l1_r2 : l1_r2 : 1.0
+T: sense exchange : l2_r1 : l2_r1 : 1.0
+T: sense exchange : l2_r2 : l2_r2 : 1.0
+T: sense sense : l1_r1 : l1_r1 : 1.0
+T: sense sense : l1_r2 : l1_r2 : 1.0
+T: sense sense : l2_r1 : l2_r1 : 1.0
+T: sense sense : l2_r2 : l2_r2 : 1.0
+O: * : * : idle idle : 1.0000000000000000
+O: sense * : * : * : 0
+O: * sense : * : * : 0
+O: sense * : l1_r1 : door idle : 0.9
+O: sense * : l1_r1 : noDoor idle : 0.1
+O: sense * : l1_r2 : door idle : 0.9
+O: sense * : l1_r2 : noDoor idle : 0.1
+O: sense * : l2_r1 : noDoor idle : 0.9
+O: sense * : l2_r1 : door idle : 0.1
+O: sense * : l2_r2 : noDoor idle : 0.9
+O: sense * : l2_r2 : door idle : 0.1
+O: * sense : l1_r1 : idle door : 0.9
+O: * sense : l1_r1 : idle noDoor : 0.1
+O: * sense : l2_r1 : idle door : 0.9
+O: * sense : l2_r1 : idle noDoor : 0.1
+O: * sense : l1_r2 : idle noDoor : 0.9
+O: * sense : l1_r2 : idle door : 0.1
+O: * sense : l2_r2 : idle noDoor : 0.9
+O: * sense : l2_r2 : idle door : 0.1
+O: sense sense : * : * : 0
+O: sense sense : l1_r1 : door door : 0.81
+O: sense sense : l1_r1 : door noDoor : 0.09
+O: sense sense : l1_r1 : noDoor door : 0.09
+O: sense sense : l1_r1 : noDoor noDoor : 0.01
+O: sense sense : l1_r2 : door noDoor : 0.81
+O: sense sense : l1_r2 : door door : 0.09
+O: sense sense : l1_r2 : noDoor noDoor : 0.09
+O: sense sense : l1_r2 : noDoor door : 0.01
+O: sense sense : l2_r1 : noDoor door : 0.81
+O: sense sense : l2_r1 : door door : 0.09
+O: sense sense : l2_r1 : noDoor noDoor : 0.09
+O: sense sense : l2_r1 : door noDoor : 0.01
+O: sense sense : l2_r2 : door door : 0.01
+O: sense sense : l2_r2 : door noDoor : 0.09
+O: sense sense : l2_r2 : noDoor door : 0.09
+O: sense sense : l2_r2 : noDoor noDoor : 0.81
+R: * : * : * : * : -1.0000000000000000
+R: exchange * : * : * : * : -50
+R: * exchange : * : * : * : -50
+R: exchange exchange : l1_r1 : * : * : 50
+#
+# relay4.dpomdp
+# EOF

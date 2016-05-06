@@ -8,35 +8,10 @@
 # Should be set if USE_ARBITRARY_PRECISION_INDEX is set to 1
 #GMP_LD=-lgmpxx -lgmp
 
-#----------- POMDP SOLVE stuff ---------------
-#if !DARWIN
-##lp-solve-old
-#LIBLPSOLVEOLD_NORMAL =    $(top_builddir)/src/libpomdp-solve/src/lp-solve-old/libLPSolveOld.a
-#LIBLPSOLVEOLD_DEBUG =     $(top_builddir)/src/libpomdp-solve/src/lp-solve-old/libLPSolveOldDebug.a
-#LIBLPSOLVEOLD_INCLUDES =  -I$(top_srcdir)/src/libpomdp-solve/src/lp-solve-old/
-##mdp
-#LIBMDP_NORMAL =    $(top_builddir)/src/libpomdp-solve/src/mdp/libmdp.a
-#LIBMDP_INCLUDES =  -I$(top_srcdir)/src/libpomdp-solve/src/mdp/
-##laspack
-#LIBLASPACK_NORMAL =    $(top_builddir)/src/libpomdp-solve/src/laspack/liblaspack.a
-#LIBLASPACK_INCLUDES =  -I$(top_srcdir)/src/libpomdp-solve/src/laspack/
-##pomdp-solve itself
-#LIBPOMDPSOLVE_NORMAL =  $(top_builddir)/src/libpomdp-solve/src/libPOMDPSolve.la
-#LIBPOMDPSOLVE_PROFILE = $(top_builddir)/src/libpomdp-solve/src/libPOMDPSolveProfile.la
-#LIBPOMDPSOLVE_DEBUG =   $(top_builddir)/src/libpomdp-solve/src/libPOMDPSolveDebug.a
-#LIBPOMDPSOLVE_INCLUDES =-I$(top_srcdir)/src/libpomdp-solve/src
-#endif
-
-LPSOLVE_LD = -llpsolve55 -lcolamd -ldl
-#----------- end POMDP SOLVE stuff ---------------
 
 LIBDAI_NORMAL = $(top_builddir)/src/libDAI/libDAI.la
 LIBDAI_INCLUDES =  -I$(top_srcdir)/src/libDAI
 
-if FOUND_LIBXML2
-  XML2_CFLAGS = `xml2-config --cflags`		#not sure why this was called 'CFLAGS'...?
-  XML2_CXXFLAGS = `xml2-config --cflags`	#...but we also need it for g++, so making it CXXFLAGS...
-endif
 #####################################################################
 # Compiler flags
 
@@ -57,6 +32,9 @@ CPP_OPTIMIZATION_FLAGS = -O3 -DNDEBUG
 # too old to support this?
 MARCH_FLAGS = -march=native  # automatically picks the correct settings for your system
 
+if FOUND_LIBXML2
+  XML2_CXXFLAGS = `xml2-config --cflags`
+endif
 
 #default flags throughout all MADP:
 MADP_CXXFLAGS = -Wall -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
@@ -71,14 +49,12 @@ MADP_INCLUDES = \
  $(LIBDAI_INCLUDES)\
  -I$(top_srcdir)/src/boost
 
-MADP_LD = $(LPSOLVE_LD) 
+MADP_LD = 
+# $(LPSOLVE_LD) 
 
 #####################################################################
 # Lists of libs to be linked with binaries.
 # Note that the linking order matters, in order to correctly resolve symbols
-#
-#
-# normal: 
 MADPLIBS_NORMAL_BASE = \
  $(top_builddir)/src/base/libMADPBase.la
 

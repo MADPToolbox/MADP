@@ -6,6 +6,7 @@ EXTRA_DIST = src/include/versions.h \
  problems \
  doc \
  src/boost \
+ src/solvers/GMAA-IC \
  src/solvers/GMAA-ICE
 
 #removes subversion dirs before packing
@@ -22,6 +23,7 @@ bak-recursive:
 
 htmldoc:
 	doxygen doc/doxygen.conf;
+	cd src/libDAI; doxygen doxygen.conf
 
 package:
 	rm -fr madp-0.3.1

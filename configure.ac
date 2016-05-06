@@ -75,10 +75,13 @@ AC_PROG_LIBTOOL
 AC_CHECK_HEADER(
         [lpsolve/lp_lib.h],
         [],
-        [AC_MSG_ERROR([lpsolve headers not installed])])
+        [AC_MSG_WARN([lpsolve not installed, required for pruning POMDP value functions])])
 AC_CHECK_LIB(dl, dlopen)
 AC_CHECK_LIB(colamd, colamd)
-AC_CHECK_LIB([lpsolve55_pic], [make_lp])
+AC_CHECK_LIB([lpsolve55_pic], [make_lp],
+        [],
+        [AC_MSG_WARN([lpsolve not installed, required for pruning POMDP value functions])])
+
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -216,14 +219,6 @@ AC_CONFIG_FILES([Makefile
                  src/libDAI/Makefile
                  src/solvers/Makefile
                  ])
-#avoid ": compiling `test_gsl.c' with per-target flags requires `AM_PROG_CC_C_O' in `configure.ac'"
-
-# skip these? (they are disabled from compilation by default...?)
-#                 src/libpomdp-solve/Makefile
-#                 src/libpomdp-solve/src/Makefile
-#                 src/libDAI/utils/Makefile
-#                 src/libDAI/tests/Makefile
-#                 src/libDAI/MADP-integr-tests/Makefile
 
 #avoid ": compiling `test_gsl.c' with per-target flags requires `AM_PROG_CC_C_O' in `configure.ac'"
 AM_PROG_CC_C_O
