@@ -16,11 +16,33 @@ Please refer to the file 'AUTHORS' for contact information and current
 affiliations. MADP includes other software, for details see COPYING.
 
 ========================================================================
-Installation:
+Required software (as Debian package names):
 
-Execute the following
+MADP includes all required software.
 
-sh autogen.sh
+Optional software:
+
+Doxygen (doxygen) [for generating documentation]
+Graphviz (graphviz) [for dependency graphs in the generated documentation]
+lp-solve (liblpsolve55-dev and libufsparse-dev) 
+libxml2 (libxml2-dev) [for using the XML-based factored model parser]
+
+For enabling optional software, see src/Makefile.custom and
+src/include/configuration.h.
+
+========================================================================
+Documentation and Installation Instructions
+
+See doc/MADPToolbox-0.XXX.pdf, which also includes detailed 
+installation instructions.
+
+To (re)generate API documentation from source, run:
+
+make htmldoc
+
+Open doc/html/index.html in a webbrowser
+
+To compile, Execute the following
 ./configure
 make
 
@@ -34,17 +56,6 @@ mkdir ~/.madp
 cd ~/.madp
 ln -s ~/<PATHTOMADP>/problems
 ln -s ~/<PATHTOMADP>/results
-
-========================================================================
-Documentation:
-
-To generate documentation from source
-cd src && make htmldoc
-
-Open doc/html/index.html in a webbrowser
-
-More docs can be found in doc/manually_maintained/
-
 
 ========================================================================
 Acknowledgments

@@ -13,6 +13,9 @@ Changelog:
 -edit the date
 -other features?
 
+NEWS:
+edit the date
+
 README:
 -the required software?
 

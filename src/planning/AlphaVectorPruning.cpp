@@ -7,10 +7,13 @@
 
 #include "AlphaVectorPruning.h"
 #include <float.h>
+#include <config.h>
 
+#ifdef HAVE_LIBLPSOLVE55_PIC
 extern "C" {
 #include <lpsolve/lp_lib.h>
 }
+#endif
 
 using namespace std;
 
@@ -170,6 +173,7 @@ bool AlphaVectorPruning::FindBelief(const AlphaVector &p,
                                     vector<double> &belief)
 {
     bool foundBelief=false;
+#ifdef HAVE_LIBLPSOLVE55_PIC
     size_t nrStates = p.GetNrValues();
     belief=vector<double>(nrStates,0);
 
@@ -256,7 +260,9 @@ bool AlphaVectorPruning::FindBelief(const AlphaVector &p,
     }    
     // delete the problem and free memory
     delete_lp(lp);
-    
+#else // HAVE_LIBLPSOLVE55_PIC
+    throw(E("AlphaVectorPruning: lpsolve was not installed"));
+#endif // HAVE_LIBLPSOLVE55_PIC    
     return(foundBelief);
 }
 

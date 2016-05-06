@@ -13,9 +13,9 @@ libMADP_la_LIBADD = \
   ../parser/libMADPParser.la \
   ../base/libMADPBase.la \
   ../libDAI/libDAI.la 
-if !DARWIN
-libMADP_la_LIBADD += ../libpomdp-solve/src/libPOMDPSolve.la
-endif
+#if !DARWIN
+#libMADP_la_LIBADD += ../libpomdp-solve/src/libPOMDPSolve.la
+#endif
 
 libMADP_la_LDFLAGS = -release $(PACKAGE_VERSION)
 

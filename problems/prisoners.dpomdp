@@ -1,0 +1,100 @@
+# This is a Dec-POMDP (.dpomdp) file for the Prisoner's dilemma.
+# For more detailed documentation, see test.dpomdp in the parser subdirectory 
+# (src/parser).
+#
+#The agents. 
+#----------
+#Either 1) the number of agents: 
+#   agents: %d
+#or 2) a list of agent identifiers, e.g.:
+#   agents: agent1_name, name-of-agent2, ... 
+agents: 2 
+#   discount: %f 
+discount: 1 
+#.0
+#   values: [ reward, cost ] 
+values: reward
+#   states: [ %d, <list of states> ] 
+states: NULL_STATE
+#
+#Examples of this are:
+#   start: 0.3 0.1 0.0 0.2 0.5
+#   start: first-state
+#   start: 5
+#   start: uniform
+#   start include: first-state third state
+#   start include: 1 3
+#   start exclude: fifth-state seventh-state
+start: 
+uniform
+#
+#The actions declarations
+#------------------------
+#the  (number/list of) actions for each of the agents on a separate line
+#   actions: 
+#   [ %d, <list of actions> ] 
+#   [ %d, <list of actions> ] 
+#   ...
+#   [ %d, <list of actions> ] 
+actions: 
+StaySilent Betray
+StaySilent Betray
+#the (number/list of) observations for each of the agents on a separate line
+#   observations: 
+#   [ %d, <list of observations> ]
+#   [ %d, <list of observations> ]
+#   ...
+#   [ %d, <list of observations> ]
+observations: 
+O_StaySilent O_Betray
+O_StaySilent O_Betray
+#Transition probabilities
+#   T: <a1 a2...an> : <start-state> : <end-state> : %f
+#or
+#   T: <a1 a2...an> : <start-state> :
+#   %f %f ... %f			    P(s_1'|ja,s) ... P(s_k'|ja,s)
+#or
+#   T: <a1 a2...an> :			    this is a |S| x |S| matrix
+#   %f %f ... %f			    P(s_1'|ja,s_1) ... P(s_k'|ja,s_1)
+#   %f %f ... %f			    ...
+#   ...					    ...
+#   %f %f ... %f			    P(s_1'|ja,s_k) ... P(s_k'|ja,s_k)
+#or
+#   T: <a1 a2...an> 
+#   [ identity, uniform ]
+T: * :
+uniform
+#Observation probabilities
+#    O: <a1 a2...an> : <end-state> : <o1 o2 ... om> : %f
+#or
+#    O: <a1 a2...an> : <end-state> :
+#    %f %f ... %f	    P(jo_1|ja,s') ... P(jo_x|ja,s')
+#or
+#    O:<a1 a2...an> :	    - a |S|x|JO| matrix
+#    %f %f ... %f	    P(jo_1|ja,s_1') ... P(jo_x|ja,s_1') 
+#    %f %f ... %f	    ... 
+#    ...		    ...
+#    %f %f ... %f	    P(jo_1|ja,s_k') ... P(jo_x|ja,s_k') 
+#O: * :
+#uniform
+O: StaySilent StaySilent : * : O_StaySilent O_StaySilent : 1.0
+O: StaySilent Betray : * : O_StaySilent O_Betray : 1.0
+O: Betray StaySilent : * : O_Betray O_StaySilent : 1.0
+O: Betray Betray : * : O_Betray O_Betray : 1.0
+#The rewards
+#or
+#    R: <a1 a2...an> : <start-state> : <end-state> :
+#    %f %f ... %f
+#or
+#    R: <a1 a2...an> : <start-state> :
+#    %f %f ... %f 
+#    %f %f ... %f 
+#    ...
+#    %f %f ... %f
+#
+#Typical problems only use R(s,ja) which is specified by:
+#   R: <a1 a2...an> : <start-state> : * : * : %f
+R: StaySilent StaySilent : * : * : * : -1
+R: StaySilent Betray : * : * : * : -10 
+R: Betray StaySilent : * : * : * : 0 
+R: Betray Betray : * : * : * : -5

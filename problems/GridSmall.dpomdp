@@ -1,7 +1,10 @@
 # Meeting in a 2x2 grid DEC-POMDP description
 # GridSmall.dpomdp
-# $Id: GridSmall.dpomdp 1171 2007-07-19 16:10:35Z mtjspaan $
 # Problem appeared in (Bernstein, Hansen & Zilberstein, IJCAI 2005).
+# This is the version with 2 observations per agents (Amato,
+# Bernstein & Zilberstein, AAMAS Workshop on Multi-Agent Sequential
+# Decision Making in Uncertain Domains (MSDM) 2006).
+#
 # .dpomdp description converted from .posg description provided at
 # http://rbr.cs.umass.edu/~camato/decpomdp/GridSmall.posg
 # Fixed rounding errors (e.g., replaced 0.63999 with 0.64).
