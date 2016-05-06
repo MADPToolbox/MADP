@@ -55,9 +55,6 @@ MADP_LD =
 #####################################################################
 # Lists of libs to be linked with binaries.
 # Note that the linking order matters, in order to correctly resolve symbols
-#
-#
-# normal: 
 MADPLIBS_NORMAL_BASE = \
  $(top_builddir)/src/base/libMADPBase.la
 
