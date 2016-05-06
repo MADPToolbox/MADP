@@ -63,6 +63,8 @@ AC_SUBST(CSTANDARD,"-std=c++98")
 # AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
+#CHECK for standard c++ libs (and include the linkind directives...)
+AC_CHECK_LIB([stdc++],[__cxa_free_exception])
 # defining the libs doesn't work...
 # Don't check nor include lp-solve anymore until Tony Cassandra's code
 # has been updated for using the system-wide lp-solve
