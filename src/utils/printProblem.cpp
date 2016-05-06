@@ -8,25 +8,41 @@
 // Very simple programs that only uses the Parser and Base libraries.
 
 #include <iostream>
-#include "DecPOMDPDiscrete.h"
-#include "MADPParser.h"
+#include "argumentUtils.h"
 
 using namespace std;
+using namespace ArgumentUtils;
+
+#include "argumentHandlers.h"
+
+const char *argp_program_version = "printProblem";
+
+// Program documentation
+static char doc[] =
+"printProblem - Print out the models of a problem. \
+\v";
+
+//NOTE: make sure that the below value (nrChildParsers) is correct!
+const int nrChildParsers = 2;
+const struct argp_child childVector[] = {
+    ArgumentHandlers::problemFile_child,
+    ArgumentHandlers::modelOptions_child,
+    { 0 }
+};
+
+#include "argumentHandlersPostChild.h"
 
 int main(int argc, char **argv)
 {
-    if(argc!=2)
+    try
     {
-        cout << "Use as follows: printProblem "
-             << "<problem>" << endl;
-        return(1);
-    }
 
-    try {
+    ArgumentHandlers::Arguments args;
 
-        DecPOMDPDiscrete dpomdp("","",argv[1]);
-        MADPParser parser(&dpomdp);
-        dpomdp.Print();
+    argp_parse (&ArgumentHandlers::theArgpStruc, argc, argv, 0, 0, &args);
+
+    DecPOMDPDiscreteInterface* dpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
+    cout << dpomdp->SoftPrint() << endl;
 
     }
     catch(E& e){ e.Print(); }

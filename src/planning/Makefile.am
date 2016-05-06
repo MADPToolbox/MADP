@@ -3,13 +3,13 @@ include $(top_srcdir)/config/Make-rules
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I$(top_srcdir)/src/base\
+INCLUDEPATH		= -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/include -I$(top_srcdir)/src/support\
  -I$(top_srcdir)/src/planning\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif

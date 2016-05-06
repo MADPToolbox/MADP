@@ -20,14 +20,15 @@ example_Perseus
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I..\
+INCLUDE_PATH		= -I..\
  -I$(top_srcdir)/src/base -I$(top_srcdir)/src/include\
  -I$(top_srcdir)/src/support -I$(top_srcdir)/src/planning\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDE_PATH)
+
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif

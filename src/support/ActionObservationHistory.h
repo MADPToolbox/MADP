@@ -12,7 +12,6 @@
 /* the include directives */
 #include <iostream>
 #include "Globals.h"
-#include "Referrer.h"
 #include "IndividualHistory.h"
 
 //forward declation:
@@ -21,7 +20,7 @@ class PlanningUnitMADPDiscrete;
 
 
 /// ActionObservationHistory represents an action-observation history of an agent.
-class ActionObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>,
+class ActionObservationHistory  :
     public IndividualHistory
 {
     private:    
@@ -35,6 +34,8 @@ class ActionObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>,
          * (_m_actionObservationI) this gives a full description of 
          * this joint actionObservation history.*/   
         ActionObservationHistory* _m_pred;
+
+        PlanningUnitMADPDiscrete* _m_planningUnitMADPDiscrete;
    
     protected:
     

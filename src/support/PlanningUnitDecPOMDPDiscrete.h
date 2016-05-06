@@ -12,7 +12,6 @@
 /* the include directives */
 #include <iostream>
 #include "Globals.h"
-#include "Referrer.h"
 #include "PlanningUnitMADPDiscrete.h"
 #include "DecPOMDPDiscreteInterface.h"
 #include "boost/shared_ptr.hpp"

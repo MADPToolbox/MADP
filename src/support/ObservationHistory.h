@@ -12,7 +12,6 @@
 /* the include directives */
 #include <iostream>
 #include "Globals.h"
-#include "Referrer.h"
 #include "E.h"
 #include "IndividualHistory.h"
 
@@ -25,7 +24,7 @@ class PlanningUnitMADPDiscrete; //forward declaration to avoid including each ot
  * It does so by storing an index and a pointer to a preceeding
  * observation history.
  */
-class ObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>,
+class ObservationHistory  :
     public IndividualHistory
 {
     private:
@@ -43,6 +42,10 @@ class ObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>,
          * observation(_m_observationI) this gives a full description of 
          * this observation history.*/   
         ObservationHistory* _m_pred;
+
+        ///ref to the pu
+        PlanningUnitMADPDiscrete* _m_PlanningUnitMADPDiscrete;
+
     protected:
     
     public:

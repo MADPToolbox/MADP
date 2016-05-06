@@ -17,8 +17,8 @@ using namespace std;
 //Default constructor
 ActionHistory::ActionHistory(PlanningUnitMADPDiscrete& pu, 
         Index agentI) :
-    Referrer<PlanningUnitMADPDiscrete>(pu),
-    IndividualHistory(agentI)
+    IndividualHistory(agentI),
+    _m_planningUnitMADPDiscrete(&pu)
 {
     SetLength(0);
     _m_actionI = 0;
@@ -27,8 +27,8 @@ ActionHistory::ActionHistory(PlanningUnitMADPDiscrete& pu,
 }
 
 ActionHistory::ActionHistory(Index aI, ActionHistory* pred):
-    Referrer<PlanningUnitMADPDiscrete>( pred->GetReferred() ),
-    IndividualHistory(pred->_m_agentI)
+    IndividualHistory(pred->_m_agentI),
+    _m_planningUnitMADPDiscrete(pred->_m_planningUnitMADPDiscrete)
 {
     SetLength(pred->GetLength() + 1);
     _m_actionI = aI;
@@ -64,7 +64,7 @@ string ActionHistory::SoftPrint() const
    
     if (!_m_isEmpty) // don't print the empty action
     {
-        ss << (GetReferred()->GetAction(_m_agentI,
+        ss << (_m_planningUnitMADPDiscrete->GetAction(_m_agentI,
             _m_actionI))->SoftPrintBrief();
         ss << ", ";
     }

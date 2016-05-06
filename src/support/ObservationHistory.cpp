@@ -15,10 +15,9 @@ using namespace std;
 #define DEBUG_OH 0
 
 //Default constructor
-ObservationHistory::ObservationHistory(PlanningUnitMADPDiscrete& pu, 
-        Index agentI) :
-    Referrer<PlanningUnitMADPDiscrete>(pu),
-    IndividualHistory(agentI)
+ObservationHistory::ObservationHistory(PlanningUnitMADPDiscrete& pu,Index agentI) :
+    IndividualHistory(agentI),
+    _m_PlanningUnitMADPDiscrete(&pu)
 {
     SetLength(0);
     _m_observationI = 0;
@@ -33,8 +32,8 @@ ObservationHistory::ObservationHistory(PlanningUnitMADPDiscrete& pu, Index agent
 }
 
 ObservationHistory::ObservationHistory(Index obsI, ObservationHistory* pred):
-    Referrer<PlanningUnitMADPDiscrete>( pred->GetReferred() ),
-    IndividualHistory(pred->_m_agentI)
+    IndividualHistory(pred->_m_agentI),
+    _m_PlanningUnitMADPDiscrete(pred->_m_PlanningUnitMADPDiscrete)
 {
     SetLength(pred->GetLength() + 1);
     _m_observationI = obsI;
@@ -64,7 +63,7 @@ string ObservationHistory::SoftPrint() const
     {
 //        ss << GetReferred()->GetObservationDiscrete(_m_agentI,
 //        let's see if this works...
-        ss << GetReferred()->GetObservation(_m_agentI,
+        ss << _m_PlanningUnitMADPDiscrete->GetObservation(_m_agentI,
             _m_observationI)->SoftPrintBrief() << ", ";
     }
     else

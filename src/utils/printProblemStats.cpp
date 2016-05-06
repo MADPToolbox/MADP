@@ -6,7 +6,6 @@
  */
 
 #include <iostream>
-#include "MADPParser.h"
 #include "NullPlanner.h"
 #include "directories.h"
 
@@ -72,7 +71,7 @@ int main(int argc, char **argv)
     cout << endl
          << "Statistics per horizon:" << endl;
 
-    for(Index h=1;h<=args.horizon;++h)
+    for(Index h=1;h<=(Index)args.horizon;++h)
     {
         NullPlanner np(h,decpomdp);
         cout << "h=" << h

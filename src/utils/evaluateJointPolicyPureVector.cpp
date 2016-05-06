@@ -7,8 +7,6 @@
 
 
 #include <iostream>
-#include "DecPOMDPDiscreteInterface.h"
-#include "MADPParser.h"
 #include "directories.h"
 #include "SimulationDecPOMDPDiscrete.h"
 #include "JointPolicyPureVector.h"

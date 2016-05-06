@@ -29,7 +29,11 @@ protected:
     size_t _m_nrFireLevels;
     double _m_costOfMove;
     bool _m_forcePositionRepres;
-
+    // this the probability agents receive for reducing the firelevel
+    // to 1 if >1 agents are present, otherwise it reduces just by 1
+    // level.
+    double _m_multipleAgentExtinguishProb;
+    
     bool _m_includePositions;
 
     size_t _m_nrStateFeatures;
@@ -49,14 +53,15 @@ protected:
             (sI, _m_nrPerStateFeatureVec );
     }
     ///Compute the probability of value yVal of state variable y, given ii=<Xs,As,Ys>
-    double ComputeTransitionProb(
+    virtual double ComputeTransitionProb(
         Index y,
         Index yVal,
         const std::vector< Index>& Xs,
         const std::vector< Index>& As,
         const std::vector< Index>& Ys
         ) const;        
-    double ComputeObservationProb(
+
+    virtual double ComputeObservationProb(
         Index o,
         Index oVal,
         const std::vector< Index>& As,
@@ -70,11 +75,8 @@ protected:
     virtual size_t GetAgentLocation(Index action,
                                     Index agI) const;
 
-    virtual std::string SoftPrintBriefDescription(
-        size_t nrAgents, size_t nrHouses, size_t nrFLs) const;
-    virtual std::string SoftPrintDescription(size_t nrAgents,
-                                             size_t nrHouses,
-                                             size_t nrFLs) const;
+    virtual std::string SoftPrintBriefDescription() const;
+    virtual std::string SoftPrintDescription() const;
 
     ///Construct all the Actions and actionSets (the vector _m_actionVecs).
     virtual void ConstructActions();
@@ -87,12 +89,15 @@ protected:
     virtual void SetYScopes();
     virtual void SetOScopes();
 
+    double GetMultipleAgentExtinguishProb() const;
+    std::string GetMultipleAgentExtinguishProbString() const;
 
 public:
     ///Constructor
     ProblemFireFightingFactored(
             size_t nrAgents, size_t nrHouses, size_t nrFireLevels,
             double costOfMove=0.0, bool forcePositionRepres = false,
+            double multipleAgentExtinguishProb = 1.0,
             bool initialize=true);
 
     /// Destructor.

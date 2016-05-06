@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
         Timing times;
         times.Start("Parsing");
-        //DecPOMDPDiscreteInterface* 
+
         decpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
         TransitionObservationIndependentMADPDiscrete *toi=0;
         if((toi=dynamic_cast<TransitionObservationIndependentMADPDiscrete*>(decpomdp)) &&
@@ -166,6 +166,7 @@ int main(int argc, char **argv)
             double Vjb0=-DBL_MAX;
             for(Index a=0;a!=np.GetNrJointActions();++a)
                 Vjb0=max(q->GetQ(Globals::INITIAL_JAOHI,a),Vjb0);
+
             cout << "Value of jaohI 0 = " << Vjb0 << endl;
         }
 
@@ -173,6 +174,5 @@ int main(int argc, char **argv)
     }
     catch(E& e){ e.Print(); }
 
-    cout << "cleanup..." << endl;
     delete decpomdp;
 }

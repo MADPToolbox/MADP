@@ -12,7 +12,6 @@
 /* the include directives */
 #include <iostream>
 #include "Globals.h"
-#include "Referrer.h"
 #include "PlanningUnitDecPOMDPDiscrete.h"
 #include "FactoredDecPOMDPDiscreteInterface.h"
 

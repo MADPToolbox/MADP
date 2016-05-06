@@ -14,7 +14,6 @@
 #include "Globals.h"
 #include "Policy.h"
 #include "Interface_ProblemToPolicyDiscrete.h"
-#include "Referrer.h"
 
 using namespace PolicyGlobals;
 

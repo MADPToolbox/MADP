@@ -15,11 +15,12 @@ LIBDAI_INCLUDES =  -I$(top_srcdir)/src/libDAI
 #####################################################################
 # Compiler flags
 
+
 # the debug flags used - according to 
 # http://sourceware.org/gdb/current/onlinedocs/gdb_13.html#SEC111
 # dwarf-2 is best for c++ and gdb
 # -fno-inline should make things easier to debug
-DEBUG_FLAGS = -gdwarf-2 -fno-inline
+DEBUG_FLAGS = -O0 -gdwarf-2 -fno-inline
 
 # Optimization flags used for building normal and profiling libraries.
 # -DNDEBUG speeds up the boost::numeric::ublas operations
@@ -46,19 +47,17 @@ MADP_CFLAGS =
 MADP_INCLUDES = \
  $(INCLUDE) \
  $(LIBDAI_INCLUDES)\
- $(LIBPOMDPSOLVE_INCLUDES)\
  -I$(top_srcdir)/src/boost
 
 MADP_LD = 
- #$(MATLAB_LD)\
- #$(LPSOLVE_LD) \
- #$(PNL_LD)\
- #$(UMFPACK_LD)\
- #$(GMP_LD)
+# $(LPSOLVE_LD) 
 
 #####################################################################
 # Lists of libs to be linked with binaries.
 # Note that the linking order matters, in order to correctly resolve symbols
+#
+#
+# normal: 
 MADPLIBS_NORMAL_BASE = \
  $(top_builddir)/src/base/libMADPBase.la
 

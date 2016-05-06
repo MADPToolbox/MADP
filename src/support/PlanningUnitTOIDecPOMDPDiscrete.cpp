@@ -15,8 +15,8 @@ PlanningUnitTOIDecPOMDPDiscrete::PlanningUnitTOIDecPOMDPDiscrete(
     size_t horizon,
     TOIDecPOMDPDiscrete* p
     ) :
-    Referrer<TOIDecPOMDPDiscrete>(p),
-    PlanningUnitDecPOMDPDiscrete(params,horizon,p) 
+    PlanningUnitDecPOMDPDiscrete(params,horizon,p),
+    _m_TOIDecPOMDPDiscrete(p)
 {
     if(DEBUG_PU_CONSTRUCTORS) cout << "PlanningUnitTOIDecPOMDPDiscrete(PlanningUnitMADPDiscreteParameters params, size_t horizon, DecPOMDPDiscreteInterface* p)  called" << endl;
     if(p!=0)
@@ -27,8 +27,8 @@ PlanningUnitTOIDecPOMDPDiscrete::PlanningUnitTOIDecPOMDPDiscrete(
     size_t horizon,
     TOIDecPOMDPDiscrete* p
     ) :
-    Referrer<TOIDecPOMDPDiscrete>(p),
-    PlanningUnitDecPOMDPDiscrete(horizon,p)
+    PlanningUnitDecPOMDPDiscrete(horizon,p),
+    _m_TOIDecPOMDPDiscrete(p)
 {
     if(DEBUG_PU_CONSTRUCTORS) cout << "PlanningUnitTOIDecPOMDPDiscrete(size_t horizon, DecPOMDPDiscreteInterface* p)  called" << endl;
     if(p!=0)
@@ -37,9 +37,9 @@ PlanningUnitTOIDecPOMDPDiscrete::PlanningUnitTOIDecPOMDPDiscrete(
 
 void PlanningUnitTOIDecPOMDPDiscrete::SetProblem(TOIDecPOMDPDiscrete* p)
 {
-    if(p == GetReferred())
+    if(p == _m_TOIDecPOMDPDiscrete)
         return;
-    SetReferred(p);
+    _m_TOIDecPOMDPDiscrete=p;
 #if 0
     //set (and initialize) the problem at PlanningUnitDecPOMDPDiscrete level:
     DecPOMDPDiscreteInterface* p2 = 

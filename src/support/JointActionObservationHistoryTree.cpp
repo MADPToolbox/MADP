@@ -107,10 +107,10 @@ JointActionObservationHistoryTree* JointActionObservationHistoryTree::GetSuccess
         
         this->SetSuccessor(aI, oI, next_jaoht);
 
-        next_jaoht->SetIndex(next_jaoh->GetReferred()->
+        next_jaoht->SetIndex(next_jaoh->GetPlanningUnitMADPDiscrete()->
                              GetSuccessorJAOHI(this->GetIndex(),aI,oI));
         // stores the pointer in the big reference vector
-        next_jaoh->GetReferred()->
+        next_jaoh->GetPlanningUnitMADPDiscrete()->
             RegisterJointActionObservationHistoryTree(next_jaoht);
 
         suc=next_jaoht;

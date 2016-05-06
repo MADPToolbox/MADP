@@ -12,14 +12,13 @@
 /* the include directives */
 #include <iostream>
 #include "Globals.h"
-#include "Referrer.h"
 #include "JointHistory.h"
 
 //forward declation:
 class PlanningUnitMADPDiscrete;
 
 /// JointActionObservationHistory represents a joint action observation history.
-class JointActionObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>,
+class JointActionObservationHistory :
     public JointHistory
 {
     private:    
@@ -38,6 +37,9 @@ class JointActionObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>
          * ActionObservationHistories this gives an alternate description of the
          * current JointActionObservation History. */
         std::vector<Index> _m_individualActionObservationHistories;
+
+        ///pointer to the pu
+        PlanningUnitMADPDiscrete* _m_planningUnitMADPDiscrete;
 
         void GetJointActionObservationHistoryVectorsRecursive(
             std::vector<Index> &jaIs, std::vector<Index> &joIs);
@@ -66,6 +68,10 @@ class JointActionObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>
             const
         {return _m_individualActionObservationHistories;}
         
+        ///Returns PlanningUnitMADPDiscrete
+        PlanningUnitMADPDiscrete* GetPlanningUnitMADPDiscrete()
+        { return _m_planningUnitMADPDiscrete;}
+
         //other
         ///SoftPrints the history.
         std::string SoftPrint() const;

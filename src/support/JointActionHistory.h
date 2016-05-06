@@ -14,7 +14,6 @@
 #include <vector>
 
 #include "Globals.h"
-#include "Referrer.h"
 #include "TreeNode.h"
 #include "JointHistory.h"
 
@@ -26,7 +25,7 @@ class PlanningUnitMADPDiscrete; //forward declaration to avoid including each ot
  * This consists of a joint action history index, the last joint
  * action (index) a pointer to the predecessor JOH.  and a vector of
  * indexes to the individual action histories.  */
-class JointActionHistory : public Referrer<PlanningUnitMADPDiscrete>,
+class JointActionHistory :
     public JointHistory
 {
     private:
@@ -47,7 +46,8 @@ class JointActionHistory : public Referrer<PlanningUnitMADPDiscrete>,
          * current JointAction History. */
         std::vector<Index> _m_individualActionHistories;
 
-    
+        PlanningUnitMADPDiscrete* _m_planningUnitMADPDiscrete;
+
     protected:
     
     public:

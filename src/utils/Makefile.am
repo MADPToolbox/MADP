@@ -1,5 +1,3 @@
-# $Id: Makefile.am 9372 2015-03-10 18:27:08Z mtjspaan $
-
 include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
@@ -20,14 +18,14 @@ PROGRAMS_NORMAL =  \
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I..\
+INCLUDEPATH		= -I..\
  -I$(top_srcdir)/src/base -I$(top_srcdir)/src/include\
  -I$(top_srcdir)/src/support -I$(top_srcdir)/src/planning\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES)
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif
@@ -108,6 +106,7 @@ policyPureVectorToDotGraph_DEPENDENCIES = $(MADPLIBS_NORMAL)
 policyPureVectorToDotGraph_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 policyPureVectorToDotGraph_CXXFLAGS= $(CSTANDARD)
 policyPureVectorToDotGraph_CFLAGS=
+
 # Build evaluateJointPolicyPureVector
 evaluateJointPolicyPureVector_SOURCES = evaluateJointPolicyPureVector.cpp
 evaluateJointPolicyPureVector_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
@@ -128,9 +127,9 @@ calculateQheuristic_CFLAGS=
 
 # Build printProblem
 printProblem_SOURCES = printProblem.cpp
-printProblem_LDADD = $(MADPLIBS_NORMAL_NOPLANNING) $(MADP_LD)
+printProblem_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
 printProblem_LDFLAGS = $(AM_LDFLAGS) 
-printProblem_DEPENDENCIES = $(MADPLIBS_NORMAL_NOPLANNING)
+printProblem_DEPENDENCIES = $(MADPLIBS_NORMAL)
 printProblem_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 printProblem_CXXFLAGS= $(CSTANDARD)
 printProblem_CFLAGS=
