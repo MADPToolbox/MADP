@@ -1,20 +1,20 @@
-2016-04-xx Frans Oliehoek <frans.oliehoek@liverpool.ac.uk>
-    * Release 0.4
+2016-05-08 Frans Oliehoek <frans.oliehoek@liverpool.ac.uk>
+	* Release 0.4
 
-    * Includes spirit parser for .pomdp files
-    
-    * Includes new code for pruning POMDP vectors; obviates dependence on 
-      Cassandra's code and old LP solve version.
+	* Includes spirit parser for .pomdp files
 
-    * Includes new factor graph solution code
+	* Includes new code for pruning POMDP vectors; obviates dependence on 
+	  Cassandra's code and old LP solve version.
 
-    * generalized firefighting CGBG domain aded
+	* Includes new factor graph solution code
 
-    * simulation class for Factored Dec-POMDPs and TOI Dec-MDPs
+	* generalized firefighting CGBG domain aded
 
-    * approximate BG clustering methods
+	* simulation class for Factored Dec-POMDPs and TOI Dec-MDPs
 
-    * kGMAA with clustering
+	* approximate BG clustering methods
+
+	* kGMAA with clustering
 
 
 2015-02-22 Frans Oliehoek <frans.oliehoek@liverpool.ac.uk>
