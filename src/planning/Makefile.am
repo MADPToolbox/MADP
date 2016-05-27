@@ -34,7 +34,10 @@ SIMULATION_HFILES=$(SIMULATION_CPPFILES:.cpp=.h) \
  AgentDelayedSharedObservations.h\
  AgentFullyObservable.h\
  AgentSharedObservations.h\
- AgentLocalObservations.h
+ AgentLocalObservations.h\
+ AgentTOIFullyObservableSyncedSpecialReward.h\
+ AgentTOIFullyObservableSynced.h
+
 
 GMAA_CPPFILES=\
  GeneralizedMAAStarPlanner.cpp \
@@ -86,7 +89,10 @@ POMDP_CPPFILES=\
  AlphaVectorWeighted.cpp\
  PerseusWeightedPlanner.cpp \
  PerseusQFunctionPlanner.cpp\
- PerseusStationary.cpp
+ PerseusStationary.cpp\
+ PerseusNonStationary.cpp\
+ PerseusNonStationaryQPlanner.cpp\
+ PerseusBGNSPlanner.cpp
 
 
 POMDP_HFILES=$(POMDP_CPPFILES:.cpp=.h)\

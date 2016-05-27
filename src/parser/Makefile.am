@@ -27,7 +27,8 @@ PARSER_CPPFILES=\
  MADPParser.cpp 
 
 PARSER_HFILES=$(PARSER_CPPFILES:.cpp=.h) ParserInterface.h\
- CommentOrBlankParser.h
+ CommentOrBlankParser.h\
+ CommentBlankOrNewlineParser.h
 
 PARSER_FILES=$(PARSER_CPPFILES) $(PARSER_HFILES)
 

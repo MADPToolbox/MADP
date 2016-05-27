@@ -14,7 +14,8 @@ PROGRAMS_NORMAL =  \
  evaluateJointPolicyPureVector\
  calculateQheuristic\
  printProblem\
- printProblemStats
+ printProblemStats\
+ prunePWLCValueFunction
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
@@ -142,4 +143,38 @@ printProblemStats_DEPENDENCIES = $(MADPLIBS_NORMAL)
 printProblemStats_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 printProblemStats_CXXFLAGS= $(CSTANDARD)
 printProblemStats_CFLAGS=
+
+# Build prunePWLCQfunction
+prunePWLCValueFunction_SOURCES = prunePWLCValueFunction.cpp
+prunePWLCValueFunction_LDADD = $(MADPLIBS_NORMAL_NOPARSER) $(MADP_LD)
+prunePWLCValueFunction_LDFLAGS = $(AM_LDFLAGS) 
+prunePWLCValueFunction_DEPENDENCIES = $(MADPLIBS_NORMAL_NOPARSER)
+prunePWLCValueFunction_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
+prunePWLCValueFunction_CXXFLAGS= $(CSTANDARD)
+prunePWLCValueFunction_CFLAGS=
+
+
+
+
+
+
+
+
+
+
+
+###############
+# All DYNAMIC libraries
+# the LTLIBRARIES (LibTool-libraries)
+
+# the library to be build...
+lib_LTLIBRARIES = 
+noinst_LTLIBRARIES =
+
+
+# sources for the library:
+
+###############
+# All STATIC libraries
+lib_LIBRARIES	=
 

@@ -55,56 +55,6 @@ ValueFunctionPOMDPDiscrete AlphaVectorPruning::Prune(const ValueFunctionPOMDPDis
 
     size_t nrStates = all.at(0).GetNrValues();
 		
-    /*
-    EW: This piece of code may select too many vectors. On the instance below it selects
-        four vectors, but for the corners it only needs three vectors. In the computation
-        of bestCorners, the 'equal' case is missing.
-
-    0 -1
-    9.0 8.0 1.0 1.0 1.0
-
-    0 -1
-    8.0 8.0 8.0 1.0 1.0
-
-    0 -1
-    7.0 1.0 8.0 8.0 1.0
-
-    0 -1
-    6.0 1.0 1.0 8.0 9.0
-
-
-    //First we add the best alphavector for each corner of the belief simplex;
-    ValueFunctionPOMDPDiscrete bestCorners;
-
-    AlphaVector curr=all.at(0);
-    for(Index i=0; i<nrStates; ++i)
-        bestCorners.push_back(curr);
-    
-    for(Index i=0; i<in.size(); i++)
-    {
-        curr = in.at(i);
-        for(Index j=0; j<nrStates; j++)
-        {
-            if(curr.GetValue(j)>bestCorners.at(j).GetValue(j))
-                bestCorners.at(j)=curr;
-        }
-    }
-    for(Index i=0; i<nrStates; i++)
-    {
-        RemoveFirstOccurrence(all,bestCorners.at(i));
-
-        if(!Contains(Vpruned,bestCorners.at(i)))
-        {
-            Vpruned.push_back(bestCorners.at(i));
-#if DEBUG_AlphaVectorPruning
-            cout << "AlphaVectorPruning adding best corner vector for state " << i 
-                 << ":" << endl
-                 << SoftPrintVector(bestCorners.at(i).GetValues()) << endl;
-#endif
-        }
-    }
-    */
-		
     while(all.size()>0)
     {
         AlphaVector curr=all.at(0);

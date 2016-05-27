@@ -1,18 +1,10 @@
-#                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-
 AC_PREREQ(2.61)
 AC_INIT([MADP],[0.4],[madp-users@omni.isr.ist.utl.pt])
 # subdir-objects is used in src/libpomdp-solve
 AM_INIT_AUTOMAKE([1.9 tar-pax subdir-objects])
-#old
-#AC_CONFIG_SRCDIR([src/])
-#AC_CONFIG_HEADER([config.h])
-#AC_CONFIG_FILES -> at bottom of file!
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
-
-
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
@@ -73,6 +65,8 @@ AC_CHECK_LIB([stdc++],[__cxa_free_exception])
 #        [AC_DEFINE([HAVE_LPSOLVE], [],[lpsolve available])])
 #        [AC_DEFINE([HAVE_LPSOLVE], [],[lpsolve available]) LPSOLVE_LIB="/usr/lib/liblpsolve55_pic.a" LPSOLVE_LD="-lcolamd -ldl"])
 
+# IMPORTANT; check for math lib before lpsolve, otherwise lpsolve will fail (it needs '-lm')
+AC_CHECK_LIB([m], [main])
 # check for lpsolve
 AC_CHECK_HEADER(
         [lpsolve/lp_lib.h],
@@ -102,15 +96,6 @@ AC_CPLEX
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
 AC_CHECK_FUNCS([pow strtoull])
-
-#---------------some stuff required for pomdp-solve ------------------------------------
-#AC_PREREQ(2.57)
-#AC_INIT([pomdp-solve], [5.3], [arc@cassandra.org])
-#AM_INIT_AUTOMAKE(pomdp-solve, 5.3)
-
-# Allow the defined vars to come from a file instead of a slew of '-D'
-# compiler flags.
-#AM_CONFIG_HEADER([config.h])
 
 ## Option for using compile -g flag for debugging symbols
 ##
@@ -146,17 +131,14 @@ AC_ARG_ENABLE(dmalloc,
         ]
 )
 # Checks for programs.
-AC_PROG_YACC
 AC_PROG_CC
-AM_PROG_LEX
-
+#AC_PROG_YACC
+#AM_PROG_LEX
 
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lcplex':
 #AC_CHECK_LIB([cplex], [main])
-# FIXME: Replace `main' with a function in `-lm':
-AC_CHECK_LIB([m], [main])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -175,13 +157,6 @@ AC_TYPE_SIGNAL
 AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([bzero floor gettimeofday memset pow sqrt strstr])
-
-#AC_OUTPUT([Makefile                   \
-           #src/Makefile               \
-           #src/mdp/Makefile           \
-           #src/lp-solve/Makefile           \
-           #src/laspack/Makefile
-           #testing/Makefile])
 
 #---------------end of stuff required for pomdp-solve ------------------------------------
 
@@ -202,7 +177,6 @@ AM_CONDITIONAL([DARWIN], [test x$HOST_OS = xdarwin])
 AC_SEARCH_LIBS([argp_parse], [argp], [], [
   AC_MSG_ERROR([unable to find the argp_parse() function])
 ])
-
 
 #Check for libxml2 (required for ParserProbModelXML)
 AC_CHECK_LIB([xml2], [xmlInitParser])
