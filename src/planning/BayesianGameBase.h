@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -34,8 +26,8 @@
  * decision problem or Planning unit.
  * This implies that, in order to convert a time-step of a MADP Planning
  * Unit to a Bayesian game, indices of observation(-action) histories have
- * to be converted. This class uses its own indices.
- */
+ * to be converted. This class uses its own indices. 
+ **/
 class BayesianGameBase :
     public Interface_ProblemToPolicyDiscretePure //this class implements the interface
         //used by PolicyPureVector
@@ -188,6 +180,7 @@ class BayesianGameBase :
 
         /** Prints a description of this BayesianGameBase to a string.*/
         std::string SoftPrint() const;
+        std::string SoftPrintSummary() const;
         /**\brief Print this BayesianGameBase to cout.*/
         void Print() const
         {std::cout << SoftPrint();}

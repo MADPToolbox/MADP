@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek
  * Matthijs Spaan
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include <sys/times.h>
@@ -30,6 +22,7 @@
 #include "GMAA_MAAstarClassic.h"
 #include "GMAA_MAAstarCluster.h"
 #include "GMAA_kGMAA.h"
+#include "GMAA_kGMAACluster.h"
 
 #include "QBG.h"
 #include "QPOMDP.h"
@@ -48,6 +41,7 @@
 #include "BGIP_SolverCreator_MP.h"
 #include "BGIP_SolverCreator_BnB.h" 
 #include "BGIP_SolverCreator_Random.h" 
+#include "BGIP_SolverCreator_BFSNonInc.h" 
 
 #include "argumentHandlers.h"
 #include "argumentUtils.h"
@@ -618,6 +612,8 @@ void InitializeOutput(ArgumentHandlers::Arguments &args,
         if(args.useBGclustering)
         {
             ss << "_Cluster";
+            if(args.BGClusterAlgorithm != BayesianGameWithClusterInfo::Lossless)
+                ss << "_tJB" << args.thresholdJB << "_tPjaoh" << args.thresholdPjaoh;
         }
         switch(args.gmaa)
         {
@@ -641,6 +637,7 @@ void InitializeOutput(ArgumentHandlers::Arguments &args,
             switch(args.bgsolver)
             {
             case BFS:
+            case BFSNonInc:
                 // BFS has no parameters
                 break;
             case AM:
@@ -730,8 +727,6 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
     const PlanningUnitMADPDiscreteParameters &params,
     const string &filename,
     BGIP_SolverCreatorInterface * bgipsc_p
-    //BGIP_SolverCreatorInterface_T<JointPolicyPureVector> * bgsc_p,
-    //BGIP_SolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG> * bgscCluster_p
     )
 {
     GeneralizedMAAStarPlannerForDecPOMDPDiscrete *gmaa=0;
@@ -754,8 +749,16 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
         case FSPC:
             args.k=1; // fall through on purpose
         case kGMAA:
-            throw E("kGMAA not implemented for clustered version");
+        {
+            GMAA_kGMAACluster *gmaaCluster=
+                new GMAA_kGMAACluster(params, bgipsc_p,
+                                      args.horizon, decpomdp, args.k,
+                                      static_cast<BayesianGameWithClusterInfo::BGClusterAlgorithm>(args.BGClusterAlgorithm));
+            gmaaCluster->SetTresholdJB(args.thresholdJB);
+            gmaaCluster->SetTresholdPjaoh(args.thresholdPjaoh);
+            gmaa=gmaaCluster;
             break;
+        }
         case MAAstarClassic:
             throw E("MAAstarClassic not implemented for clustered version");
             break;
@@ -838,6 +841,15 @@ void GetBGIPSolverCreatorInstances(
                         args.verbose, args.k);
             else
                 bgipsc_p = new BGIP_SolverCreator_BFS<JointPolicyPureVector>(args.verbose, args.k);
+            break;
+        case BFSNonInc:
+            if(args.useBGclustering)
+                bgipsc_p = 
+                    new BGIP_SolverCreator_BFSNonInc<JointPolicyPureVectorForClusteredBG>(
+                        args.verbose, args.k);
+            else
+                bgipsc_p = new BGIP_SolverCreator_BFSNonInc<JointPolicyPureVector>(
+                    args.verbose, args.k);
             break;
         case AM:
             if(args.useBGclustering)

@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -43,7 +35,7 @@ class BayesianGameWithClusterInfo :
 {
 public:
 
-    enum BGClusterAlgorithm { Lossless };
+    enum BGClusterAlgorithm { Lossless, ApproxJB, ApproxPjaoh, ApproxPjaohJB };
 
     static std::string SoftPrint(BGClusterAlgorithm clusterAlg);
     private:    
@@ -87,6 +79,8 @@ public:
         /// The type of clustering we are performing.
         BGClusterAlgorithm _m_clusterAlgorithm;
         
+        double _m_thresholdJB, _m_thresholdPjaoh;
+
     
     protected:
         /**\brief shifts all the probability mass from agent agI's type t2 
@@ -154,11 +148,15 @@ public:
                 size_t nrAgents,
                 const std::vector<size_t>& nrActions,
                 const std::vector<size_t>& nrTypes,
-                BGClusterAlgorithm clusterAlg
+                BGClusterAlgorithm clusterAlg,
+                double thresholdJB,
+                double thresholdPjaoh
         );
         ///Test equivalence of agent agI's types t1 and t2
         bool TestExactEquivalence(Index agI, Index t1, Index t2) const;
- 
+        bool TestApproximateEquivalence(Index agI, Index t1, Index t2,
+                                        double thresholdJB, 
+                                        double thresholdPjaoh) const;
         ///called by ConstructExtendedBGWCI
         void Extend();
         
@@ -194,6 +192,11 @@ public:
                 const QFunctionJAOHInterface* q
             );
 
+        void SetThresholdJB(double threshold) { _m_thresholdJB=threshold; }
+        void SetThresholdPjaoh(double threshold) { _m_thresholdPjaoh=threshold; }
+        double GetThresholdJB() const { return(_m_thresholdJB); }
+        double GetThresholdPjaoh() const {  return(_m_thresholdPjaoh); }
+    
         BGClusterAlgorithm GetClusterAlgorithm() const { return(_m_clusterAlgorithm); }
 
         double ComputeMarginalTypeProbability(Index agI, Index typeI) const;

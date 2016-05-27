@@ -2,7 +2,6 @@
 # Chris Amato's recycling robot problem, UAI 2007.
 # Extracted from
 # http://rbr.cs.umass.edu/~camato/decpomdp/down/ProblemData3Probs.java
-# $Id: recycling.dpomdp 3597 2009-08-20 12:25:35Z mtjspaan $
 agents: 2
 discount: 0.9
 values: reward

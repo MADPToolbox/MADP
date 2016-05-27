@@ -1,16 +1,14 @@
-# $Id: Makefile.am 9372 2015-03-10 18:27:08Z mtjspaan $
-
 include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I$(top_srcdir)/src/base\
+INCLUDEPATHS		= -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/include\
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATHS)
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif
@@ -33,7 +31,6 @@ GENERAL_HFILES=$(GENERAL_CPPFILES:.cpp=.h)\
  EOverflow.h\
  E.h\
  EDeadline.h\
- Referrer.h\
  DiscreteEntity.h 
 
 #the MADP files should be the more basic data types.

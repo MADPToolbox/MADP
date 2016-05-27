@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "FactoredDecPOMDPDiscrete.h"
@@ -402,8 +394,13 @@ Index FactoredDecPOMDPDiscrete::RestrictedActionVectorToJointIndex(
 void FactoredDecPOMDPDiscrete::CacheFlatRewardModel(bool sparse)
 {
     if(_m_cached_FlatRM)
+    {
+        _m_cached_FlatRM=false; // set to false, otherwise GetReward()
+                                // call below will wrongly assume the
+                                // rewards have already been cached
+                                // and return only zeroes
         delete(_m_p_rModel);
-
+    }
     _m_sparse_FlatRM = sparse;
     if(sparse)
         _m_p_rModel=new RewardModelMappingSparse(GetNrStates(),

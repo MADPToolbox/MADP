@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -37,7 +29,11 @@ protected:
     size_t _m_nrFireLevels;
     double _m_costOfMove;
     bool _m_forcePositionRepres;
-
+    // this the probability agents receive for reducing the firelevel
+    // to 1 if >1 agents are present, otherwise it reduces just by 1
+    // level.
+    double _m_multipleAgentExtinguishProb;
+    
     bool _m_includePositions;
 
     size_t _m_nrStateFeatures;
@@ -57,14 +53,15 @@ protected:
             (sI, _m_nrPerStateFeatureVec );
     }
     ///Compute the probability of value yVal of state variable y, given ii=<Xs,As,Ys>
-    double ComputeTransitionProb(
+    virtual double ComputeTransitionProb(
         Index y,
         Index yVal,
         const std::vector< Index>& Xs,
         const std::vector< Index>& As,
         const std::vector< Index>& Ys
         ) const;        
-    double ComputeObservationProb(
+
+    virtual double ComputeObservationProb(
         Index o,
         Index oVal,
         const std::vector< Index>& As,
@@ -78,11 +75,8 @@ protected:
     virtual size_t GetAgentLocation(Index action,
                                     Index agI) const;
 
-    virtual std::string SoftPrintBriefDescription(
-        size_t nrAgents, size_t nrHouses, size_t nrFLs) const;
-    virtual std::string SoftPrintDescription(size_t nrAgents,
-                                             size_t nrHouses,
-                                             size_t nrFLs) const;
+    virtual std::string SoftPrintBriefDescription() const;
+    virtual std::string SoftPrintDescription() const;
 
     ///Construct all the Actions and actionSets (the vector _m_actionVecs).
     virtual void ConstructActions();
@@ -95,12 +89,15 @@ protected:
     virtual void SetYScopes();
     virtual void SetOScopes();
 
+    double GetMultipleAgentExtinguishProb() const;
+    std::string GetMultipleAgentExtinguishProbString() const;
 
 public:
     ///Constructor
     ProblemFireFightingFactored(
             size_t nrAgents, size_t nrHouses, size_t nrFireLevels,
             double costOfMove=0.0, bool forcePositionRepres = false,
+            double multipleAgentExtinguishProb = 1.0,
             bool initialize=true);
 
     /// Destructor.

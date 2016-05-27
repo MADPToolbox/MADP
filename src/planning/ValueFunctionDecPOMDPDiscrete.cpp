@@ -1,29 +1,20 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "ValueFunctionDecPOMDPDiscrete.h"
 
 #define DEBUG_CALCV 0
-#define DEBUG_CALCV_CACHE 0
 
 using namespace std;
 
 ValueFunctionDecPOMDPDiscrete::ValueFunctionDecPOMDPDiscrete(
     PlanningUnitDecPOMDPDiscrete& p , JointPolicyDiscretePure& jp):
-    Referrer<PlanningUnitDecPOMDPDiscrete>(&p),
-    Referrer<JointPolicyDiscretePure>(&jp)
+    _m_planningUnitDecPOMDPDiscrete(&p), 
+    _m_jointPolicyDiscretePure(&jp)
 {
     _m_V_initialized = false;
     _m_p_V = 0;
@@ -37,8 +28,8 @@ ValueFunctionDecPOMDPDiscrete::ValueFunctionDecPOMDPDiscrete(
 
 ValueFunctionDecPOMDPDiscrete::ValueFunctionDecPOMDPDiscrete(
     PlanningUnitDecPOMDPDiscrete* p , JointPolicyDiscretePure* jp):
-    Referrer<PlanningUnitDecPOMDPDiscrete>(p),
-    Referrer<JointPolicyDiscretePure>(jp)
+    _m_planningUnitDecPOMDPDiscrete(p),
+    _m_jointPolicyDiscretePure(jp)
 {
     _m_V_initialized = false;
     _m_p_V = 0;
@@ -174,22 +165,11 @@ double ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursivelyCached(Index sI,
     Index johI, Index stage)
 {
 #if DEBUG_CALCV
-    {cout<< "\nValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively("
-         << sI << ", " << johI << ") called"<<endl;}
-#endif         
+    cout<< "\nValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively("
+         << sI << ", " << johI << ") called"<<endl;
+#endif
 
-#if 0 
-//moved this check to before the call of this function, saving a function call
-    if( IsCached(sI, johI) )
-    {
-#if DEBUG_CALCV
-        if(DEBUG_CALCV_CACHE)cout << "returning cached result"<<endl;
-#endif                 
-        return(    (*_m_p_V)(sI, johI) );
-    }
-#endif    
     Index jaI = GetJPol()->GetJointActionIndex(johI);
-
     double R = _m_pu->GetReward(sI, jaI);
     double ExpFutureR = 0.0;
     // horizon h policy makes decision on observation histories which 
@@ -207,22 +187,20 @@ double ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursivelyCached(Index sI,
     }
 
 #if DEBUG_CALCV
-    if(DEBUG_CALCV){ cout << "Calculating future reward"<<endl;}
+    cout << "Calculating future reward"<<endl;
 #endif                 
     for(Index sucSI = 0; sucSI < _m_nrS; sucSI++)
     {
         double probSucSI = _m_pu->GetTransitionProbability(sI, jaI,sucSI);
 #if DEBUG_CALCV
-        if(DEBUG_CALCV){ cout << "P(s"<<sucSI<<"|s"<<sI<<",ja"<<jaI<<")="<<
-                probSucSI<<endl;}
+        cout << "P(s"<<sucSI<<"|s"<<sI<<",ja"<<jaI<<")="<<probSucSI<<endl;
 #endif                 
 
         for(Index joI = 0; joI < _m_nrJO; joI++)
         {
             double probJOI =  _m_pu->GetObservationProbability(jaI, sucSI, joI);
 #if DEBUG_CALCV
-            if(DEBUG_CALCV){ cout << "P(jo"<<joI<<"|ja"<<jaI<<",s"<<sucSI<<")="
-                                  <<probJOI<<endl;}
+            cout << "P(jo"<<joI<<"|ja"<<jaI<<",s"<<sucSI<<")="<<probJOI<<endl;
 #endif                 
             Index sucJohI = _m_pu->GetSuccessorJOHI(johI, joI);
             double thisSucV;
@@ -237,10 +215,9 @@ double ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursivelyCached(Index sI,
     (*_m_p_V)(sI, johI) = val;
     SetCached(sI, johI);
 #if DEBUG_CALCV
-    if(DEBUG_CALCV){ 
-        cout << "ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively("
-             << sI <<", " << johI << ") \n->immediate R="<<R<<
-            " \n->exp. future reward="<<ExpFutureR<<"\n->V="<<val<<endl;} 
+    cout << "ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively("
+         << sI <<", " << johI << ") \n->immediate R="<<R<<
+        " \n->exp. future reward="<<ExpFutureR<<"\n->V="<<val<<endl;
 #endif                 
     return(val);
 }

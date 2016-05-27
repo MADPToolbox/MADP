@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -20,7 +12,6 @@
 /* the include directives */
 #include <iostream>
 #include "Globals.h"
-#include "Referrer.h"
 #include "IndividualHistory.h"
 
 //forward declation:
@@ -29,7 +20,7 @@ class PlanningUnitMADPDiscrete;
 
 
 /// ActionObservationHistory represents an action-observation history of an agent.
-class ActionObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>,
+class ActionObservationHistory  :
     public IndividualHistory
 {
     private:    
@@ -43,6 +34,8 @@ class ActionObservationHistory  : public Referrer<PlanningUnitMADPDiscrete>,
          * (_m_actionObservationI) this gives a full description of 
          * this joint actionObservation history.*/   
         ActionObservationHistory* _m_pred;
+
+        PlanningUnitMADPDiscrete* _m_planningUnitMADPDiscrete;
    
     protected:
     

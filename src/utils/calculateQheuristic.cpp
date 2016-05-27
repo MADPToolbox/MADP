@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include <iostream>
@@ -62,7 +54,7 @@ int main(int argc, char **argv)
 
         Timing times;
         times.Start("Parsing");
-        //DecPOMDPDiscreteInterface* 
+
         decpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
         TransitionObservationIndependentMADPDiscrete *toi=0;
         if((toi=dynamic_cast<TransitionObservationIndependentMADPDiscrete*>(decpomdp)) &&
@@ -174,6 +166,7 @@ int main(int argc, char **argv)
             double Vjb0=-DBL_MAX;
             for(Index a=0;a!=np.GetNrJointActions();++a)
                 Vjb0=max(q->GetQ(Globals::INITIAL_JAOHI,a),Vjb0);
+
             cout << "Value of jaohI 0 = " << Vjb0 << endl;
         }
 
@@ -181,6 +174,5 @@ int main(int argc, char **argv)
     }
     catch(E& e){ e.Print(); }
 
-    cout << "cleanup..." << endl;
     delete decpomdp;
 }

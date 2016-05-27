@@ -20,14 +20,15 @@ example_Perseus
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I..\
+INCLUDE_PATH		= -I..\
  -I$(top_srcdir)/src/base -I$(top_srcdir)/src/include\
  -I$(top_srcdir)/src/support -I$(top_srcdir)/src/planning\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDE_PATH)
+
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif
@@ -62,7 +63,7 @@ example_decTigerJESP_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 example_decTigerJESP_CXXFLAGS= $(CSTANDARD)
 example_decTigerJESP_CFLAGS=
 
-# Build GMAA
+# Build example_GMAA
 example_GMAA_SOURCES = example_GMAA.cpp
 example_GMAA_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
 example_GMAA_LDFLAGS = $(AM_LDFLAGS) 

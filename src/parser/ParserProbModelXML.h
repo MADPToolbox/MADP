@@ -1,15 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Joao Messias 
- *
- * For contact information please see the included AUTHORS file.
+ * Frans Oliehoek
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #ifndef _PARSERPROBMODELXML_H_
@@ -231,8 +224,7 @@ class ParserProbModelXML :
         std::vector<std::size_t> _m_ASizes;
 };
 
-
-#endif /* !_PARSERDECPOMDPDISCRETE_H_ */
+#endif 
 
 // Local Variables: ***
 // mode:c++ ***

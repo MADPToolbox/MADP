@@ -1,18 +1,11 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Joao Messias 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "ParserProbModelXML.h"
+#include <string.h> /*strcmp*/
 
 using namespace std;
 
@@ -195,10 +188,11 @@ void SetScopes(ParserProbModelXML* parser, FactoredDecPOMDPDiscrete* decpomdp)
     xmlXPathFreeObject (link_nodes);
 }
 
+/*  FAO 2016-03-14, unused function, so commenting out.
 bool CompareParsedDependencies(pair<Index,Index> p1, pair<Index,Index> p2)
 {
     return p1.first < p2.first;
-}
+} */
 
 bool CompareParsedActions(pair<Index, xmlNodePtr> p1, pair<Index, xmlNodePtr > p2)
 {
@@ -376,6 +370,58 @@ double ComputeObservationProb(Index o,
     }
     return p;
 }
+
+class ProbModelXMLScopeFunctor : public MultiAgentDecisionProcessDiscreteFactoredStates::ScopeFunctor
+{
+public:
+  ProbModelXMLScopeFunctor(ParserProbModelXML* parser,
+                           FactoredDecPOMDPDiscrete* fdecpomdp) :
+                           _m_parser(parser),
+                           _m_fDecPOMDP(fdecpomdp){};
+                           
+  void operator()(){SetScopes(_m_parser,_m_fDecPOMDP);};
+  
+  ParserProbModelXML* _m_parser;
+  FactoredDecPOMDPDiscrete* _m_fDecPOMDP;
+};
+
+class ProbModelXMLTransitionProbFunctor : public MultiAgentDecisionProcessDiscreteFactoredStates::TransitionProbFunctor
+{
+public:
+  ProbModelXMLTransitionProbFunctor(ParserProbModelXML* parser,
+                                    FactoredDecPOMDPDiscrete* fdecpomdp) :
+                                    _m_parser(parser),
+                                    _m_fDecPOMDP(fdecpomdp){};
+  double operator()(Index y, 
+                    Index yVal,
+                    const std::vector< Index>& Xs,
+                    const std::vector< Index>& As,
+                    const std::vector< Index>& Ys) const
+  {return ComputeTransitionProb (y,yVal,Xs,As,Ys,_m_parser,_m_fDecPOMDP);};
+  
+  ParserProbModelXML* _m_parser;
+  FactoredDecPOMDPDiscrete* _m_fDecPOMDP;
+};
+
+class ProbModelXMLObservationProbFunctor : public MultiAgentDecisionProcessDiscreteFactoredStates::ObservationProbFunctor
+{
+public:
+  ProbModelXMLObservationProbFunctor(ParserProbModelXML* parser,
+                                     FactoredDecPOMDPDiscrete* fdecpomdp) :                                     
+                                     _m_parser(parser),
+                                     _m_fDecPOMDP(fdecpomdp){};                                    
+  double operator()(Index o, 
+                    Index oVal,
+                    const std::vector< Index>& Xs,
+                    const std::vector< Index>& As,
+                    const std::vector< Index>& Ys,
+                    const std::vector< Index>& Os) const
+  {return ComputeObservationProb (o,oVal,Xs,As,Ys,Os,_m_parser,_m_fDecPOMDP);};
+                                                      
+  ParserProbModelXML* _m_parser;
+  FactoredDecPOMDPDiscrete* _m_fDecPOMDP;
+};
+
 #endif
 }
 
@@ -1105,7 +1151,11 @@ double ParserProbModelXML::QueryTable(const xmlNodePtr node,
       return data->at(jIdx);
     }
     else
-      throw EParse("CPD indexed value out of bounds.");
+    {
+      stringstream ss;
+      ss << "CPD indexed value for variable " << GetVariableName(node) << " out of bounds";
+      throw EParse(ss.str());
+    }
 }
 
 const vector<double>* ParserProbModelXML::ParseArray(const xmlNodePtr node)
@@ -1425,17 +1475,12 @@ void ParserProbModelXML::Parse()
         ReadActions();
         ReadObservations();
         InitializeLRFs();
-        boost::function<double (Index o,
-                                Index oVal,
-                                const std::vector< Index>& Xs,
-                                const std::vector< Index>& As,
-                                const std::vector< Index>& Ys,
-                                const std::vector< Index>& Os) > f
-          = boost::bind(ComputeObservationProb, _1,_2,_3,_4,_5,_6, this, _m_fDecPOMDP);
+
+        ProbModelXMLScopeFunctor sf(this,_m_fDecPOMDP);
+        ProbModelXMLTransitionProbFunctor tf(this,_m_fDecPOMDP);
+        ProbModelXMLObservationProbFunctor of(this,_m_fDecPOMDP);
         _m_fDecPOMDP->SetEventObservability(_m_asynchronousModel);
-        _m_fDecPOMDP->Initialize2DBN(boost::bind(SetScopes, this, _m_fDecPOMDP),
-                                     boost::bind(ComputeTransitionProb, _1, _2, _3, _4, _5, this, _m_fDecPOMDP),
-                                     f);
+        _m_fDecPOMDP->Initialize2DBN(sf,tf,of);
         SetISD();
         ReadLRFs();
 

@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include <list>
@@ -34,6 +26,7 @@
 
 using namespace std;
 
+#define BGCLUSTER_OUTPUT_CLUSTERSTATS 0
 #define BGCLUSTER_OUTPUT_TESTEQUIVALENCE 0
 #define BGCLUSTER_REMOVE_ZEROPROB_TYPES 1
 
@@ -50,7 +43,9 @@ BayesianGameWithClusterInfo::BayesianGameWithClusterInfo(
             ,_m_qJB(dynamic_cast<const QFunctionJointBeliefInterface *>(q))
             ,_m_qHybrid(dynamic_cast<const QHybrid *>(q))
             ,_m_pBGJPol()
-            ,_m_clusterAlgorithm(clusterAlg)
+            ,_m_clusterAlgorithm(clusterAlg),
+            _m_thresholdJB(0),
+            _m_thresholdPjaoh(0)
 {
     //extra stuff we need to do for cluster info...
 
@@ -144,7 +139,10 @@ BayesianGameWithClusterInfo::BayesianGameWithClusterInfo(
     , _m_qJB(0)
     , _m_qHybrid(0)
     , _m_pBGJPol()
-    , _m_typeLists(pu->GetNrAgents(), 0)
+    , _m_typeLists(pu->GetNrAgents(), 0),
+    _m_thresholdJB(0),
+    _m_thresholdPjaoh(0)
+
 {
     size_t nrAgents = pu->GetNrAgents();
     for(Index agI=0; agI < nrAgents; agI++)
@@ -169,7 +167,9 @@ BayesianGameWithClusterInfo::BayesianGameWithClusterInfo(
         size_t nrAgents,
         const vector<size_t>& nrActions,
         const vector<size_t>& nrTypes,
-        BGClusterAlgorithm clusterAlg
+        BGClusterAlgorithm clusterAlg,
+        double thresholdJB,
+        double thresholdPjaoh
     )
         :
 
@@ -181,7 +181,9 @@ BayesianGameWithClusterInfo::BayesianGameWithClusterInfo(
             ,_m_pBGJPol(prevJPolBG)
             //,_m_JBs( GetNrJointTypes() )
             ,_m_jaohReps( GetNrJointTypes() )
-            ,_m_clusterAlgorithm(clusterAlg)
+            ,_m_clusterAlgorithm(clusterAlg),
+            _m_thresholdJB(thresholdJB),
+            _m_thresholdPjaoh(thresholdPjaoh)
 {
 }
 
@@ -195,6 +197,8 @@ BayesianGameWithClusterInfo::BayesianGameWithClusterInfo(const BayesianGameWithC
     _m_pBGJPol = o._m_pBGJPol;
     _m_jaohReps = o._m_jaohReps;
     _m_clusterAlgorithm = o._m_clusterAlgorithm;
+    _m_thresholdJB = o._m_thresholdJB;
+    _m_thresholdPjaoh = o._m_thresholdPjaoh;
     _m_typeLists= std::vector< TypeClusterList* > (o._m_typeLists.size(),0);
     for(Index k=0;k!=o._m_typeLists.size();++k)
     {
@@ -268,7 +272,9 @@ BayesianGameWithClusterInfo::ConstructExtendedBGWCI(
                            pBG->GetNrAgents(),
                            pBG->GetNrActions(),
                            nrTypes,
-                           pBG->GetClusterAlgorithm()
+                           pBG->GetClusterAlgorithm(),
+                           pBG->GetThresholdJB(),
+                           pBG->GetThresholdPjaoh()
                            ));
 
     bg->Extend();
@@ -443,9 +449,12 @@ BayesianGameWithClusterInfo::Cluster()
             _m_nrAgents,
             _m_nrActions,
             nrNewTypes,
-            _m_clusterAlgorithm
+            _m_clusterAlgorithm,
+            _m_thresholdJB,
+            _m_thresholdPjaoh
                             ));
-#if 0
+
+#if BGCLUSTER_OUTPUT_CLUSTERSTATS
     cout << GetStage() << " " << bgc->GetNrJointTypes()
          << "      stage " << GetStage()
          << " nrNewTypes " << SoftPrintVector(nrNewTypes)
@@ -666,6 +675,130 @@ bool BayesianGameWithClusterInfo::TestExactEquivalence(Index agI, Index t1, Inde
         return(false);
 }
 
+bool BayesianGameWithClusterInfo::TestApproximateEquivalence(Index agI, Index t1, Index t2,
+                                                             double thresholdJB, 
+                                                             double thresholdPjaoh) const
+{
+    //looping over all joint type profiles of the other agents
+    //( over all type_{-i} ) is inconvenient.
+    //Rather we loop over all joint types in this function
+    
+    //we start with the individual type vector corr. to joint type 0
+    //(i.e., the vector with type index 0 for each agent).
+    vector<Index> typeIndices;
+
+    //first we compute the marginals P(t1) and P(t2)
+    double p1, p2;
+    p1 = p2 = 0.0;    
+    typeIndices = vector<Index>(GetNrAgents(), 0 );
+    bool finished = false;
+
+    while( !finished )
+    {
+        //only if agent agI's component is t1 we do stuff
+        if(typeIndices.at(agI) == t1)
+        {
+            vector<Index> typeIndices2 = typeIndices;
+            typeIndices2.at(agI) = t2;
+            Index jtI1 = IndividualToJointTypeIndices( typeIndices);
+            Index jtI2 = IndividualToJointTypeIndices( typeIndices2);
+            p1 += GetProbability(jtI1);
+            p2 += GetProbability(jtI2);
+        }        
+        finished = IndexTools::Increment(typeIndices, _m_nrTypes);
+    }
+
+    ///TODO: check if both p1, p2 > 0
+
+
+    //now we compare P(type{-i} | t1) =? P(type{-i} | t2)
+    typeIndices = vector<Index>(GetNrAgents(), 0 );
+    finished = false;
+    bool equalProb=true;
+    while( !finished && equalProb )
+    {
+        //only if agent agI's component is t1 we do stuff
+        if(typeIndices.at(agI) == t1)
+        {
+            vector<Index> typeIndices2 = typeIndices;
+            typeIndices2.at(agI) = t2;
+            Index jtI1 = IndividualToJointTypeIndices( typeIndices);
+            Index jtI2 = IndividualToJointTypeIndices( typeIndices2);
+            double pjt1 =  GetProbability(jtI1);
+            double pjt2 =  GetProbability(jtI2);
+            double conditional_pjt1 = pjt1 / p1;
+            double conditional_pjt2 = pjt2 / p2;
+            if( fabs(conditional_pjt1-conditional_pjt2) > thresholdPjaoh)
+            {
+                equalProb=false;
+            }
+        }        
+        finished = IndexTools::Increment(typeIndices, _m_nrTypes);
+    }
+
+#if !BGCLUSTER_OUTPUT_TESTEQUIVALENCE
+    // if we want to check why two types are not equivalent, we also
+    // need the second test, otherwise we can stop here
+    if(!equalProb)
+        return(false);
+#endif
+
+    //now we compare P(s, type{-i} | t1) =? P(s, type{-i} | t2)
+    //or, actually we check that P(s |  type{-i}, t1) =? P(s | type{-i} , t2) 
+    typeIndices = vector<Index>(GetNrAgents(), 0 );
+    finished = false;
+    bool equalJB=true;
+    while( !finished && equalJB )
+    {
+        //only if agent agI's component is t1 we do stuff
+        if(typeIndices.at(agI) == t1)
+        {
+            vector<Index> typeIndices2 = typeIndices;
+            typeIndices2.at(agI) = t2;
+            Index jtI1 = IndividualToJointTypeIndices( typeIndices);
+            Index jtI2 = IndividualToJointTypeIndices( typeIndices2);
+            JointBeliefInterface* jb1 = _m_JBs.at(jtI1);
+            JointBeliefInterface* jb2 = _m_JBs.at(jtI2);
+            // only do this test if the joint beliefs actually exist
+            // (they may not in case the joint type has prob 0)
+            if(jb1!=0 && jb2!=0 &&
+               // If they exist, we still need to check whether can
+               // actually occur!
+               !Globals::EqualProbability(GetProbability(jtI1),0.0) &&
+               !Globals::EqualProbability(GetProbability(jtI2),0.0))
+            {
+                BeliefIteratorGeneric bit1 = jb1->GetIterator();
+                BeliefIteratorGeneric bit2 = jb2->GetIterator();
+                do
+                {
+                    double p1 = bit1.GetProbability();
+                    double p2 = bit2.GetProbability();
+                    if( fabs(p1-p2) > thresholdJB)
+                        equalJB=false;
+                }
+                while(equalJB && bit1.Next() && bit2.Next());
+            }
+        }
+        finished = IndexTools::Increment(typeIndices, _m_nrTypes);
+    }
+
+#if BGCLUSTER_OUTPUT_TESTEQUIVALENCE
+    if(!equalProb && !equalJB)
+        cout << "TESTEQUIVALENCE " << GetStage() << " notEquivalent both" << endl;
+    else if(!equalProb)
+        cout << "TESTEQUIVALENCE " << GetStage() << " notEquivalent prob" << endl;
+    else if(!equalJB)
+        cout << "TESTEQUIVALENCE " << GetStage() << " notEquivalent belief" << endl;
+    else
+        cout << "TESTEQUIVALENCE " << GetStage() << " equivalent" << endl;
+#endif
+
+    if(equalProb && equalJB)
+        return(true);
+    else
+        return(false);
+}
+
 size_t BayesianGameWithClusterInfo::ConstructClusteredIndividualTypes(
         Index agI, 
         TypeClusterList* newTypeList
@@ -732,6 +865,18 @@ size_t BayesianGameWithClusterInfo::ConstructClusteredIndividualTypes(
             case Lossless:
                 equivalent=TestExactEquivalence(agI, t1, t2);
                 break;
+            case ApproxJB:
+                equivalent=TestApproximateEquivalence(agI, t1, t2, _m_thresholdJB,
+                                                      PROB_PRECISION);
+                break;
+            case ApproxPjaoh:
+                equivalent=TestApproximateEquivalence(agI, t1, t2, PROB_PRECISION,
+                                                      _m_thresholdPjaoh);
+                break;
+            case ApproxPjaohJB:
+                equivalent=TestApproximateEquivalence(agI, t1, t2, _m_thresholdJB,
+                                                      _m_thresholdPjaoh);
+                break;
             default:
                 throw(E("BayesianGameWithClusterInfo::ConstructClusteredIndividualTypes clustering algorithm not handled"));
             }
@@ -790,6 +935,20 @@ void BayesianGameWithClusterInfo::ShiftProbabilityAndUtility(Index agI, Index t1
 
             SetProbability(jtI1, p1+p2);
             SetProbability(jtI2, 0.0);
+
+            // if are doing approximate clustering, also update the
+            // utility by a weighted sum
+            if(_m_clusterAlgorithm!=Lossless)
+            {
+                for(Index jaI=0; jaI < GetNrJointActions(); jaI++)
+                {
+                    u1 = GetUtility(jtI1,jaI);
+                    u2 = GetUtility(jtI2,jaI);
+
+                    // set the weighted utility
+                    SetUtility(jtI1, jaI, (p1/(p1+p2))*u1 + (p2/(p1+p2))*u2);
+                }
+            }
         }        
         finished = 
             IndexTools::Increment(typeIndices, _m_nrTypes);
@@ -936,6 +1095,12 @@ string BayesianGameWithClusterInfo::SoftPrint(BGClusterAlgorithm clusterAlg)
     {
     case Lossless:
         return("Lossless");
+    case ApproxJB:
+        return("ApproxJB");
+    case ApproxPjaoh:
+        return("ApproxPjaoh");
+    case ApproxPjaohJB:
+        return("ApproxPjaohJB");
     }
 
     throw(E("BayesianGameWithClusterInfo::SoftPrint BGClusterAlgorithm not handled"));

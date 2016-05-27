@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "argumentHandlers.h"
@@ -22,7 +14,7 @@ using namespace ArgumentHandlers;
 namespace ArgumentHandlers {
 
 const char *argp_program_bug_address = 
-", <m.t.j.spaan@tudelft.nl>";
+"https://github.com/MADPToolbox/MADP";
 
 // a group for input arguments
 static const int GID_INPUTARG=1;
@@ -52,9 +44,11 @@ static const int OPT_ISLANDCONF=4;    // island configuration
 static const int OPT_MAXBACKLOG=5;    // maximum backlog
 static const int OPT_VARIATION=6;    // aloha variation
 static struct argp_option problemFile_options[] = {
+//FFG:
 {"agents",      OPT_NRAGENTS,   "NRAGENTS",  0, "FireFighting: the number of agents (2)" },
 {"houses",      OPT_NRHOUSES,   "NRHOUSES",  0, "FireFighting: the number of houses (3)" },
 {"firelevels",  OPT_NRFLS,      "NRFLS",  0, "FireFighting: the number of firelevels (3)"},
+//Aloha:
 {"islands",  OPT_ISLANDCONF,      "ISLANDS",  0, "Aloha: the island configuration (TwoIslands), can be TwoIslands, OneIsland, TwoIndependentIslands, ThreeIslandsInLine, ThreeIslandsClustered, SmallBigSmallInLine, FiveIslandsInLine, FourIslandsInLine, FourIslandsInSquare, SixIslandsInLine, SevenIslandsInLine"},
 {"variation",  OPT_VARIATION,      "VARIATION",  0, "Aloha: which variation to use (NoNewPacket), can be NoNewPacket, NewPacket, NewPacketSendAll, NewPacketProgressivePenalty"},
 {"backlog",  OPT_MAXBACKLOG,      "MAXBL",  0, "Aloha: the maximum backlog per island (2)"},
@@ -428,11 +422,14 @@ main argp parser of your application. (and this message will\
 not be shown)\
 \v\
 BGIP_SOLVERTYPE parameter:\n\
-BFS\t-\tBrute force search\n\
+BFS\t-\tBrute force search, incremental (for GMAA-ICE))\n\
+BFSNonInc\t-\tBrute force search, non-incremental (for plain MAA*)\n\
 AM \t-\tAlternating Maximization (see AM options)\n\
 CE \t-\tCross-Entropy (see CE options) \n\
 MP \t-\tMax-Plus (see MaxPlus options) \n\
 BnB \t-\tBranch-and-Bound (see BnB options)\n\
+CGBG_MP\t-\tMax-Plus for CGBGs (only for factored Dec-POMDPs) \n\
+NDP\t-\tNon-serial Dynamic Programming (only for factored Dec-POMDPs) \n\
 Random\t-\tGives random solutions, for testing purposes";
 
 static struct argp_option bgsolver_options[] = {
@@ -452,6 +449,8 @@ bgsolver_parse_argument (int key, char *arg, struct argp_state *state)
     case 'B':
         if(strcmp(arg,"BFS")==0)
             theArgumentsStruc->bgsolver = BGIP_SolverType::BFS;
+        if(strcmp(arg,"BFSNonInc")==0)
+            theArgumentsStruc->bgsolver = BGIP_SolverType::BFSNonInc;
         else if(strcmp(arg,"AM")==0)
             theArgumentsStruc->bgsolver = BGIP_SolverType::AM;
         else if(strcmp(arg,"CE")==0)
@@ -578,10 +577,20 @@ static const char *gmaa_cluster_doc =
 "This is the documentation for the options options parser\
 This parser should be included as a child argp parser in the \
 main argp parser of your application. (and this message will\
-not be shown)";
+not be shown)\
+\v\
+CLUSTERALG parameter:\n\
+Lossless      -> Lossless clustering (default)\n\
+ApproxJB      -> Approximate clustering based on joint belief threshold\n\
+ApproxPjaoh   -> Approximate clustering based on Pjaoh threshold\n\
+ApproxPjaohJB -> Approximate clustering based on joint belief and Pjaoh threshold\n\
+\n";
 
 static struct argp_option gmaa_cluster_options[] = {
 {"useBGclustering", 'C', 0, 0, "Use Bayesian Game clustering"},
+{"BGClusterAlgorithm", 'A', "CLUSTERALG", 0, "Which clustering algorithm to use (Lossless)"},
+{"thresholdJB", 'j', "THRESHOLDJB", 0, "Threshold for considering two joint beliefs equal"},
+{"thresholdPjaoh", 'p', "THRESHOLDPJAOH", 0, "Threshold for considering two Pjaoh equal"},
 { 0 }
 };
 error_t
@@ -595,6 +604,24 @@ gmaa_cluster_parse_argument (int key, char *arg, struct argp_state *state)
     {
     case 'C':
         theArgumentsStruc->useBGclustering = 1;
+        break;
+    case 'A':
+        if(strcmp(arg,"Lossless")==0)
+            theArgumentsStruc->BGClusterAlgorithm=BayesianGameWithClusterInfo::Lossless;
+        else if(strcmp(arg,"ApproxJB")==0)
+            theArgumentsStruc->BGClusterAlgorithm=BayesianGameWithClusterInfo::ApproxJB;
+        else if(strcmp(arg,"ApproxPjaoh")==0)
+            theArgumentsStruc->BGClusterAlgorithm=BayesianGameWithClusterInfo::ApproxPjaoh;
+        else if(strcmp(arg,"ApproxPjaohJB")==0)
+            theArgumentsStruc->BGClusterAlgorithm=BayesianGameWithClusterInfo::ApproxPjaohJB;
+        else
+            return ARGP_ERR_UNKNOWN;
+        break;
+    case 'j':
+        theArgumentsStruc->thresholdJB = strtof(arg,0);
+        break;
+    case 'p':
+        theArgumentsStruc->thresholdPjaoh = strtof(arg,0);
         break;
     default:
         return ARGP_ERR_UNKNOWN;

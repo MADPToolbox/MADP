@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "BayesianGameBase.h"
@@ -247,7 +239,7 @@ double BayesianGameBase::GetProbability(Index i) const
 
 
 
-string BayesianGameBase::SoftPrint() const
+string BayesianGameBase::SoftPrintSummary() const
 {
     stringstream ss;
     ss << "Bayesian game with "<<_m_nrAgents<<" agents"<<endl;
@@ -257,6 +249,21 @@ string BayesianGameBase::SoftPrint() const
     ss << "\nNumber of types ";
     ss << SoftPrintVector(_m_nrTypes);
     ss << " ("<< _m_nrJTypes <<" joint types)"<<endl;
+    return(ss.str());
+}
+string BayesianGameBase::SoftPrint() const
+{
+    stringstream ss;
+    ss << this->SoftPrintSummary();
+/*  
+    ss << "Bayesian game with "<<_m_nrAgents<<" agents"<<endl;
+    ss << "Number of actions ";
+    ss << SoftPrintVector(_m_nrActions);
+    ss << " ("<< _m_nrJA <<" joint actions)";
+    ss << "\nNumber of types ";
+    ss << SoftPrintVector(_m_nrTypes);
+    ss << " ("<< _m_nrJTypes <<" joint types)"<<endl;
+*/    
     ss << "joint type probs ";
     if(_m_useSparse)
         ss << "(sparse) " << SoftPrintVector(_m_jTypeProbsSparse);

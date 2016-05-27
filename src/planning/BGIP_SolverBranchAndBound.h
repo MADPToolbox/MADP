@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -36,6 +28,7 @@
 #define CACHE_IMPLIED_JPOL 0
 
 #define INITIALIZE_LB_TO_BESTFOUND 1
+#define BAILOUT_WHEN_CBG_LOWERBOUND_IS_HIT 0
 
 
 #define DEBUG_VALID_ACTIONS 0
@@ -148,7 +141,7 @@ private:
         if(this->GetNrFoundSolutions()>0)
         {
             _m_maxLowerBound=this->GetPayoff();
-            if(_m_verbosity>=0)
+            if(_m_verbosity>=1)
                 std::cout << "Initialized max lower bound to value of best solution (out of "
                           << this->GetNrFoundSolutions() << " already found): "
                           << _m_maxLowerBound << std::endl;
@@ -176,6 +169,13 @@ private:
                 _m_nrNodesFullySpecified++;
                 break;
             }
+#if BAILOUT_WHEN_CBG_LOWERBOUND_IS_HIT
+            if(top->GetF() < _m_CBGlowerBound)
+            {
+                std::cout << "Hit CBG lowerbound, bailing out" << std::endl;
+                return(-DBL_MAX);
+            }
+#endif
             if(top->GetF() < _m_maxLowerBound &&
                top->IsFullySpecifiedPolicy(_m_maxDepth)) // we still need to check
                                               // whether this is a fully

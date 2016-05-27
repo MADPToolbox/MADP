@@ -1,28 +1,34 @@
-# $Id: Makefile.am 9371 2015-03-10 18:19:32Z mtjspaan $
-
 include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		=  -I$(top_srcdir)/src/base\
+INCLUDEPATH		=  -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/include\
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
 LDADD			=
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(XML2_CFLAGS)
+AM_CPPFLAGS		= $(MADP_CPPFLAGS) $(INCLUDEPATH) 
+AM_CXXFLAGS 		= $(MADP_CXXFLAGS)
+AM_CFLAGS 		= $(MADP_CFLAGS)
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif
-AM_CXXFLAGS 		= $(CSTANDARD)
 
-PARSER_CPPFILES=ParserDecPOMDPDiscrete.cpp ParserTOIDecPOMDPDiscrete.cpp\
- ParserTOIDecMDPDiscrete.cpp ParserTOIFactoredRewardDecPOMDPDiscrete.cpp\
- ParserTOICompactRewardDecPOMDPDiscrete.cpp ParserProbModelXML.cpp\
- ParserPOMDPDiscrete.cpp \
- MADPParser.cpp
+PARSER_CPPFILES=\
+ ParserDPOMDPFormat_Spirit.cpp\
+ ParserPOMDPFormat_Spirit.cpp\
+ ParserTOIDecPOMDPDiscrete.cpp\
+ ParserTOIDecMDPDiscrete.cpp\
+ ParserTOIFactoredRewardDecPOMDPDiscrete.cpp\
+ ParserTOICompactRewardDecPOMDPDiscrete.cpp\
+ ParserProbModelXML.cpp\
+ ParserPOMDPDiscrete.cpp\
+ MADPParser.cpp 
+
 PARSER_HFILES=$(PARSER_CPPFILES:.cpp=.h) ParserInterface.h\
- CommentOrBlankParser.h
+ CommentOrBlankParser.h\
+ CommentBlankOrNewlineParser.h
 
 PARSER_FILES=$(PARSER_CPPFILES) $(PARSER_HFILES)
 

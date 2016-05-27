@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "OptimalValueDatabase.h"
@@ -23,18 +15,22 @@ using namespace std;
 //Default constructor
 OptimalValueDatabase::OptimalValueDatabase(
     const PlanningUnitDecPOMDPDiscrete* pu) :
-    _m_pu(pu)
+    _m_problemName(pu->GetDPOMDPD()->GetUnixName()),
+    _m_discount(pu->GetDiscount()),
+    _m_horizon(pu->GetHorizon())
 {
     Load();
-//     double discount=1.0;
-//     AddEntry("DecTiger", discount, 2, -4.000000);
-//     AddEntry("DecTiger", discount, 3, 5.190812);
-//     AddEntry("DecTiger", discount, 4, 4.802755);
-//     AddEntry("DecTiger", discount, 5, 7.026451);
-//     AddEntry("dectiger", discount, 2, -4.000000);
-//     AddEntry("dectiger", discount, 3, 5.190812);
-//     AddEntry("dectiger", discount, 4, 4.802755);
-//     AddEntry("dectiger", discount, 5, 7.026451);
+}
+
+OptimalValueDatabase::OptimalValueDatabase(
+    const string &problemName,
+    double discount,
+    size_t horizon) :
+                   _m_problemName(problemName),
+                   _m_discount(discount),
+                   _m_horizon(horizon)
+{
+    Load();
 }
 
 void OptimalValueDatabase::AddEntry(const std::string &problemName,
@@ -51,9 +47,9 @@ void OptimalValueDatabase::AddEntry(const std::string &problemName,
 
 void OptimalValueDatabase::SetOptimalValue(double value)
 {
-    AddEntry(_m_pu->GetDPOMDPD()->GetUnixName(),
-             _m_pu->GetDiscount(),
-             _m_pu->GetHorizon(),
+    AddEntry(_m_problemName,
+             _m_discount,
+             _m_horizon,
              value);
     Save();
 }
@@ -85,9 +81,9 @@ double OptimalValueDatabase::GetEntry(const std::string &problemName,
 double
 OptimalValueDatabase::GetOptimalValue() const
 {
-    return(GetEntry(_m_pu->GetDPOMDPD()->GetUnixName(),
-                    _m_pu->GetDiscount(),
-                    _m_pu->GetHorizon()));
+    return(GetEntry(_m_problemName,
+                    _m_discount,
+                    _m_horizon));
 }
 
 bool OptimalValueDatabase::IsOptimal(const std::string &problemName,
@@ -103,9 +99,9 @@ bool OptimalValueDatabase::IsOptimal(const std::string &problemName,
 }
 bool OptimalValueDatabase::IsOptimal(double value) const
 {
-    return(IsOptimal(_m_pu->GetDPOMDPD()->GetUnixName(),
-                     _m_pu->GetDiscount(),
-                     _m_pu->GetHorizon(),
+    return(IsOptimal(_m_problemName,
+                     _m_discount,
+                     _m_horizon,
                      value));
 }
 
@@ -128,9 +124,9 @@ bool OptimalValueDatabase::IsInDatabase(const std::string &problemName,
 bool 
 OptimalValueDatabase::IsInDatabase() const
 {
-    return(IsInDatabase(_m_pu->GetDPOMDPD()->GetUnixName(),
-                        _m_pu->GetDiscount(),
-                        _m_pu->GetHorizon()));
+    return(IsInDatabase(_m_problemName,
+                        _m_discount,
+                        _m_horizon));
 }
 
 string OptimalValueDatabase::SoftPrint() const

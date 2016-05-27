@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -185,8 +177,8 @@ public:
     bool SetStatesInitialized(bool b) { return(_m_S.SetInitialized(b)); }
 
     void SetNrObservations(Index AI, size_t nrO) { _m_O.SetNrObservations(AI,nrO); }
-    void AddObservation(Index AI, const std::string &name,
-                        const std::string &description="") { _m_O.AddObservation(AI,name, description); }
+    void AddObservation(Index AI, const std::string &name, const std::string &description="") 
+        { _m_O.AddObservation(AI,name, description); }
     const ObservationDiscrete* GetObservationDiscrete(Index agentI, 
                                                       Index a) const
         { return(_m_O.GetObservationDiscrete(agentI,a)); }
@@ -196,8 +188,8 @@ public:
     bool SetObservationsInitialized(bool b) { return(_m_O.SetInitialized(b)); }
 
     void SetNrActions(Index AI, size_t nrA) { _m_A.SetNrActions(AI,nrA); }
-    void AddAction(Index AI, const std::string &name,
-                   const std::string &description="") { _m_A.AddAction(AI,name, description); }
+    void AddAction(Index AI, const std::string &name, const std::string &description="") 
+        { _m_A.AddAction(AI,name, description); }
     const ActionDiscrete* GetActionDiscrete(Index agentI, Index a) const
         { return(_m_A.GetActionDiscrete(agentI,a)); }
     size_t ConstructJointActions() { return(_m_A.ConstructJointActions()); }

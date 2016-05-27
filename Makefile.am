@@ -3,9 +3,11 @@ SUBDIRS = src
 EXTRA_DIST = src/include/versions.h \
  src/include/configuration.h \
  src/parser/dpomdp.spirit \
+ src/parser/pomdp.spirit \
  problems \
  doc \
  src/boost \
+ src/solvers/GMAA-IC \
  src/solvers/GMAA-ICE
 
 #removes subversion dirs before packing

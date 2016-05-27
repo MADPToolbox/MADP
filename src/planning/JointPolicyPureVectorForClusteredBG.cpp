@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "JointPolicyPureVectorForClusteredBG.h"
@@ -354,16 +346,19 @@ JointPolicyPureVectorForClusteredBG::RecursivelyFillPolicyForAgent(
         ///NOTE: this can throw an error if there is no type 
         //for the history (e.g. if the histories prob. is 0)
         Index n_tI = 0;
+        Index n_aI = 0; // ensure that action 0 is selected if exception is thrown
         try{
             n_tI = bg->FindTypeClusterIndex(agI, tc, aI, obsI);
+            n_aI = jpolBG->GetActionIndex(agI, n_tI);
         } catch (E& e) {
             cout << "JointPolicyPureVectorForClusteredBG::RecursivelyFillPolicyForAgent implement catch?\n";
             continue;
         }
-        
+
         const TypeCluster* n_tc =  bg->GetTypeCluster(agI, n_tI);
-        Index n_aI = jpolBG->GetActionIndex(agI, n_tI);
+        
         jpolJPPV->SetAction(agI, n_ohI, n_aI); //<- here something happens
+
         Index h = pu->GetHorizon();
         Index n_ts = ts+1;
         if(n_ts  <= h - 1) // ts + 1 <= h - 1

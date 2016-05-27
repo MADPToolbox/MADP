@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -28,8 +20,10 @@
 class POMDPDiscrete : public DecPOMDPDiscrete
 {
     private:    
+        
     
     protected:
+        static const int SINGLE_AGENT_INDEX = 0;
     
     public:
         // Constructor, destructor and copy assignment.
@@ -43,13 +37,25 @@ class POMDPDiscrete : public DecPOMDPDiscrete
         /// Copy constructor.
         ///        POMDPDiscrete(const POMDPDiscrete& a);
         /// Destructor.
-        virtual ~POMDPDiscrete();
-        /// Copy assignment operator
+        virtual ~POMDPDiscrete(){};
+        // Copy assignment operator
 //         POMDPDiscrete& operator= (const POMDPDiscrete& o);
 
-        // these shadow the ones defined in DecPOMDPDiscrete (on purpose)
-        size_t GetNrActions() { return(GetNrJointActions()); }
-        size_t GetNrObservations() { return(GetNrJointObservations()); }
+        size_t GetNrSingleAgentActions() const      { return(GetNrActions(SINGLE_AGENT_INDEX)); } 
+        size_t GetNrSingleAgentObservations() const { return(GetNrObservations(SINGLE_AGENT_INDEX)); }
+
+        ///set the number of actions for the single agent
+        void SetNrSingleAgentActions( size_t nrA )      
+            { this->SetNrActions(SINGLE_AGENT_INDEX, nrA); } 
+        ///add an action for the single agent
+        void AddSingleAgentAction(const std::string &name, const std::string &description="") 
+            { this->AddAction(SINGLE_AGENT_INDEX, name, description); }
+        ///set the number of obversations for the POMDP (single agent)
+        void SetNrSingleAgentObservations( size_t nrO ) 
+            { this->SetNrObservations(SINGLE_AGENT_INDEX, nrO); }
+        ///add an observation for the single agent
+        void AddSingleAgentObservation(const std::string &name, const std::string &description="") 
+            { this->AddObservation(SINGLE_AGENT_INDEX, name, description); }
 };
 
 

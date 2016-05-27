@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "ActionObservationHistory.h"
@@ -26,27 +18,26 @@ using namespace std;
 
 //Default constructor
 ActionObservationHistory::ActionObservationHistory(PlanningUnitMADPDiscrete& pu, Index agentI) :
-    Referrer<PlanningUnitMADPDiscrete>(pu),
-    IndividualHistory(agentI)
+    IndividualHistory(agentI),
+    _m_planningUnitMADPDiscrete(&pu)
 {    
     SetLength(0);
     _m_pred = 0;
     _m_ahI = 0; //HARDCODED
     _m_ohI = 0; //HARDCODED
 }
-ActionObservationHistory::ActionObservationHistory(Index aI, Index oI, 
-                ActionObservationHistory* pred) :
-    Referrer<PlanningUnitMADPDiscrete>(pred->GetReferred()),
-    IndividualHistory(pred->_m_agentI)
+ActionObservationHistory::ActionObservationHistory(Index aI, Index oI,ActionObservationHistory* pred) :
+    IndividualHistory(pred->_m_agentI),
+    _m_planningUnitMADPDiscrete(pred->_m_planningUnitMADPDiscrete)
 {
     SetLength(pred->GetLength() + 1);
     _m_pred = pred;
     _m_ahI = 
-        CastLIndexToIndex(GetReferred()->GetActionHistoryTree(_m_agentI, pred->_m_ahI) //=aht
+        CastLIndexToIndex(_m_planningUnitMADPDiscrete->GetActionHistoryTree(_m_agentI, pred->_m_ahI) //=aht
                           ->GetSuccessor(aI) //=aht'
                           ->GetIndex()); //=ahI'
     _m_ohI = 
-       CastLIndexToIndex(GetReferred()->GetObservationHistoryTree(_m_agentI, pred->_m_ohI) //=oht
+       CastLIndexToIndex(_m_planningUnitMADPDiscrete->GetObservationHistoryTree(_m_agentI, pred->_m_ohI) //=oht
                          ->GetSuccessor(oI) //=oht'
                          ->GetIndex()); //=ohI'
 }
@@ -66,28 +57,28 @@ string ActionObservationHistory::SoftPrint() const
         }
     }
 
-    ActionHistory* ah = GetReferred()->GetActionHistoryTree(
+    ActionHistory* ah = _m_planningUnitMADPDiscrete->GetActionHistoryTree(
             _m_agentI, _m_ahI) //=aht
         ->GetContainedElement(); //=ah
     if (!ah->IsEmpty()) // don't print the empty observation
     {
         ss << ", ";
         Index aI = ah->GetLastActionIndex(); // aI
-        ss << GetReferred()->GetAction(_m_agentI, aI)->SoftPrintBrief();
+        ss << _m_planningUnitMADPDiscrete->GetAction(_m_agentI, aI)->SoftPrintBrief();
     }
     else
         ss << "EMPTY_AH";
 
     ss << ", ";
 
-    ObservationHistory* oh = GetReferred()->GetObservationHistoryTree(
+    ObservationHistory* oh = _m_planningUnitMADPDiscrete->GetObservationHistoryTree(
             _m_agentI, _m_ohI) //=oht
         ->GetContainedElement(); //=oh
     if (!oh->ContainsEmptyOI()) // don't print the empty observation
     {
         ss << ", ";
         Index oI = oh->GetLastObservationIndex(); // oI
-        ss << GetReferred()->GetObservation(_m_agentI, oI)->SoftPrintBrief();
+        ss << _m_planningUnitMADPDiscrete->GetObservation(_m_agentI, oI)->SoftPrintBrief();
     }
     else
         ss << "Oempty";

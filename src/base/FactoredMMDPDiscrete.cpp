@@ -1,15 +1,7 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Philipp Robbel 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "FactoredMMDPDiscrete.h"
@@ -41,10 +33,12 @@ void FactoredMMDPDiscrete::Initialize2DBN()
     // construct observations
     ConstructObservations();
     SetObservationsInitialized(true); // Note: joint indices are likely to break
+
+    BoundScopeFunctor<FactoredMMDPDiscrete> sf(this,&FactoredMMDPDiscrete::SetScopes);
+    BoundTransitionProbFunctor<FactoredMMDPDiscrete> tf(this,&FactoredMMDPDiscrete::ComputeTransitionProb);
+    EmptyObservationProbFunctor of;
     
-    MultiAgentDecisionProcessDiscreteFactoredStates::Initialize2DBN(boost::bind( &FactoredMMDPDiscrete::SetScopes, this),
-                                                                    boost::bind( &FactoredMMDPDiscrete::ComputeTransitionProb, this, _1,_2,_3,_4,_5),
-                                                                    EmptyComputeObservationProb); //fully-observable scenario
+    MultiAgentDecisionProcessDiscreteFactoredStates::Initialize2DBN(sf, tf, of); 
 
     // above calls SetOScopes and initializes CPD vector for observation variables
     Initialize2DBNObservations(); // set actual CPDs

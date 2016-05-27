@@ -1,28 +1,19 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 
 #include <iostream>
 #include <fstream>
 #include "DecPOMDPDiscrete.h"
-#include "MADPParser.h"
-#include "TOIFactoredRewardDecPOMDPDiscrete.h"
-#include "TOICompactRewardDecPOMDPDiscrete.h"
 #include "directories.h"
 #include "SimulationDecPOMDPDiscrete.h"
+#include "SimulationFactoredDecPOMDPDiscrete.h"
 #include "NullPlanner.h"
+#include "NullPlannerFactored.h"
 #include "AgentRandom.h"
 #include "argumentUtils.h"
 
@@ -52,42 +43,35 @@ const struct argp_child childVector[] = {
 
 int main(int argc, char **argv)
 {
+    try {
+
     ArgumentHandlers::Arguments args;
     argp_parse (&ArgumentHandlers::theArgpStruc, argc, argv, 0, 0, &args);
 
-    string dpomdpFile=directories::MADPGetProblemFilename(args);
+    DecPOMDPDiscreteInterface* decpomdp=0;
+    FactoredDecPOMDPDiscreteInterface* fdecpomdp=0;
+    bool factoredModel=false;
 
-    try {
-    
-    cout << "Initializing problem..."<<endl;
-        
-    TOICompactRewardDecPOMDPDiscrete *toi=0;
-    DecPOMDPDiscreteInterface *dpomdp=0;
-    PlanningUnitDecPOMDPDiscrete *np=0;
-    if(args.isTOI)
-    {
-        toi=new TOICompactRewardDecPOMDPDiscrete("","",dpomdpFile);
-        MADPParser parser(toi);
-        dpomdp=toi;
-        np=new NullPlanner(args.horizon,toi);
-    }
+    decpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
+    fdecpomdp = dynamic_cast<FactoredDecPOMDPDiscreteInterface*>(decpomdp);
+    if(fdecpomdp)
+        factoredModel=true;
+
+    NullPlanner *np=0;
+    NullPlannerFactored *npFactored=0;
+    if(factoredModel)
+        npFactored=new NullPlannerFactored(args.horizon,fdecpomdp);
     else
-    {
-        dpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
-        cout << "DecPOMDP initialized" << endl;
-
-        np=new NullPlanner(args.horizon,dpomdp);
-        cout << "NullPlanner initialized" << endl;
-    }
+        np=new NullPlanner(args.horizon,decpomdp);
 
     ofstream of;
     if(!args.dryrun)
     {
         // Create results dir if it doesn't exist already
-        directories::MADPCreateResultsDir("evaluateRandomPolicy",*dpomdp);
+        directories::MADPCreateResultsDir("evaluateRandomPolicy",*decpomdp);
         stringstream ss;
         ss  << directories::MADPGetResultsFilename("evaluateRandomPolicy",
-                                                   *dpomdp,args)
+                                                   *decpomdp,args)
             << "h" << args.horizon << "_nrRuns" << args.nrRuns;
         string filename=ss.str();
         of.open(filename.c_str());
@@ -102,7 +86,12 @@ int main(int argc, char **argv)
     }
 
     SimulationResult result;
-    if(np)
+    if(factoredModel)
+    {
+        SimulationFactoredDecPOMDPDiscrete sim(*npFactored,args);
+        result=sim.RunSimulationsRandomActions();
+    }
+    else
     {
         SimulationDecPOMDPDiscrete sim(*np,args);
         vector<AgentFullyObservable*> agents;

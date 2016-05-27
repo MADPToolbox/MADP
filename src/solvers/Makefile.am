@@ -4,9 +4,9 @@ include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
 # Which programs to build. Only PROGRAMS_NORMAL will be installed.
-PROGRAMS_NORMAL =  Perseus \
- GMAA \
- GMAA_ELSI \
+PROGRAMS_NORMAL =  Perseus\
+ GMAA\
+ GMAA_ELSI\
  JESP \
  DICEPS \
  BFS \
@@ -20,14 +20,14 @@ endif
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I..\
+INCLUDEPATH		= -I..\
  -I$(top_srcdir)/src/base -I$(top_srcdir)/src/include\
  -I$(top_srcdir)/src/support -I$(top_srcdir)/src/planning\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif

@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include <iostream>
@@ -86,24 +78,24 @@ int main(int argc, char **argv)
 
     try
     {
-        cout << "Instantiating the problem..."<<endl;
-        DecPOMDPDiscreteInterface* decpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
-        cout << "...done."<<endl;
+    cout << "Instantiating the problem..."<<endl;
+    DecPOMDPDiscreteInterface* decpomdp = GetDecPOMDPDiscreteInterfaceFromArgs(args);
+    cout << "...done."<<endl;
 
-        PlanningUnitDecPOMDPDiscrete *np = new NullPlanner(args.horizon, decpomdp);
-        MDPValueIteration vi(*np);
-        vi.Plan();
-        QTable q = vi.GetQTable(0); //<- infinite horizon, so get 1 value function of stage 0
+    PlanningUnitDecPOMDPDiscrete *np = new NullPlanner(args.horizon, decpomdp);
+    MDPValueIteration vi(*np);
+    vi.Plan();
+    QTable q = vi.GetQTable(0); //<- infinite horizon, so get 1 value function of stage 0
 
-        int nrRuns = args.nrRuns; //500;
-        int seed = args.randomSeed;
-        SimulationDecPOMDPDiscrete sim(*np, nrRuns, seed);
-        vector<double> avgRewards;
+    int nrRuns = args.nrRuns; //500;
+    int seed = args.randomSeed;
+    SimulationDecPOMDPDiscrete sim(*np, nrRuns, seed);
+    vector<double> avgRewards;
 
-        double r;
-        r = runOneSimulation(q, np, sim );
-        avgRewards.push_back(r);
-        cout << "Avg rewards: " << SoftPrintVector(avgRewards) << endl;
+    double r;
+    r = runOneSimulation(q, np, sim );
+    avgRewards.push_back(r);
+    cout << "Avg rewards: " << SoftPrintVector(avgRewards) << endl;
 
     }
     catch(E& e){ e.Print(); }

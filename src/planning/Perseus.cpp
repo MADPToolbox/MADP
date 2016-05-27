@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "Perseus.h"
@@ -41,6 +33,42 @@ Perseus::Perseus(const PlanningUnitDecPOMDPDiscrete* pu) :
 }
 
 Perseus::Perseus(const boost::shared_ptr<const PlanningUnitDecPOMDPDiscrete> &pu) :
+    AlphaVectorPlanning(pu),
+    _m_verbose(0),
+    _m_initializeWithImmediateReward(false),
+    _m_initializeWithZero(false),
+    _m_bestValue(-DBL_MAX),
+    _m_beliefsInitialized(false),
+    _m_identification("Perseus"),
+    _m_storeIntermediateValueFunctions(false),
+    _m_storeTimings(false),
+    _m_computeVectorForEachBelief(false),
+    _m_dryrun(false)
+{
+    SetMinimumNumberOfIterations(10);
+    SetMaximumNumberOfIterations(INT_MAX);
+    UpdateValueFunctionName();
+}
+
+Perseus::Perseus(const PlanningUnitFactoredDecPOMDPDiscrete* pu) :
+    AlphaVectorPlanning(pu),
+    _m_verbose(0),
+    _m_initializeWithImmediateReward(false),
+    _m_initializeWithZero(false),
+    _m_bestValue(-DBL_MAX),
+    _m_beliefsInitialized(false),
+    _m_identification("Perseus"),
+    _m_storeIntermediateValueFunctions(false),
+    _m_storeTimings(false),
+    _m_computeVectorForEachBelief(false),
+    _m_dryrun(false)
+{
+    SetMinimumNumberOfIterations(10);
+    SetMaximumNumberOfIterations(INT_MAX);
+    UpdateValueFunctionName();
+}
+
+Perseus::Perseus(const boost::shared_ptr<const PlanningUnitFactoredDecPOMDPDiscrete> &pu) :
     AlphaVectorPlanning(pu),
     _m_verbose(0),
     _m_initializeWithImmediateReward(false),
@@ -333,6 +361,9 @@ string Perseus::BackupTypeToString(const QAVParameters &params)
     case EVENT_POMDP:
         ss << "EVENT_POMDP";
         break;
+    case FACTORED_POMDP:
+        ss << "FACTORED_POMDP";
+        break;
     default:
         ss << "PerseusBackupType " << params.backup << " is unknown";
         throw(E(ss));
@@ -347,18 +378,21 @@ QAVParameters Perseus::ProcessArguments(const ArgumentHandlers::Arguments &args)
     qavParams.weight=1;
     qavParams.bgBackupType=args.bgBackup;
     
-    qavParams.stationary=true;
 
-    qavParams.backup=args.backup;
+
     switch(args.backup)
     {
     case POMDP:
-    case BG:
     case EVENT_POMDP:
+    case FACTORED_POMDP:
+    case BG:
+        qavParams.stationary=true;
         break;
     default:
         throw(E("PerseusBackupType is unknown"));
     }
+
+    qavParams.backup=args.backup;
 
     return(qavParams);
 }

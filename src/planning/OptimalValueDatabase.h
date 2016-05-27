@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -34,7 +26,9 @@ private:
     /// The database
     std::map<nameDiscountHorizonT, double> _m_optimalValues;
 
-    const PlanningUnitDecPOMDPDiscrete* _m_pu;
+    std::string _m_problemName;
+    double _m_discount;
+    size_t _m_horizon;
 
     /// Add an entry to the database.
     void AddEntry(const std::string &problemName,
@@ -67,6 +61,10 @@ public:
     // Constructor, destructor and copy assignment.
     /// (default) Constructor
     OptimalValueDatabase(const PlanningUnitDecPOMDPDiscrete *pu);
+
+    OptimalValueDatabase(const std::string &problemName,
+                         double discount,
+                         size_t horizon);
 
     /// Add an entry to the database. Saves it to disk.
     void SetOptimalValue(double value);

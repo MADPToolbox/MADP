@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "directories.h"
@@ -44,7 +36,7 @@ string directories::MADPGetResultsDir(const string & method,
 string directories::MADPGetResultsDir(const string & method,
                                       const PlanningUnit &pu)
 {
-    return(MADPGetResultsDir(method,pu.GetProblem()->GetUnixName()));
+    return(MADPGetResultsDir(method, pu.GetProblem()->GetUnixName()));
 }
 
 string
@@ -52,7 +44,7 @@ directories::MADPGetResultsDir(const string & method,
                                const MultiAgentDecisionProcessInterface
                                &problem)
 {
-    return(MADPGetResultsDir(method,problem.GetUnixName()));
+    return(MADPGetResultsDir(method, problem.GetUnixName()));
 }
 
 string directories::MADPGetResultsDir(const string & method,
@@ -214,6 +206,7 @@ string directories::MADPGetProblemFilename(const string & problem)
         vector<string> extensions; //default extensions. Add more here if needed.
         extensions.push_back("pgmx"); 
         extensions.push_back("dpomdp");
+        extensions.push_back("POMDP");
         problemName = problem;
         while(extensions.size() > 0)
         {
@@ -232,7 +225,9 @@ string directories::MADPGetProblemFilename(const string & problem)
 	closedir (d);
     }
 
-    throw(E("Problem file not found."));
+    stringstream ss;
+    ss << "Problem file not found (problem = " << problem << ")";
+    throw(E(ss));
     return(problem);
 }
 

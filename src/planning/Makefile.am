@@ -1,17 +1,15 @@
-# $Id: Makefile.am 9372 2015-03-10 18:27:08Z mtjspaan $
-
 include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
-INCLUDES		= -I$(top_srcdir)/src/base\
+INCLUDEPATH		= -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/include -I$(top_srcdir)/src/support\
  -I$(top_srcdir)/src/planning\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS)
+AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif
@@ -19,6 +17,8 @@ AM_CXXFLAGS 		= $(CSTANDARD)
 
 SIMULATION_CPPFILES=SimulationResult.cpp\
  SimulationDecPOMDPDiscrete.cpp \
+ SimulationTOIDecPOMDPDiscrete.cpp \
+ SimulationFactoredDecPOMDPDiscrete.cpp \
  AgentPOMDP.cpp\
  AgentBG.cpp\
  AgentQMDP.cpp\
@@ -34,7 +34,10 @@ SIMULATION_HFILES=$(SIMULATION_CPPFILES:.cpp=.h) \
  AgentDelayedSharedObservations.h\
  AgentFullyObservable.h\
  AgentSharedObservations.h\
- AgentLocalObservations.h
+ AgentLocalObservations.h\
+ AgentTOIFullyObservableSyncedSpecialReward.h\
+ AgentTOIFullyObservableSynced.h
+
 
 GMAA_CPPFILES=\
  GeneralizedMAAStarPlanner.cpp \
@@ -65,6 +68,7 @@ POMDP_CPPFILES=\
  BeliefSetNonStationary.cpp\
  AlphaVector.cpp \
  AlphaVectorPlanning.cpp\
+ AlphaVectorPruning.cpp\
  Perseus.cpp \
  AlphaVectorPOMDP.cpp\
  AlphaVectorConstrainedPOMDP.cpp\
@@ -82,10 +86,14 @@ POMDP_CPPFILES=\
  QBGPlanner_TreeIncPruneBnB.cpp\
  QTreeIncPruneBG.cpp\
  PerseusBGPOMDPPlanner.cpp \
+ AlphaVectorWeighted.cpp\
+ PerseusWeightedPlanner.cpp \
  PerseusQFunctionPlanner.cpp\
- PerseusStationary.cpp
+ PerseusStationary.cpp\
+ PerseusNonStationary.cpp\
+ PerseusNonStationaryQPlanner.cpp\
+ PerseusBGNSPlanner.cpp
 
-# needed? AlphaVectorWeighted.cpp  PerseusWeightedPlanner.cpp 
 
 POMDP_HFILES=$(POMDP_CPPFILES:.cpp=.h)\
  ValueFunctionPOMDPDiscrete.h\
@@ -105,6 +113,7 @@ PLANNING_CPPFILES=\
  MaxPlusSolver.cpp\
  MaxPlusSolverForBGs.cpp\
  BGIP_SolverBruteForceSearch.cpp\
+ BGIP_SolverBFSNonIncremental.cpp\
  BGIP_SolverBranchAndBound.cpp\
  BGIP_BnB_Node.cpp\
  BnB_JointTypeOrdering.cpp\
@@ -120,8 +129,14 @@ PLANNING_CPPFILES=\
  BGCG_SolverMaxPlus.cpp\
  BGCG_SolverRandom.cpp\
  BGCG_SolverCreator.cpp \
+ BGCG_SolverFG.cpp\
+ BG_FactorGraphCreator.cpp\
+ FG_Solver.cpp\
+ FG_SolverMaxPlus.cpp\
+ FG_SolverNDP.cpp\
  QFunction.cpp\
  QFunctionForDecPOMDP.cpp\
+ QFunctionForFactoredDecPOMDP.cpp\
  QFunctionJAOHInterface.cpp\
  QFunctionJAOH.cpp\
  QFunctionJAOHTree.cpp\
@@ -157,9 +172,6 @@ PLANNING_CPPFILES=\
  argumentHandlers.cpp\
  argumentUtils.cpp\
  directories.cpp 
- 
-# BGCGWrapperForBGIP.cpp
-# BGCG_SolverFG.cpp
 
 PLANNING_HFILES=$(PLANNING_CPPFILES:.cpp=.h) \
  argumentHandlersPostChild.h\
@@ -180,10 +192,12 @@ PLANNING_HFILES=$(PLANNING_CPPFILES:.cpp=.h) \
  BGIP_SolverCreator_MP.h\
  BGIP_SolverCreator_CE.h\
  BGIP_SolverCreator_BFS.h\
+ BGIP_SolverCreator_BFSNonInc.h\
  BGIP_SolverCreator_BnB.h\
  BGIP_SolverCreator_Random.h\
  BGCG_SolverCreator_NDP.h \
  BGCG_SolverCreator_MP.h \
+ BGCG_SolverCreator_FG.h \
  BGCG_SolverCreator_Random.h \
  BayesianGameIdenticalPayoffInterface.h \
  BGIP_IncrementalSolverInterface_T.h \

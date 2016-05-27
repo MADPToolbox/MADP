@@ -1,18 +1,10 @@
-#                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-
 AC_PREREQ(2.61)
-AC_INIT([MADP],[0.3.1],[madp-users@omni.isr.ist.utl.pt])
+AC_INIT([MADP],[0.4],[madp-users@omni.isr.ist.utl.pt])
 # subdir-objects is used in src/libpomdp-solve
 AM_INIT_AUTOMAKE([1.9 tar-pax subdir-objects])
-#old
-#AC_CONFIG_SRCDIR([src/])
-#AC_CONFIG_HEADER([config.h])
-#AC_CONFIG_FILES -> at bottom of file!
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
-
-
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
@@ -63,6 +55,8 @@ AC_SUBST(CSTANDARD,"-std=c++98")
 # AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
+#CHECK for standard c++ libs (and include the linkind directives...)
+AC_CHECK_LIB([stdc++],[__cxa_free_exception])
 # defining the libs doesn't work...
 # Don't check nor include lp-solve anymore until Tony Cassandra's code
 # has been updated for using the system-wide lp-solve
@@ -70,6 +64,20 @@ AC_PROG_LIBTOOL
 #        [lpsolve/lp_types.h],
 #        [AC_DEFINE([HAVE_LPSOLVE], [],[lpsolve available])])
 #        [AC_DEFINE([HAVE_LPSOLVE], [],[lpsolve available]) LPSOLVE_LIB="/usr/lib/liblpsolve55_pic.a" LPSOLVE_LD="-lcolamd -ldl"])
+
+# IMPORTANT; check for math lib before lpsolve, otherwise lpsolve will fail (it needs '-lm')
+AC_CHECK_LIB([m], [main])
+# check for lpsolve
+AC_CHECK_HEADER(
+        [lpsolve/lp_lib.h],
+        [],
+        [AC_MSG_WARN([lpsolve not installed, required for pruning POMDP value functions])])
+AC_CHECK_LIB(dl, dlopen)
+AC_CHECK_LIB(colamd, colamd)
+AC_CHECK_LIB([lpsolve55_pic], [make_lp],
+        [],
+        [AC_MSG_WARN([lpsolve not installed, required for pruning POMDP value functions])])
+
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -88,15 +96,6 @@ AC_CPLEX
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
 AC_CHECK_FUNCS([pow strtoull])
-
-#---------------some stuff required for pomdp-solve ------------------------------------
-#AC_PREREQ(2.57)
-#AC_INIT([pomdp-solve], [5.3], [arc@cassandra.org])
-#AM_INIT_AUTOMAKE(pomdp-solve, 5.3)
-
-# Allow the defined vars to come from a file instead of a slew of '-D'
-# compiler flags.
-#AM_CONFIG_HEADER([config.h])
 
 ## Option for using compile -g flag for debugging symbols
 ##
@@ -132,17 +131,14 @@ AC_ARG_ENABLE(dmalloc,
         ]
 )
 # Checks for programs.
-AC_PROG_YACC
 AC_PROG_CC
-AM_PROG_LEX
-#AC_PROG_RANLIB  # - libtoolize: `AC_PROG_RANLIB' is rendered obsolete by `LT_INIT'
+#AC_PROG_YACC
+#AM_PROG_LEX
 
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lcplex':
 #AC_CHECK_LIB([cplex], [main])
-# FIXME: Replace `main' with a function in `-lm':
-AC_CHECK_LIB([m], [main])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -161,13 +157,6 @@ AC_TYPE_SIGNAL
 AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([bzero floor gettimeofday memset pow sqrt strstr])
-
-#AC_OUTPUT([Makefile                   \
-           #src/Makefile               \
-           #src/mdp/Makefile           \
-           #src/lp-solve/Makefile           \
-           #src/laspack/Makefile
-           #testing/Makefile])
 
 #---------------end of stuff required for pomdp-solve ------------------------------------
 
@@ -196,8 +185,6 @@ AM_CONDITIONAL(FOUND_LIBXML2, [test "x$ac_cv_header_libxml2_libxml_xmlexports_h"
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
-                 src/libpomdp-solve/Makefile
-                 src/libpomdp-solve/src/Makefile
                  src/parser/Makefile
                  src/base/Makefile
                  src/support/Makefile
@@ -208,12 +195,6 @@ AC_CONFIG_FILES([Makefile
                  src/libDAI/Makefile
                  src/solvers/Makefile
                  ])
-#avoid ": compiling `test_gsl.c' with per-target flags requires `AM_PROG_CC_C_O' in `configure.ac'"
-
-# skip these? (they are disabled from compilation by default...?)
-#                 src/libDAI/utils/Makefile
-#                 src/libDAI/tests/Makefile
-#                 src/libDAI/MADP-integr-tests/Makefile
 
 #avoid ": compiling `test_gsl.c' with per-target flags requires `AM_PROG_CC_C_O' in `configure.ac'"
 AM_PROG_CC_C_O

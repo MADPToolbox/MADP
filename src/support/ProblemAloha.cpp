@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "ProblemAloha.h"
@@ -28,24 +20,25 @@ using namespace std;
 //Default constructor
 ProblemAloha::ProblemAloha(IslandConfiguration islands,
                            AlohaVariation variation,
-                           size_t maxBacklog):
+                           size_t maxBacklog,
+                           size_t nrAgents,
+                           bool initialize):
     FactoredDecPOMDPDiscrete("", "", "none"),
     _m_islandConf(islands),
     _m_variation(variation),
-    _m_maxBacklog(maxBacklog)
+    _m_maxBacklog(maxBacklog),
+    _m_nrAgentsPassedOnCommandline(nrAgents)
 {
-    InitializeAloha();
+    if(initialize)
+        InitializeAloha();
 }
 
 
 void ProblemAloha::InitializeAloha()
 {
-    SetName(SoftPrintBriefDescription(_m_islandConf));
-    SetDescription(SoftPrintDescription(_m_islandConf));
-    SetUnixName(SoftPrintBriefDescription(_m_islandConf));
-
     SetSparse(true);
 
+    /* -----------'ConstructNrAgents()' ------- */
     switch(_m_islandConf)
     {
     case OneIsland:
@@ -73,11 +66,19 @@ void ProblemAloha::InitializeAloha()
     case SevenIslandsInLine:
         _m_nrIslands=7;
         break;
+    case InLine:
+        _m_nrIslands=_m_nrAgentsPassedOnCommandline;
+        break;
     default:
         throw(E("InitializeAloha() island config not handled"));
     }
     SetNrAgents(_m_nrIslands);
 
+    // first we need to set the number of agents before the
+    // SoftPrintBriefDescription() is correct
+    SetName(SoftPrintBriefDescription());
+    SetDescription(SoftPrintDescription());
+    SetUnixName(SoftPrintBriefDescription());
 
     vector<size_t> nrElems(2);
     nrElems[0]=_m_maxBacklog;
@@ -87,6 +88,9 @@ void ProblemAloha::InitializeAloha()
     nrElems[1]=2; // yes or no
     _m_stepSizeObservations=IndexTools::CalculateStepSize(nrElems);
 
+    /* 
+     * -----------'ConstructStateSpace() -------
+     */
     for(Index iI = 0; iI < _m_nrIslands; iI++)
     {
         Index sfI = AddStateFactor( 
@@ -126,6 +130,8 @@ void ProblemAloha::InitializeAloha()
 
     SetStatesInitialized(true);
 
+
+    /*-----------'ConstructInitialStateDistribution' ------- */
     //after initialization we can add the ISD:
     FSDist_COF *isd=
         new FSDist_COF(*this);
@@ -163,7 +169,7 @@ void ProblemAloha::InitializeAloha()
     // Initialize the 2DBN in MultiAgentDecisionProcessDiscreteFactoredStates
     Initialize2DBN();
 
-    cout << ">>>Trans./obs. models created"<<endl;
+//    cout << ">>>Trans./obs. models created"<<endl;
 //    cout << _m_2dbn.SoftPrint();
 
 
@@ -172,6 +178,7 @@ void ProblemAloha::InitializeAloha()
     //first add scope for each reward function
     for(Index e=0; e < _m_nrIslands; e++)
     {
+        //cout << "Setting scope for reward function e=" << e << endl;
         //Add scope
         Scope emptySc;
         Scope ySc;
@@ -179,6 +186,8 @@ void ProblemAloha::InitializeAloha()
         Scope aSc;
         aSc.Insert(e); // this seems necessary...
         SetScopeForLRF(e, emptySc, aSc, ySc, emptySc);
+        //const Scope& agSC = GetAgentScopeForLRF(e);
+        //cout << "agent scope = " << agSC.SoftPrint();
     }
     // compute some bookkeeping from the scopes
     InitializeInstantiationInformation();
@@ -186,6 +195,7 @@ void ProblemAloha::InitializeAloha()
     // now we add the reward functions themselves
     for(Index e=0; e < _m_nrIslands; e++)
     {
+        //cout << "Adding reward function e=" << e << endl;
         Scope emptySc;
         Scope ySc;
         ySc.Insert(e);//reward e depends on backlog of island e
@@ -325,6 +335,7 @@ bool ProblemAloha::areNeighbors(Index x, Index y) const
     case FiveIslandsInLine:
     case SixIslandsInLine:
     case SevenIslandsInLine:
+    case InLine:
         if(abs(static_cast<int>(x)-
                static_cast<int>(y))==1)
             neighbors=true;
@@ -370,6 +381,7 @@ double ProblemAloha::GetNewPacketProb(Index y) const
     case FourIslandsInSquare:
     case SixIslandsInLine:
     case SevenIslandsInLine:
+    case InLine:
         p=pHighProb;
         break;
     case SmallBigSmallInLine:
@@ -411,25 +423,29 @@ string ProblemAloha::IslandConfigToString(IslandConfiguration conf)
         return("SixIslandsInLine");
     case SevenIslandsInLine:
         return("SevenIslandsInLine");
+    case InLine:
+        return("InLine");
     }
 
     return("IslandConf not handled");
 }
 
 
-string ProblemAloha::SoftPrintBriefDescription(
-    IslandConfiguration islands) const
+string ProblemAloha::SoftPrintBriefDescription() const
 {
     stringstream ss;
-    ss << "Aloha_" << SoftPrintVariation(_m_variation)
-       << "_" << IslandConfigToString(islands) << "_maxBL"
-       << _m_maxBacklog;
+    ss << "Aloha_" << SoftPrintVariation(GetVariation())
+       << "_";
+    if(GetIslandConfiguration()==InLine)
+        ss << GetNrAgents();
+    ss << IslandConfigToString(GetIslandConfiguration()) << "_maxBL"
+       << GetMaxBacklog();
     return ss.str();
 }
 
-string ProblemAloha::SoftPrintDescription(IslandConfiguration islands) const
+string ProblemAloha::SoftPrintDescription() const
 {
-    return SoftPrintBriefDescription(islands);
+    return SoftPrintBriefDescription();
 }
 
 string ProblemAloha::SoftPrintVariation(AlohaVariation variation) const

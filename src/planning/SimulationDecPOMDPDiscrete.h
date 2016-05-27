@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -49,7 +41,7 @@ private:
                      Index sI, Index prevJaI, double &specialR) const;
     void PreActHook(const std::vector<AgentLocalObservations*> &agents,
                     Index jaI, Index joI, double r, Index prevJoI,
-                    Index sI, Index prevJaI, Index ts) const {}
+                    Index sI, Index prevJaI, Index prevSI, Index ts) const {}
 
     Index GetAction(const std::vector<AgentSharedObservations*> &agents,
                      Index i,
@@ -57,21 +49,21 @@ private:
                      Index sI, Index prevJaI, double &specialR) const;
     void PreActHook(const std::vector<AgentSharedObservations*> &agents,
                     Index jaI, Index joI, double r, Index prevJoI,
-                    Index sI, Index prevJaI, Index ts) const {}
+                    Index sI, Index prevJaI, Index prevSI, Index ts) const {}
 
     Index GetAction(const std::vector<AgentDelayedSharedObservations*> &agents,
                      Index i, Index jaI, Index joI, double r, Index prevJoI,
                      Index sI, Index prevJaI, double &specialR) const;
     void PreActHook(const std::vector<AgentDelayedSharedObservations*> &agents,
                     Index jaI, Index joI, double r, Index prevJoI,
-                    Index sI, Index prevJaI, Index ts) const {}
+                    Index sI, Index prevJaI, Index prevSI, Index ts) const {}
 
     Index GetAction(const std::vector<AgentFullyObservable*> &agents, Index i,
                      Index jaI, Index joI, double r, Index prevJoI,
                      Index sI, Index prevJaI, double &specialR) const;
     void PreActHook(const std::vector<AgentFullyObservable*> &agents,
                     Index jaI, Index joI, double r, Index prevJoI,
-                    Index sI, Index prevJaI, Index ts) const {}
+                    Index sI, Index prevJaI, Index prevSI, Index ts) const {}
 
     void Initialize();
 
@@ -126,7 +118,7 @@ public:
         int i;
         for(i=0;i<GetNrRuns();i++)
         {
-            Index jaI,sI,joI,prevJoI,prevJaI;
+            Index jaI,sI,joI,prevJoI,prevJaI,prevSI;
             int nr=agents.size(),i;
             std::vector<Index> aIs(nr);
 
@@ -149,18 +141,19 @@ public:
             jaI=INT_MAX;
             prevJoI=INT_MAX;
             prevJaI=INT_MAX;
+            prevSI=INT_MAX;
             for(h=0;h<_m_horizon;h++)
             {
-                PreActHook(agents,jaI,joI,r,prevJoI,sI,prevJaI,h);
+                PreActHook(agents,jaI,joI,r,prevJoI,sI,prevJaI,prevSI,h);
                 specialR=0;
                 // get the action for each particular agent
                 for(i=0;i<nr;++i)
-                    aIs[i]=GetAction(agents,i,jaI,joI,r,prevJoI,sI,prevJaI,
-                                     specialR);
+                    aIs[i]=GetAction(agents,i,jaI,joI,r,prevJoI,sI,prevJaI, specialR);
                 jaI=_m_pu->IndividualToJointActionIndices(aIs);
 
                 prevJoI=joI;
                 prevJaI=jaI;
+                prevSI=sI;
                 Step(jaI, h, sI, joI, r, sumR, specialR);
             }
             

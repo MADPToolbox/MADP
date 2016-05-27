@@ -1,22 +1,15 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "AgentBG.h"
 #include <float.h>
 #include "PlanningUnitDecPOMDPDiscrete.h"
 #include "PerseusBGPlanner.h"
+#include "PerseusBGNSPlanner.h"
 #include "BayesianGameIdenticalPayoff.h"
 #include "JointPolicyPureVector.h"
 #include "QFunctionJAOHInterface.h"
@@ -29,6 +22,24 @@ AgentBG::AgentBG(const PlanningUnitDecPOMDPDiscrete *pu, Index id,
                  QAV<PerseusBGPlanner> *QBG) :
     AgentDelayedSharedObservations(pu,id),
     _m_QBGstationary(QBG),
+    _m_QBGnonStationary(0),
+    _m_t(0)
+{
+    _m_bgip=new BayesianGameIdenticalPayoff(pu->GetNrAgents(),
+                                            pu->GetDPOMDPD()->GetNrActions(), 
+                                            pu->GetDPOMDPD()->
+                                            GetNrObservations());
+    _m_jpol=new JointPolicyPureVector(_m_bgip);
+#if DEBUG_AgentBG
+    cout << GetIndex() << " " <<_m_jpol->SoftPrint() << endl;
+#endif
+}
+
+AgentBG::AgentBG(const PlanningUnitDecPOMDPDiscrete *pu, Index id,
+                 QAV<PerseusBGNSPlanner> *QBG) :
+    AgentDelayedSharedObservations(pu,id),
+    _m_QBGstationary(0),
+    _m_QBGnonStationary(QBG),
     _m_t(0)
 {
     _m_bgip=new BayesianGameIdenticalPayoff(pu->GetNrAgents(),
@@ -44,6 +55,7 @@ AgentBG::AgentBG(const PlanningUnitDecPOMDPDiscrete *pu, Index id,
 AgentBG::AgentBG(const AgentBG& a) :
     AgentDelayedSharedObservations(a),
     _m_QBGstationary(a._m_QBGstationary), // share the QBG, just copy the pointer
+    _m_QBGnonStationary(a._m_QBGnonStationary), // share the QBG, just copy the pointer
     _m_t(a._m_t),
     _m_prevJB(a._m_prevJB),
     _m_oIs(a._m_oIs),
@@ -170,7 +182,10 @@ AgentBG::GetMaximizingBGIndex(const JointBeliefInterface &jb) const
 
     for(Index a=0;a!=GetPU()->GetNrJointActions();++a)
     {
-        q=_m_QBGstationary->GetQ(jb,a,bI);
+        if(_m_QBGstationary)
+            q=_m_QBGstationary->GetQ(jb,a,bI);
+        else
+            q=_m_QBGnonStationary->GetQ(jb,_m_t,a,bI);
 
         if(q>v)
         {
@@ -194,7 +209,10 @@ Index AgentBG::GetMaximizingActionIndex(const JointBeliefInterface &jb) const
 
     for(Index a=0;a!=GetPU()->GetNrJointActions();++a)
     {
-        q=_m_QBGstationary->GetQ(jb,a,bI);
+        if(_m_QBGstationary)
+            q=_m_QBGstationary->GetQ(jb,a,bI);
+        else
+            q=_m_QBGnonStationary->GetQ(jb,_m_t,a,bI);
         
         if(q>v)
         {

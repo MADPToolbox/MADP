@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "JointActionHistory.h"
@@ -24,7 +16,7 @@ using namespace std;
 
 //Default constructor
 JointActionHistory::JointActionHistory(PlanningUnitMADPDiscrete& pu) :
-     Referrer<PlanningUnitMADPDiscrete>(pu)
+    _m_planningUnitMADPDiscrete(&pu)
 {
     SetLength(0);
     _m_jointActionI = 0;
@@ -41,7 +33,7 @@ JointActionHistory::JointActionHistory(PlanningUnitMADPDiscrete& pu,
 
 JointActionHistory::JointActionHistory(Index jaI,
            JointActionHistory* pred) :
-     Referrer<PlanningUnitMADPDiscrete>( pred->GetReferred() )
+    _m_planningUnitMADPDiscrete(pred->_m_planningUnitMADPDiscrete)
 {
     SetLength(pred->GetLength() + 1);
     _m_jointActionI = jaI;
@@ -49,7 +41,7 @@ JointActionHistory::JointActionHistory(Index jaI,
     _m_pred = pred;
     size_t nrAgents = pred->_m_individualActionHistories.size();
     
-    vector<Index> indivActionIndices = GetReferred()->
+    vector<Index> indivActionIndices = _m_planningUnitMADPDiscrete->
         JointToIndividualActionIndices(jaI);
 
     for(Index aI=0; aI < nrAgents; aI++)
@@ -63,10 +55,8 @@ JointActionHistory::JointActionHistory(Index jaI,
         //Index sucOHindex_ai = oht_ai->GetSuccessor(indivActionIndices[aI])->
             //GetIndex();
         //and store it...
-        Index sucOHindex_ai = 
-            GetReferred() //=PlanningUnitMADPDiscrete
-            -> GetSuccessorAHI(aI, 
-                    predOHindex_ai, indivActionIndices[aI] ) ;
+        Index sucOHindex_ai = _m_planningUnitMADPDiscrete -> 
+            GetSuccessorAHI(aI,predOHindex_ai, indivActionIndices[aI] ) ;
 
         _m_individualActionHistories.push_back(sucOHindex_ai);
     }
@@ -114,8 +104,7 @@ string JointActionHistory::SoftPrint() const
         
     if (!_m_isEmpty) // don't print the empty action
     {
-//        GetReferred()->GetJointActionDiscrete(
-        ss << GetReferred()->GetJointAction(
+        ss << _m_planningUnitMADPDiscrete->GetJointAction(
             _m_jointActionI)->SoftPrintBrief();
     }
     else

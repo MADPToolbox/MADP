@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -22,7 +14,6 @@
 #include <vector>
 #include "Globals.h"
 #include "E.h"
-#include "Referrer.h"
 #include "JointHistory.h"
 
 class PlanningUnitMADPDiscrete; //forward declaration to avoid including each other
@@ -32,7 +23,7 @@ class PlanningUnitMADPDiscrete; //forward declaration to avoid including each ot
  * This consists of a joint observation history index, the last joint
  * observation (index) a pointer to the predecessor JOH.  and a vector
  * of indexes to the individual observation histories.  */
-class JointObservationHistory : public Referrer<PlanningUnitMADPDiscrete>,
+class JointObservationHistory :
     public JointHistory
 {
     private:
@@ -53,6 +44,9 @@ class JointObservationHistory : public Referrer<PlanningUnitMADPDiscrete>,
          * ObservationHistories this gives an alternate description of the 
          * current JointObservation History. */
         std::vector<Index> _m_individualObservationHistories;
+
+        ///ref to the pu
+        PlanningUnitMADPDiscrete* _m_planningUnitMADPDiscrete;
 
     protected:
     

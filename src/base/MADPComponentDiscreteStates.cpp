@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include "MADPComponentDiscreteStates.h"
@@ -85,6 +77,15 @@ bool MADPComponentDiscreteStates::SetInitialized(bool b)
         // check if sums to 1
         if(abs(sum-1)>PROB_PRECISION)
             validISD=false;
+
+        // but if it sums to 0, this means the ISD simply has not been set.
+        // in this case, we set to uniform:
+        if(abs(sum) < PROB_PRECISION)
+        {
+            cerr << "Warning, initial state distribution was not set, assuming uniform..." << endl;
+            this->SetUniformISD();
+            validISD = true;
+        }
 
         // check whether the size is correct
         if(_m_initialStateDistribution->size()!=_m_nrStates)

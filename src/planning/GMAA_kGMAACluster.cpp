@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 #include <float.h>
@@ -44,8 +36,8 @@ GMAA_kGMAACluster::GMAA_kGMAACluster(
     _m_clusteredBGsizes(horizon,vector<int>(0,0)),
     _m_clusterStatsFilename(""),
     _m_clusterAlg(clusterAlg),
-    //_m_thresholdJB(0),
-    //_m_thresholdPjaoh(0),
+    _m_thresholdJB(0),
+    _m_thresholdPjaoh(0),
     _m_dummyBG(new BayesianGameWithClusterInfo(this))
 {
     if(!_m_newBGIP_Solver)
@@ -99,8 +91,8 @@ bool GMAA_kGMAACluster::ConstructAndValuateNextPolicies(
         pP = pPcopy;
 
         bg_ts = BGwCI_sharedPtr(new BayesianGameWithClusterInfo(this, _m_qHeuristic, pP, _m_clusterAlg));
-        //bg_ts->SetThresholdJB(_m_thresholdJB);
-        //bg_ts->SetThresholdPjaoh(_m_thresholdPjaoh);
+        bg_ts->SetThresholdJB(_m_thresholdJB);
+        bg_ts->SetThresholdPjaoh(_m_thresholdPjaoh);
         //cout << "constucted BG for stage 0 "<< endl;
         //cout << bg_ts->SoftPrint() << endl;
     }

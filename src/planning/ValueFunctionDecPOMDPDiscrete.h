@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -22,7 +14,6 @@
 #include <map>
 #include "Globals.h"
 #include "ValueFunction.h"
-#include "Referrer.h"
 #include "PlanningUnitDecPOMDPDiscrete.h"
 #include "JointPolicyDiscretePure.h"
 #include "boost/numeric/ublas/matrix.hpp"
@@ -31,9 +22,7 @@
  * value function of a (pure) joint policy for a discrete Dec-POMDP.
  */
 class ValueFunctionDecPOMDPDiscrete : 
-    public ValueFunction,
-    public Referrer<PlanningUnitDecPOMDPDiscrete>,
-    public Referrer<JointPolicyDiscretePure>
+    public ValueFunction
 {
     private:
     PlanningUnitDecPOMDPDiscrete* _m_pu;
@@ -45,6 +34,10 @@ class ValueFunctionDecPOMDPDiscrete :
     size_t _m_nrS;
     size_t _m_h;
     bool _m_V_initialized;
+
+    PlanningUnitDecPOMDPDiscrete* _m_planningUnitDecPOMDPDiscrete;
+    JointPolicyDiscretePure* _m_jointPolicyDiscretePure;
+
     typedef boost::numeric::ublas::matrix<double> Matrix;
 
     Matrix* _m_p_V; //stores V(sI, JOHistI)

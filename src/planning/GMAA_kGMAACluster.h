@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -68,7 +60,7 @@ class GMAA_kGMAACluster : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
         void SaveClusterStats(std::string filename) const;
 
         BayesianGameWithClusterInfo::BGClusterAlgorithm _m_clusterAlg;
-        /*double _m_thresholdJB, _m_thresholdPjaoh;*/
+        double _m_thresholdJB, _m_thresholdPjaoh;
     
         /// Used in NewJpol()
         boost::shared_ptr<BayesianGameWithClusterInfo> _m_dummyBG;
@@ -152,8 +144,8 @@ class GMAA_kGMAACluster : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
             GetThisFromMostDerivedPU()
         { return this; }
 
-//        void SetTresholdJB(double threshold) { _m_thresholdJB=threshold; }
-//        void SetTresholdPjaoh(double threshold) { _m_thresholdPjaoh=threshold; }
+        void SetTresholdJB(double threshold) { _m_thresholdJB=threshold; }
+        void SetTresholdPjaoh(double threshold) { _m_thresholdPjaoh=threshold; }
 
         std::string SoftPrintClusteringStats() const;
         void PrintClusteringStats() const {

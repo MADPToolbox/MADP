@@ -1,16 +1,8 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox v0.3. 
- *
- * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
- * please refer to the included README file.
- *
- * This file has been written and/or modified by the following people:
- *
+/* REPLACE_MADP_HEADER */
+/* REPLACE_CONTRIBUTING_AUTHORS_START
  * Frans Oliehoek 
  * Matthijs Spaan 
- *
- * For contact information please see the included AUTHORS file.
+ * REPLACE_CONTRIBUTING_AUTHORS_END
  */
 
 /* Only include this header file once. */
@@ -55,6 +47,8 @@ class QFunctionForFactoredDecPOMDP :
 
         //data manipulation (set) functions:
         
+    //Implement QFunctionForFactoredDecPOMDPInterface
+
         ///Changes the Planning unit pointed to.
         void SetPUF(const PlanningUnitFactoredDecPOMDPDiscrete* pu)
         { _m_puf = pu;}
@@ -71,27 +65,29 @@ class QFunctionForFactoredDecPOMDP :
             else
                 return _m_pufShared.get();
         }
-        // This class inherits the QFunctionJAOHInterface 
-        // (which specifies GetQ (Index jaohI, Index jaI) which this should 
-        // implement)
-        // A side effect is that the below function (which does not make sense)
-        // is also inherited...
+
+        // These functions are also specified by the QFunctionForDecPOMDPInterface, but do not
+        // really make sense for Factored Q functions...
+        // (We should rethink this at some point, but now just taking easy way out)
         void SetPU(const PlanningUnitDecPOMDPDiscrete* pu)
         { throw E("QFunctionForFactoredDecPOMDP needs an PlanningUnitFactoredDecPOMDPDiscrete!");}
         void SetPU(const boost::shared_ptr<const PlanningUnitDecPOMDPDiscrete> &pu)
         { throw E("QFunctionForFactoredDecPOMDP needs an PlanningUnitFactoredDecPOMDPDiscrete!");}
 
-    virtual void ComputeWithCachedQValues(bool computeIfNotCached) 
+
+    //'Implement' QFunctionInterface
+        // These methods should of course just be implemented in further deriving classes,
+        // however, we haven't really used them yet, so this is convenient.
+        virtual void ComputeWithCachedQValues(bool computeIfNotCached) 
         { throw E("QFunctionForFactoredDecPOMDP::ComputeWithCachedQValues not yet implemented");}
 
-    virtual void Load(const std::string &filename)
+        virtual void Load(const std::string &filename)
         { throw E("QFunctionForFactoredDecPOMDP::Load not yet implemented");}
 
-    virtual void Save(const std::string &filename) const
+        virtual void Save(const std::string &filename) const
         { throw E("QFunctionForFactoredDecPOMDP::Save not yet implemented");}
 
-    virtual std::string GetCacheFilename() const
-        { throw E("QFunctionForFactoredDecPOMDP::GetCacheFilename not yet implemented");}
+        virtual std::string GetCacheFilename() const;
 
 };
 
