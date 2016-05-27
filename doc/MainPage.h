@@ -1,5 +1,3 @@
-// $Id: MainPage.h 9056 2014-04-30 08:43:26Z faolieho $
-
 // This file contains the text of the first page of the
 // Doxygen-generated documentation. The file is called .h so doxygen
 // will process it.
@@ -150,4 +148,7 @@ using SimulationResult::Save().
 
 \endhtmlonly
 \verbinclude "AUTHORS"
+
+
 */
+
