@@ -26,6 +26,7 @@ printQHeurStatistics
 printRandomBGCGstatistics
 printSystemInfo
 prunePWLCQfunction
+prunePWLCValueFunction
 rollOutJointPolicyPureVector
 splitPWLCQfunction
 toiToDPOMDP
