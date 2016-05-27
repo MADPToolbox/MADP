@@ -8,7 +8,6 @@ tags
 *.bin
 *.swp
 *.bak_rplc
-Makefile.in
 Makefile
 tst_
 dbg_*
@@ -25,7 +24,6 @@ config.h.in
 config.log
 config.status
 config.sub
-configure
 depcomp
 doc/doxygen_sqlite3.db
 doc/html/
