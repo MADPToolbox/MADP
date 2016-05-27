@@ -103,9 +103,10 @@ _AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
 # configured tree to be moved without reconfiguration.
 
 AC_DEFUN([AM_AUX_DIR_EXPAND],
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-# Expand $ac_aux_dir to an absolute path.
-am_aux_dir=`cd "$ac_aux_dir" && pwd`
+[dnl Rely on autoconf to set up CDPATH properly.
+AC_PREREQ([2.50])dnl
+# expand $ac_aux_dir to an absolute path
+am_aux_dir=`cd $ac_aux_dir && pwd`
 ])
 
 # AM_CONDITIONAL                                            -*- Autoconf -*-
@@ -641,24 +642,6 @@ else
 fi
 rmdir .tst 2>/dev/null
 AC_SUBST([am__leading_dot])])
-
-# Copyright (C) 1998-2013 Free Software Foundation, Inc.
-#
-# This file is free software; the Free Software Foundation
-# gives unlimited permission to copy and/or distribute it,
-# with or without modifications, as long as this notice is preserved.
-
-# AM_PROG_LEX
-# -----------
-# Autoconf leaves LEX=: if lex or flex can't be found.  Change that to a
-# "missing" invocation, for better error output.
-AC_DEFUN([AM_PROG_LEX],
-[AC_PREREQ([2.50])dnl
-AC_REQUIRE([AM_MISSING_HAS_RUN])dnl
-AC_REQUIRE([AC_PROG_LEX])dnl
-if test "$LEX" = :; then
-  LEX=${am_missing_run}flex
-fi])
 
 # Check to see how 'make' treats includes.	            -*- Autoconf -*-
 

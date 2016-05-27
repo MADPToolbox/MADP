@@ -240,9 +240,6 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
-LEX = @LEX@
-LEXLIB = @LEXLIB@
-LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -273,8 +270,6 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
-YACC = @YACC@
-YFLAGS = @YFLAGS@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -333,6 +328,7 @@ SUBDIRS = src
 EXTRA_DIST = src/include/versions.h \
  src/include/configuration.h \
  src/parser/dpomdp.spirit \
+ src/parser/pomdp.spirit \
  problems \
  doc \
  src/boost \
@@ -837,7 +833,6 @@ bak-recursive:
 
 htmldoc:
 	doxygen doc/doxygen.conf;
-	cd src/libDAI; doxygen doxygen.conf
 
 package:
 	rm -fr madp-0.3.1
