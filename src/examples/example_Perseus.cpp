@@ -38,8 +38,6 @@ static char doc[] =
 +-------------------------------------------------------------------------+ \
 ";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 7;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -105,7 +103,7 @@ int main(int argc, char **argv)
         params.SetUseSparseJointBeliefs(true);
     else
         params.SetUseSparseJointBeliefs(false);
-    NullPlanner *np=new NullPlanner(params,horizon,decpomdp);
+    NullPlanner *np=new NullPlanner(horizon, decpomdp, &params);
     
     Perseus *P;
     PerseusStationary *PS=0;

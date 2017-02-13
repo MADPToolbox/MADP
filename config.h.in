@@ -6,6 +6,12 @@
 /* Define if you have CPLEX library. */
 #undef HAVE_CPLEX
 
+/* defined if cusolverDn.h is found. */
+#undef HAVE_CUDA_CUSOLVERDN_H
+
+/* defined if cuda.h is found. */
+#undef HAVE_CUDA_H
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
@@ -110,6 +116,9 @@
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
 #undef LT_OBJDIR
+
+/* Path to nvcc binary */
+#undef NVCC_PATH
 
 /* Name of package */
 #undef PACKAGE

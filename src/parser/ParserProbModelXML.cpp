@@ -1180,7 +1180,6 @@ const vector<double>* ParserProbModelXML::ParseArray(const xmlNodePtr node)
       {
         data >> skipws >> d;
         p->push_back(d);
-        ws(data);
       }
       
       _m_arrayCache[node] = p;

@@ -80,6 +80,7 @@ private:
     std::vector<std::vector<std::vector<SparseVector* > > > _m_TsOsForBackup;
 
     bool _m_useSparse;
+    size_t _m_acceleratedPruningThreshold;
 
     GaoVectorSet BackProjectFull(const VectorSet &v) const;
     GaoVectorSet BackProjectSparse(const VectorSet &v) const;
@@ -229,6 +230,9 @@ public:
     static std::string SoftPrint(const VectorSet &VS);
 
     static bool EqualVS(const VectorSet &VS1, const VectorSet &VS2);
+
+    size_t GetAcceleratedPruningThreshold() const;
+    void SetAcceleratedPruningThreshold(size_t acceleratedPruningThreshold);
 
 };
 

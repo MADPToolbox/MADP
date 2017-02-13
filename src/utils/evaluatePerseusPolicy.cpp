@@ -44,8 +44,6 @@ static char doc[] =
 "evaluatePerseusPolicy - simulate Perseus value functions \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 6;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -53,6 +51,7 @@ const struct argp_child childVector[] = {
     ArgumentHandlers::solutionMethodOptions_child,
     ArgumentHandlers::perseusbackup_child,
     ArgumentHandlers::simulation_child,
+    ArgumentHandlers::eventPomdp_child,
     { 0 }
 };
 
@@ -100,8 +99,10 @@ int main(int argc, char **argv)
         params.SetUseSparseJointBeliefs(true);
     else
         params.SetUseSparseJointBeliefs(false);
-    PlanningUnitDecPOMDPDiscrete *np=new NullPlanner(params,horizon,
-                                                     decpomdp);
+
+    params.SetEventObservability(decpomdp->GetEventObservability());
+
+    PlanningUnitDecPOMDPDiscrete *np=new NullPlanner(horizon,decpomdp, &params);
 
     SimulationDecPOMDPDiscrete sim(*np,args);
     SimulationResult result;

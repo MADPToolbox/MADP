@@ -23,20 +23,13 @@
 using namespace std;
 
 GMAA_MAAstarClassic::GMAA_MAAstarClassic(
-    const PlanningUnitMADPDiscreteParameters &params,
     size_t horizon, 
     DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params,
     int verboseness
     ) :
 //    PlanningUnitDecPOMDPDiscrete(params, horizon, p), //virtual base must be called directly
-    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(params, horizon, p, verboseness)
-{
-}
-
-GMAA_MAAstarClassic::GMAA_MAAstarClassic(
-    size_t horizon, 
-    DecPOMDPDiscreteInterface* p) :
-    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(horizon, p)
+    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(horizon, p, params, verboseness)
 {
 }
 

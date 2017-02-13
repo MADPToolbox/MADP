@@ -105,12 +105,11 @@ class GMAA_kGMAA : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
          * the booleans arguments are passed down to PlanningUnitMADPDiscrete. 
          * */
         GMAA_kGMAA(
-            const PlanningUnitMADPDiscreteParameters &params,
-            //const BGIP_SolverCreatorInterface_T<JointPolicyPureVector> * bgs,
             const BGIP_SolverCreatorInterface * bgs,
-            size_t horizon=3,
-            DecPOMDPDiscreteInterface* p=0,
-            size_t nrPoliciesToProcess=1);
+            size_t horizon = 3,
+            DecPOMDPDiscreteInterface* p = 0,
+            const PlanningUnitMADPDiscreteParameters * params = 0,
+            size_t nrPoliciesToProcess = 1);
 
 };
 

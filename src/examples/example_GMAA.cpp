@@ -70,8 +70,6 @@ static char doc[] =
 +-------------------------------------------------------------------------+ \
 ";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 6;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -340,8 +338,7 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
                     bgipsc_p->SoftPrintBrief() << " is not" << endl;
                 exit(1);
             }
-            gmaa=new GMAA_MAAstarCluster(params, bgipsc_p, args.horizon,
-                                         decpomdp, verboseness );
+            gmaa=new GMAA_MAAstarCluster(bgipsc_p, args.horizon, decpomdp, &params, verboseness );
             break;
         case FSPC:
             args.k=1; // fall through on purpose
@@ -349,8 +346,7 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
         {
             GMAA_kGMAACluster *gmaaCluster=
                 new GMAA_kGMAACluster(
-                    params, bgipsc_p,
-                    args.horizon, decpomdp, args.k,
+                    bgipsc_p, args.horizon, decpomdp, &params, args.k,
                     static_cast<BayesianGameWithClusterInfo::BGClusterAlgorithm>(
                         args.BGClusterAlgorithm)
                     );
@@ -375,15 +371,15 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
                     bgipsc_p->SoftPrintBrief() << " is not" << endl;
                 exit(1);
             }
-            gmaa=new GMAA_MAAstar(params, bgipsc_p, args.horizon, decpomdp, verboseness );
+            gmaa=new GMAA_MAAstar(bgipsc_p, args.horizon, decpomdp, &params, verboseness );
             break;
         case FSPC:
             args.k=1; // fall through on purpose
         case kGMAA:
-            gmaa=new GMAA_kGMAA(params, bgipsc_p, args.horizon, decpomdp, args.k);
+            gmaa=new GMAA_kGMAA(bgipsc_p, args.horizon, decpomdp, &params, args.k);
             break;
         case MAAstarClassic:
-            gmaa=new GMAA_MAAstarClassic(params, args.horizon, decpomdp, verboseness );
+            gmaa=new GMAA_MAAstarClassic(args.horizon, decpomdp, &params, verboseness );
             break;
         default:
             throw E("unrecognized GMAA type?!");

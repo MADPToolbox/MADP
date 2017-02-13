@@ -35,32 +35,19 @@ using namespace std;
 //Default constructor
 GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete::
 GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete(
-        PlanningUnitMADPDiscreteParameters params,
-        size_t horizon, 
-        FactoredDecPOMDPDiscreteInterface* p
+        size_t horizon
+        , FactoredDecPOMDPDiscreteInterface* p
+        , const PlanningUnitMADPDiscreteParameters * params
         , int verboseness
         , double slack) 
 :
-    PlanningUnitFactoredDecPOMDPDiscrete(params, horizon, p)
+    PlanningUnitFactoredDecPOMDPDiscrete(horizon, p, params)
     , GeneralizedMAAStarPlanner(verboseness, slack)
 {
     _m_qHeuristic=0;
     _m_useSparseBeliefs=GetParams().GetUseSparseJointBeliefs();
 }
 
-GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete::
-GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete(
-        size_t horizon, 
-        FactoredDecPOMDPDiscreteInterface* p
-        , double slack) 
-:
-    PlanningUnitFactoredDecPOMDPDiscrete(horizon, p),
-    GeneralizedMAAStarPlanner(0, slack)
-{
-    cout << "GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete slack="<<slack<<endl;
-    _m_qHeuristic=0;
-    _m_useSparseBeliefs=GetParams().GetUseSparseJointBeliefs();
-}
 
 /*
 //Destructor

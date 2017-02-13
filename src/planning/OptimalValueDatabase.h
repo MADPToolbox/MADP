@@ -34,6 +34,7 @@ private:
     /// The database
     std::map<nameDiscountHorizonT, double> _m_optimalValues;
 
+    std::string _filename;
     std::string _m_problemName;
     double _m_discount;
     size_t _m_horizon;
@@ -88,6 +89,10 @@ public:
 
     /// A string representation of the database.
     std::string SoftPrint() const;
+
+    /// Get the name of the current entry.
+    std::string GetEntryName() const;
+
 };
 
 

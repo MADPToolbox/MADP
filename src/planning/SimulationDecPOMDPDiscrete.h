@@ -26,6 +26,7 @@
 #include "PlanningUnitDecPOMDPDiscrete.h"
 #include "argumentHandlers.h"
 #include "State.h"
+#include "AgentLocalObservations.h"
 
 class JointPolicyDiscrete;
 class JointPolicyPureVectorForClusteredBG;
@@ -98,7 +99,8 @@ public:
 
     /// Constructor specifying the number of runs and the random seed.
     SimulationDecPOMDPDiscrete(const PlanningUnitDecPOMDPDiscrete &pu,
-                               int nrRuns, int seed=illegalRandomSeed);
+                               int nrRuns, int seed=illegalRandomSeed, 
+                               bool verbose=false);
 
     /// Constructor which parses the command-line arguments.
     SimulationDecPOMDPDiscrete(const PlanningUnitDecPOMDPDiscrete &pu,

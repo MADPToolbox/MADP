@@ -157,17 +157,12 @@ class GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete :
     // Constructor, destructor and copy assignment.
     /// (default) Constructor
     GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete(
-        PlanningUnitMADPDiscreteParameters params,
-        size_t horizon=3, 
-        FactoredDecPOMDPDiscreteInterface* p=0,
-        int verbose_level=0,
+        size_t horizon = 3, 
+        FactoredDecPOMDPDiscreteInterface* p = 0,
+        const PlanningUnitMADPDiscreteParameters * params = 0,
+        int verbose_level = 0,
         double slack = 0.0
         );
-
-    GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete(
-        size_t horizon=3, 
-        FactoredDecPOMDPDiscreteInterface* p=0,
-        double slack = 0.0);
 
     /// Copy assignment operator
     GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete&

@@ -45,8 +45,6 @@ This only works for infinite horizon, so you have the specify a discount < 1. \
 +-------------------------------------------------------------------------+ \
 ";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 4;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,

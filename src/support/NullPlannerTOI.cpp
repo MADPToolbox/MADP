@@ -25,7 +25,7 @@ NullPlannerTOI::NullPlannerTOI(TOIDecPOMDPDiscrete* p)
 
 }
     
-NullPlannerTOI::NullPlannerTOI(size_t horizon, TOIDecPOMDPDiscrete* p)
+/*NullPlannerTOI::NullPlannerTOI(size_t horizon, TOIDecPOMDPDiscrete* p)
 {
     PlanningUnitMADPDiscreteParameters params;
     params.SetComputeAll(false);
@@ -33,12 +33,14 @@ NullPlannerTOI::NullPlannerTOI(size_t horizon, TOIDecPOMDPDiscrete* p)
     SetParams(params);
     SetProblem(p);
     SetHorizon(horizon);
-}
+}*/
 
-NullPlannerTOI::NullPlannerTOI(const PlanningUnitMADPDiscreteParameters &params,
-                               size_t horizon,
-                               TOIDecPOMDPDiscrete* p) :
-    PlanningUnitTOIDecPOMDPDiscrete(params,horizon,p)
+NullPlannerTOI::NullPlannerTOI(
+                size_t horizon,
+                TOIDecPOMDPDiscrete* p, 
+                const PlanningUnitMADPDiscreteParameters * params
+                   ) :
+    PlanningUnitTOIDecPOMDPDiscrete(horizon, p, params)
 {
 }
 

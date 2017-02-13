@@ -40,10 +40,11 @@ class BruteForceSearchPlanner : public PlanningUnitDecPOMDPDiscrete
     
     // Constructor, destructor and copy assignment.
     // (default) Constructor
-    BruteForceSearchPlanner(size_t horizon=3, DecPOMDPDiscreteInterface* p=0);
-
-    BruteForceSearchPlanner(const PlanningUnitMADPDiscreteParameters &params,
-                            size_t horizon=3, DecPOMDPDiscreteInterface* p=0);
+    BruteForceSearchPlanner(
+                            size_t horizon=3, 
+                            DecPOMDPDiscreteInterface* p=0,
+                            const PlanningUnitMADPDiscreteParameters * params = 0
+                            );
 
     //operators:
 

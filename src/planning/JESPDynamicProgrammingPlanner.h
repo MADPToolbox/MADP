@@ -75,10 +75,11 @@ class JESPDynamicProgrammingPlanner : public PlanningUnitDecPOMDPDiscrete
         // (default) Constructor
         //JESPDynamicProgrammingPlanner();
         JESPDynamicProgrammingPlanner(
-            const PlanningUnitMADPDiscreteParameters &params,
-            size_t horizon, DecPOMDPDiscreteInterface* p);
-        JESPDynamicProgrammingPlanner(int horizon, 
-                DecPOMDPDiscreteInterface* p);
+                int horizon,
+                DecPOMDPDiscreteInterface* p,
+                const PlanningUnitMADPDiscreteParameters * params=0
+                );
+
 
         //operators:
 

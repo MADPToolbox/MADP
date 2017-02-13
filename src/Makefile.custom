@@ -1,5 +1,14 @@
 # Contains several project-wide Makefile options
 
+cleantags: cleantags-recursive
+
+cleantags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) cleantags) || exit 1; \
+	done; \
+	rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags; \
+	rm -f cscope.out cscope.in.out cscope.po.out cscope.files
+
 #####################################################################
 # Optional software packages to be used, check configuration.h to
 # enable them
@@ -11,6 +20,28 @@
 
 LIBDAI_NORMAL = $(top_builddir)/src/libDAI/libDAI.la
 LIBDAI_INCLUDES =  -I$(top_srcdir)/src/libDAI
+
+
+# The following is necessary for calling Matlab from the C++ code
+# Just set the correct MATLAB_DIR and uncomment all three lines
+#MATLAB_DIR = /scratch/matlabR2008a
+#MATLAB_INCLUDES = -I$(MATLAB_DIR)/extern/include/
+#MATLAB_LD = -L$(MATLAB_DIR)/bin/glnxa64/ \
+# -lmat -leng -lmx -lut
+
+# the open PNL library
+#PNL_LD = #define PNL library path 
+#PNL_INCLUDES = #define the PNL includes.
+#typically something like
+#PNL_LD = -L/home/faolieho/Documents/software/PNL/high/source -L/home/faolieho/Documents/software/PNL/cxcore/cxcore/src -L/home/faolieho/Documents/software/PNL/c_pgmtk/src -lhigh -lpnl -lcxcore -lpthread
+#and
+#PNL_INCLUDES = -I$(HOME)/include/pnl -I$(HOME)/include/pnl/high -I$(HOME)/include/pnl/opencx  -I$(HOME)/include/pnl/cart
+#
+#NOTE: in order to build DEBUG libraries (i.e., include the debug version of 
+# the PNL lib), the PNL_LD path should point to where the PNL library is built,
+# rather than installed. For some reason things are not working smoothly when 
+# pointing to the installation libdir (something to do with libtool I think).
+
 
 #####################################################################
 # Compiler flags
@@ -43,14 +74,12 @@ MADP_CFLAGS =
 
 #####################################################################
 # The final include path
-
+# fao 2014-02-01: added $(INCLUDE) such that we can all add include paths, for e.g., cplex.
 MADP_INCLUDES = \
  $(INCLUDE) \
- $(LIBDAI_INCLUDES)\
- -I$(top_srcdir)/src/boost
+ $(LIBDAI_INCLUDES)
 
 MADP_LD = 
-# $(LPSOLVE_LD) 
 
 #####################################################################
 # Lists of libs to be linked with binaries.

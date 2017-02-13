@@ -51,11 +51,13 @@ static const int OPT_NRFLS=3;    //#FLs
 static const int OPT_ISLANDCONF=4;    // island configuration
 static const int OPT_MAXBACKLOG=5;    // maximum backlog
 static const int OPT_VARIATION=6;    // aloha variation
+static const int OPT_EXTINGUISHPROB=8;  // FFGOpt option
 static struct argp_option problemFile_options[] = {
 //FFG:
-{"agents",      OPT_NRAGENTS,   "NRAGENTS",  0, "FireFighting: the number of agents (2)" },
-{"houses",      OPT_NRHOUSES,   "NRHOUSES",  0, "FireFighting: the number of houses (3)" },
-{"firelevels",  OPT_NRFLS,      "NRFLS",  0, "FireFighting: the number of firelevels (3)"},
+{"agents",      OPT_NRAGENTS,   "NRAGENTS", 0, "FireFighting: the number of agents (2)" },
+{"houses",      OPT_NRHOUSES,   "NRHOUSES", 0, "FireFighting: the number of houses (3)" },
+{"firelevels",  OPT_NRFLS,      "NRFLS",    0, "FireFighting: the number of firelevels (3)"},
+{"extinguishProb", OPT_EXTINGUISHPROB, "PROB",     0, "FireFighting: set multiple agent extinguish probability (1.0)" },
 //Aloha:
 {"islands",  OPT_ISLANDCONF,      "ISLANDS",  0, "Aloha: the island configuration (TwoIslands), can be TwoIslands, OneIsland, TwoIndependentIslands, ThreeIslandsInLine, ThreeIslandsClustered, SmallBigSmallInLine, FiveIslandsInLine, FourIslandsInLine, FourIslandsInSquare, SixIslandsInLine, SevenIslandsInLine"},
 {"variation",  OPT_VARIATION,      "VARIATION",  0, "Aloha: which variation to use (NoNewPacket), can be NoNewPacket, NewPacket, NewPacketSendAll, NewPacketProgressivePenalty"},
@@ -85,10 +87,7 @@ problemFile_parse_argument (int key, char *arg, struct argp_state *state)
             theArgumentsStruc->nrFLs = atoi(arg);
             break;
         case OPT_ISLANDCONF:
-            if(strlen(arg)==1)
-                theArgumentsStruc->islandConf=
-                    static_cast<ProblemAloha::IslandConfiguration>(atoi(arg));
-            else if(strcmp(arg,"TwoIslands")==0)
+            if(strcmp(arg,"TwoIslands")==0)
                 theArgumentsStruc->islandConf=ProblemAloha::TwoIslands;
             else if(strcmp(arg,"OneIsland")==0)
                 theArgumentsStruc->islandConf=ProblemAloha::OneIsland;
@@ -130,6 +129,9 @@ problemFile_parse_argument (int key, char *arg, struct argp_state *state)
             break;
         case OPT_MAXBACKLOG:
             theArgumentsStruc->maxBacklog = atoi(arg);
+            break;
+        case OPT_EXTINGUISHPROB:
+            theArgumentsStruc->extinguishProb = strtof(arg,0);
             break;
         case ARGP_KEY_NO_ARGS:
             argp_usage (state);
@@ -179,6 +181,7 @@ static struct argp_option globalOptions_options[] = {
 {"verbose",  'v', 0,       0, "Produce verbose output. Specifying this option multiple times increases verbosity." },
 {"quiet",    'q', 0,       0, "Don't produce any output" },
 {"silent",   's', 0,       OPTION_ALIAS },
+{"testMode", 't', 0,       0, "Fixed random seed and not printing variable output such as timings" },
 { 0 }
 };
 error_t
@@ -195,6 +198,9 @@ globalOptions_parse_argument (int key, char *arg, struct argp_state *state)
             break;
         case 'v':
             theArgumentsStruc->verbose++;
+            break;
+        case 't':
+            theArgumentsStruc->testMode=true;
             break;
         default:
             return ARGP_ERR_UNKNOWN;
@@ -457,7 +463,7 @@ bgsolver_parse_argument (int key, char *arg, struct argp_state *state)
     case 'B':
         if(strcmp(arg,"BFS")==0)
             theArgumentsStruc->bgsolver = BGIP_SolverType::BFS;
-        if(strcmp(arg,"BFSNonInc")==0)
+        else if(strcmp(arg,"BFSNonInc")==0)
             theArgumentsStruc->bgsolver = BGIP_SolverType::BFSNonInc;
         else if(strcmp(arg,"AM")==0)
             theArgumentsStruc->bgsolver = BGIP_SolverType::AM;
@@ -516,6 +522,7 @@ static struct argp_option gmaa_options[] = {
 {"saveTimings", 't', 0, 0, "Save timing results to disk"},
 {"useQcache", 'c', 0, 0, "Use cached Q heuristics (compute Q if not cached)"},
 {"requireQcache", OPT_REQUIREQCACHE, 0, 0, "Use cached Q heuristics (fail if not cached)"},
+{"ApproxInference", 'a', 0, 0, "Use approximate inference for BG construction (by default exact BGs are constructed"},
 {"slack",   SLACK, "FLOAT", 0, "Sets slack to avoid pruning in case of inadmissible heuristics or approximate past rewards. (default=0.0)"},
 {"GMAAdeadline", OPT_GMAADEADLINE, "TIME", 0, "Deadline for completing GMAA, in s"},
 { 0 }
@@ -559,6 +566,9 @@ gmaa_parse_argument (int key, char *arg, struct argp_state *state)
         break;
     case OPT_REQUIREQCACHE:
         theArgumentsStruc->requireQcache = true;
+        break;
+    case 'a':
+        theArgumentsStruc->exactBGs = false;
         break;
     case SLACK:
         theArgumentsStruc->slack = atof(arg);
@@ -870,6 +880,7 @@ static const int GID_QHEUR=GID_SM;
 static const int PRUNEAFTERUNION = 1;
 static const int PRUNEAFTERCROSSSUM = 2;
 static const int TREEIPVECTORCACHE = 3;
+static const int ACCELERATEDPRUNINGTHRESHOLD = 4;
 const char *qheur_argp_version = "QHEUR options parser 0.1";
 static const char *qheur_args_doc = 0;
 static const char *qheur_doc = 
@@ -897,6 +908,7 @@ static struct argp_option qheur_options[] = {
 {"pruneAfterUnion",  PRUNEAFTERUNION, "0/1", 0, "For QBGTreeIncPrune, whether to prune after every union" },
 {"pruneAfterCrossSum",  PRUNEAFTERCROSSSUM, "0/1", 0, "For QBGTreeIncPrune, whether to prune after every cross sum" },
 {"useVectorCache",  TREEIPVECTORCACHE, "0/1", 0, "For QBGTreeIncPrune, whether to cache VectorSets" },
+{"acceleratedPruningThreshold",  ACCELERATEDPRUNINGTHRESHOLD, "n", 0, "For pruning alpha vectors, the threshold at which to switch to accelerated pruning (default 200 vectors, set to 0 to disable)" },
 { 0 }
 };
 error_t
@@ -966,6 +978,9 @@ qheur_parse_argument (int key, char *arg, struct argp_state *state)
         break;
     case TREEIPVECTORCACHE:
         theArgumentsStruc->TreeIPuseVectorCache=atoi(arg);
+        break;
+    case ACCELERATEDPRUNINGTHRESHOLD:
+        theArgumentsStruc->acceleratedPruningThreshold=atoi(arg);
         break;
     default:
         return ARGP_ERR_UNKNOWN;
@@ -1057,7 +1072,7 @@ CE_parse_argument (int key, char *arg, struct argp_state *state)
     switch (key)
     {
     case CE_EVALUATION_RUNS:
-        theArgumentsStruc->nrCEEvalutionRuns = atoi(arg);
+        theArgumentsStruc->nrCEEvaluationRuns = atoi(arg);
         break;
     case CE_RESTARTS:
         theArgumentsStruc->nrCERestarts = atoi(arg);
@@ -1405,7 +1420,53 @@ eventPomdp_parse_argument (int key, char *arg, struct argp_state *state)
 static struct argp eventPomdp_argp = { eventPomdp_options, eventPomdp_parse_argument,
                                         eventPomdp_args_doc, eventPomdp_doc };
 const struct argp_child eventPomdp_child = {&eventPomdp_argp, 0,
-                                            "Event-Driven POMDP options", GID_EVENTPOMDP};
+                                            "Event-Driven POMDP options", GID_EVENTPOMDP}; 
+
+//mmdp_method options
+static const int GID_MMDP_METHOD=88;
+const char *mmdp_method_argp_version = "MMDP_method options parser 0.1";
+static const char *mmdp_method_args_doc = 0;
+static const char *mmdp_method_doc = 
+"mmdp_methods: \
+ValueIteration : \
+PolicyIteration : \
+PolicyIterationGPU :\
+\v";
+
+static struct argp_option mmdp_method_options[] = {
+{"mmdp_method",'t', "MMDP_METHOD",  0, "available: 'ValueIteration' (default), 'PolicyIteration', 'PolicyIterationGPU'"},
+{ 0 }
+};
+error_t
+mmdp_method_parse_argument (int key, char *arg, struct argp_state *state)
+{
+    /* Get the input argument from argp_parse, which we
+      know is a pointer to our arguments structure. */
+    struct Arguments *theArgumentsStruc = (struct Arguments*) state->input;
+    std::string argString(arg ? arg : "");
+    switch (key)
+    {
+        case 't': 
+            if (argString=="ValueIteration")
+                theArgumentsStruc->mmdp_method=ValueIteration;
+            else if (argString=="PolicyIteration")
+                theArgumentsStruc->mmdp_method=PolicyIteration;
+            else if (argString=="PolicyIterationGPU")
+                theArgumentsStruc->mmdp_method=PolicyIterationGPU;
+            else
+            {
+                std::cerr<<"unkown mmdp_method '"<<argString<<"'"<<std::endl;
+                abort();
+            }
+            break;
+        default:
+            return ARGP_ERR_UNKNOWN;
+            break;
+    }
+    return 0;
+}
+static struct argp mmdp_method_argp = { mmdp_method_options, mmdp_method_parse_argument, mmdp_method_args_doc, mmdp_method_doc };
+const struct argp_child mmdp_method_child = {&mmdp_method_argp, 0, "mmdp_method options", GID_MMDP_METHOD};
 
 } // end ArgumentHandlers namespace
 

@@ -19,6 +19,7 @@
 #include "PerseusPOMDPPlanner.h"
 #include "PerseusConstrainedPOMDPPlanner.h"
 #include "PerseusBGPlanner.h"
+#include "PerseusBGNSPlanner.h"
 #include "ParserTOIFactoredRewardDecPOMDPDiscrete.h"
 #include "NullPlanner.h"
 #include "directories.h"
@@ -36,8 +37,6 @@ static char doc[] =
 "Perseus - runs Perseus planners \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 9;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -55,6 +54,7 @@ const struct argp_child childVector[] = {
 
 int main(int argc, char **argv)
 {
+    bool errorOccurred=false;
     try
     {
 
@@ -95,10 +95,11 @@ int main(int argc, char **argv)
     
     params.SetEventObservability(decpomdp->GetEventObservability());
 
-    NullPlanner *np=new NullPlanner(params,horizon,decpomdp);
+    NullPlanner *np=new NullPlanner(horizon, decpomdp, &params);
 
     Perseus *P;
     PerseusStationary *PS=0;
+    PerseusNonStationary *PNS=0;
     switch(args.backup)
     {
     case POMDP:
@@ -115,7 +116,10 @@ int main(int argc, char **argv)
     default:
         throw(E("PerseusBackupType is unknown"));
     }
-    P=PS;
+    if(qavParams.stationary)
+        P=PS;
+    else
+        P=PNS;
 
     P->SetVerbose(args.verbose);
     if(args.minimumNrIterations)
@@ -152,6 +156,15 @@ int main(int argc, char **argv)
                 cout << "Saved beliefs to " << beliefFilename.str() << endl;
         }
     }
+    else
+    {
+        BeliefSetNonStationary B=
+            P->SampleBeliefsNonStationary(args);
+
+        if(args.verbose)
+            B.Print();
+        PNS->SetBeliefSet(B);
+    }
     cout << "." << endl;
 
     if(args.savePOMDP && !args.dryrun)
@@ -179,7 +192,10 @@ int main(int argc, char **argv)
     if(args.verbose)
         P->PrintTimersSummary();
     }
-    catch(E& e){ e.Print(); }
-
-    return(0);
+    catch(E& e)
+    { 
+        e.Print();
+        errorOccurred=true;
+    }
+    return errorOccurred;
 }

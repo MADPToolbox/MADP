@@ -20,18 +20,12 @@ using namespace std;
 
 #define DEBUG_BFS 0
 
-//Default constructor
-BruteForceSearchPlanner::BruteForceSearchPlanner(size_t horizon, 
-        DecPOMDPDiscreteInterface* p) :
-    PlanningUnitDecPOMDPDiscrete(horizon, p),
-    _m_foundPolicy()
-{
-}
-
 BruteForceSearchPlanner::BruteForceSearchPlanner(
-    const PlanningUnitMADPDiscreteParameters &params,
-    size_t horizon, DecPOMDPDiscreteInterface* p) :
-    PlanningUnitDecPOMDPDiscrete(params, horizon, p),
+    size_t horizon, 
+    DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params
+    ) :
+    PlanningUnitDecPOMDPDiscrete(horizon, p, params),
     _m_foundPolicy()
 {
 }
@@ -57,7 +51,7 @@ void BruteForceSearchPlanner::Plan()
         i++;
 
         ValueFunctionDecPOMDPDiscrete vf(this, jpol);
-        v = vf.CalculateV(true);//set caching to true!
+        v = vf.CalculateV<true>();//set caching to true!
         if(DEBUG_BFS)    cout << "Expected value = "<< v;
         if(v > v_best)
         {

@@ -40,8 +40,6 @@ static char doc[] =
 +-------------------------------------------------------------------------+ \
 ";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 4;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -71,7 +69,7 @@ int main(int argc, char **argv)
     else
         params.SetUseSparseJointBeliefs(false);
 
-    BruteForceSearchPlanner bfs(params,horizon,&decpomdp);
+    BruteForceSearchPlanner bfs(horizon, &decpomdp, &params);
 
     if(args.verbose >= 0)
         cout << "BruteForceSearchPlanner initialized" << endl;

@@ -41,8 +41,6 @@ static char doc[] =
 "DICEPSPlanner - runs the DICEPSPlanner \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 6;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -62,7 +60,6 @@ int main(int argc, char **argv)
     // parse the command line arguments
     ArgumentHandlers::Arguments args;
     argp_parse (&ArgumentHandlers::theArgpStruc, argc, argv, 0, 0, &args);
-    int restarts = args.nrCERestarts;
 
     srand(time(0));
 
@@ -79,8 +76,9 @@ int main(int argc, char **argv)
     DecPOMDPDiscreteInterface & decpomdp = * GetDecPOMDPDiscreteInterfaceFromArgs(args);
 
     // setup the output file stream 
-    string filename="/dev/null",timingsFilename="/dev/null";
-    ofstream of;
+    string filename="/dev/null",timingsFilename="/dev/null", 
+           convergenceFilename="/dev/null";
+    ofstream of, conv_of;
     stringstream ss;
     ss << directories::MADPGetResultsFilename("DICEPS",decpomdp,args)
         << "h" << horizon;
@@ -91,12 +89,13 @@ int main(int argc, char **argv)
         << "_sfu" << args.nrCESamplesForUpdate
         << "_a" << args.CE_alpha 
         << "_ht" << args.CE_use_hard_threshold
-        << "_evals" << args.nrCEEvalutionRuns;
+        << "_evals" << args.nrCEEvaluationRuns;
     if(!args.dryrun)
     {
         directories::MADPCreateResultsDir("DICEPS",decpomdp);
         filename=ss.str();
         timingsFilename=filename + "_Timings";
+        convergenceFilename=filename + "_convergence";
     }
     of.open(filename.c_str());
     if(!of)
@@ -132,16 +131,25 @@ int main(int argc, char **argv)
     else
         params.SetUseSparseJointBeliefs(false);
     DICEPSPlanner* planner;
-    planner = new DICEPSPlanner (params, &decpomdp,
+    planner = new DICEPSPlanner (
         horizon,
+        &decpomdp,
         //CE params
-        args.nrCERestarts,
+        1, // the restarts loop is executed here, not in DICEPSPlanner
         args.nrCEIterations,
         args.nrCESamples,
         args.nrCESamplesForUpdate, 
         args.CE_use_hard_threshold, //(gamma in CE papers)
         args.CE_alpha, //the learning rate
-        args.nrCEEvalutionRuns //the number of evaluation runs
+        args.nrCEEvaluationRuns //the number of evaluation runs
+        , &params
+        , 
+#if CONVERGENCE_STATS        
+        true // convergence stats  
+#else
+        false        
+#endif
+        , &conv_of
         , args.verbose
     );
     Time.Stop("PlanningUnit");
@@ -149,7 +157,7 @@ int main(int argc, char **argv)
 
     clock_t total_utime_diceps=0;
     double total_value=0;
-    for(int restartI = 0; restartI < restarts; restartI++)
+    for(Index restartI = 0; restartI < args.nrCERestarts; restartI++)
     {
         //start all timers:
         tms ts_before, ts_after;
@@ -188,12 +196,12 @@ int main(int argc, char **argv)
         of.flush();
 
         // output average statistics after completing the last restart
-        if(restartI==(restarts-1))
+        if(restartI==(args.nrCERestarts-1))
             of << "# h " << args.horizon<<"\t"
                << " avg DICEPS time (s): "
                << (static_cast<double>(total_utime_diceps)/
-                   sysconf(_SC_CLK_TCK))/restarts
-               << " avg value: " << total_value/restarts
+                   sysconf(_SC_CLK_TCK))/args.nrCERestarts
+               << " avg value: " << total_value/args.nrCERestarts
                << endl;
     }
     /* clean up */

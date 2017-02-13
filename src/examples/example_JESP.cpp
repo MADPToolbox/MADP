@@ -45,8 +45,6 @@ static char doc[] =
 +-------------------------------------------------------------------------+ \
 ";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 5;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -89,13 +87,13 @@ int main(int argc, char **argv)
     PlanningUnitDecPOMDPDiscrete* jesp = 0;
     if(args.jesp == JESPtype::JESPExhaustive)
     {
-        jesp = new JESPExhaustivePlanner (params,horizon,&decpomdp);
+        jesp = new JESPExhaustivePlanner (horizon, &decpomdp, &params);
         if(args.verbose >= 0)
             cout << "JESPExhaustivePlanner initialized" << endl;
     }
     else if(args.jesp == JESPtype::JESPDP)
     {
-        jesp = new JESPDynamicProgrammingPlanner (params,horizon,&decpomdp);
+        jesp = new JESPDynamicProgrammingPlanner (horizon, &decpomdp, &params);
         if(args.verbose >= 0)
             cout << "JESPDynamicProgrammingPlanner initialized" << endl;
     }

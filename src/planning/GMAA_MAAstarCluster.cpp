@@ -36,14 +36,14 @@
 using namespace std;
 
 GMAA_MAAstarCluster::GMAA_MAAstarCluster(
-    const PlanningUnitMADPDiscreteParameters &params,
     //const BGIP_IncrementalSolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG> * bgsc,
     const BGIP_SolverCreatorInterface * bgsc,
     size_t horizon, 
     DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params,
     int verboseness
     ) :
-    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(params, horizon, p, verboseness),
+    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(horizon, p, params, verboseness),
     _m_newBGIP_Solver(
             dynamic_cast<const BGIP_IncrementalSolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG>* >(bgsc)
             ),
@@ -62,29 +62,6 @@ GMAA_MAAstarCluster::GMAA_MAAstarCluster(
         //_m_newBGIP_Solver= new BGIP_SolverCreator_BFS<JointPolicyPureVectorForClusteredBG>();
     //}
 };
-
-GMAA_MAAstarCluster::GMAA_MAAstarCluster(
-    const BGIP_IncrementalSolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG> * bgsc,
-    size_t horizon, 
-    DecPOMDPDiscreteInterface* p) :
-    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(horizon, p),
-    _m_newBGIP_Solver(bgsc),
-    _m_clusteredBGsizes(horizon,vector<int>(0,0)),
-    _m_clusterStatsFilename(""),
-    _m_dummyBG(new BayesianGameWithClusterInfo(this))
-{
-    // check if we were passed a BGsolver
-    if(_m_newBGIP_Solver)
-    {
-        if(!_m_newBGIP_Solver->IsExactSolver())
-            throw(E("GMAA_MAAstarCluster requires an exact BG solver"));
-    }
-    else // otherwise instantiate one
-    {
-        _m_newBGIP_Solver=
-            new BGIP_SolverCreator_BFS<JointPolicyPureVectorForClusteredBG>();
-    }
-}
 
 GMAA_MAAstarCluster::~GMAA_MAAstarCluster()
 {

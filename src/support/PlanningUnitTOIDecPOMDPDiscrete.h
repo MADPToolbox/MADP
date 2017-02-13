@@ -43,16 +43,16 @@ public:
     // Constructor, destructor and copy assignment.
     ///the (default) Constructor. 
     PlanningUnitTOIDecPOMDPDiscrete(
-        const PlanningUnitMADPDiscreteParameters &params,
         size_t horizon=3,
-        TOIDecPOMDPDiscrete* p=0
+        TOIDecPOMDPDiscrete* p=0,
+        const PlanningUnitMADPDiscreteParameters * params = 0
         );
-        
+/*         
     PlanningUnitTOIDecPOMDPDiscrete(
         size_t horizon=3,
         TOIDecPOMDPDiscrete* p=0
         );
-
+*/
     //operators:
     
     //data manipulation (set) functions:

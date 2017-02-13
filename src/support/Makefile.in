@@ -16,14 +16,6 @@
 
 # Contains several project-wide Makefile options
 
-#####################################################################
-# Optional software packages to be used, check configuration.h to
-# enable them
-
-# For using arbitrary length integers
-# Should be set if USE_ARBITRARY_PRECISION_INDEX is set to 1
-#GMP_LD=-lgmpxx -lgmp
-
 
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
@@ -97,9 +89,10 @@ DIST_COMMON = $(top_srcdir)/src/Makefile.custom \
 subdir = src/support
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ac_cplex.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/cuda.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -303,6 +296,8 @@ CSTD = @CSTD@
 CSTD11 = @CSTD11@
 CSTDGNU = @CSTDGNU@
 CSTDGNU11 = @CSTDGNU11@
+CUDA_CPPFLAGS = @CUDA_CPPFLAGS@
+CUDA_LDFLAGS = @CUDA_LDFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
@@ -410,8 +405,36 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+#####################################################################
+# Optional software packages to be used, check configuration.h to
+# enable them
+
+# For using arbitrary length integers
+# Should be set if USE_ARBITRARY_PRECISION_INDEX is set to 1
+#GMP_LD=-lgmpxx -lgmp
 LIBDAI_NORMAL = $(top_builddir)/src/libDAI/libDAI.la
 LIBDAI_INCLUDES = -I$(top_srcdir)/src/libDAI
+
+# The following is necessary for calling Matlab from the C++ code
+# Just set the correct MATLAB_DIR and uncomment all three lines
+#MATLAB_DIR = /scratch/matlabR2008a
+#MATLAB_INCLUDES = -I$(MATLAB_DIR)/extern/include/
+#MATLAB_LD = -L$(MATLAB_DIR)/bin/glnxa64/ \
+# -lmat -leng -lmx -lut
+
+# the open PNL library
+#PNL_LD = #define PNL library path 
+#PNL_INCLUDES = #define the PNL includes.
+#typically something like
+#PNL_LD = -L/home/faolieho/Documents/software/PNL/high/source -L/home/faolieho/Documents/software/PNL/cxcore/cxcore/src -L/home/faolieho/Documents/software/PNL/c_pgmtk/src -lhigh -lpnl -lcxcore -lpthread
+#and
+#PNL_INCLUDES = -I$(HOME)/include/pnl -I$(HOME)/include/pnl/high -I$(HOME)/include/pnl/opencx  -I$(HOME)/include/pnl/cart
+#
+#NOTE: in order to build DEBUG libraries (i.e., include the debug version of 
+# the PNL lib), the PNL_LD path should point to where the PNL library is built,
+# rather than installed. For some reason things are not working smoothly when 
+# pointing to the installation libdir (something to do with libtool I think).
 
 #####################################################################
 # Compiler flags
@@ -440,13 +463,12 @@ MADP_CFLAGS =
 
 #####################################################################
 # The final include path
+# fao 2014-02-01: added $(INCLUDE) such that we can all add include paths, for e.g., cplex.
 MADP_INCLUDES = \
  $(INCLUDE) \
- $(LIBDAI_INCLUDES)\
- -I$(top_srcdir)/src/boost
+ $(LIBDAI_INCLUDES)
 
 MADP_LD = 
-# $(LPSOLVE_LD) 
 
 #####################################################################
 # Lists of libs to be linked with binaries.
@@ -1315,6 +1337,15 @@ uninstall-am: uninstall-libLTLIBRARIES \
 	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES \
 	uninstall-libMADPSupport_laHEADERS
 
+
+cleantags: cleantags-recursive
+
+cleantags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) cleantags) || exit 1; \
+	done; \
+	rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags; \
+	rm -f cscope.out cscope.in.out cscope.po.out cscope.files
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

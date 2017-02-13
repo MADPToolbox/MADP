@@ -18,7 +18,7 @@
 #include <fstream>
 #include <float.h>
 
-#include "parser/MADPParser.h"
+#include "MADPParser.h"
 #include "GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete.h"
 #include "GMAA_MAA_ELSI.h"
 #include "FactoredQLastTimeStepOrQBG.h"
@@ -31,6 +31,7 @@
 #include "FactoredDecPOMDPDiscrete.h"
 #include "argumentUtils.h"
 #include "JointPolicyPureVector.h"
+#include "OptimalValueDatabase.h"
 
 using namespace qheur;
 using namespace GMAAtype;
@@ -73,8 +74,6 @@ static char doc[] =
 "GMAA_ELSI - runs Generalized MAAStar planners for factored Dec-POMDPs\
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 7;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -92,6 +91,8 @@ int main(int argc, char **argv)
 {
     ArgumentHandlers::Arguments args;
     argp_parse (&ArgumentHandlers::theArgpStruc, argc, argv, 0, 0, &args);
+
+    bool errorOccurred=false;
 
     Qheur_t Qheur=args.qheur;
     int horizon=args.horizon;
@@ -114,6 +115,9 @@ int main(int argc, char **argv)
 //     if(args.sparse) 
 //         decpomdp->SetSparse(true);
 
+     bool optimalSolutionMethod=false;
+     if(args.gmaa==MAAstar || args.gmaa==MAAstarClassic)
+         optimalSolutionMethod=true;
 
     GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete *gmaa=0;
     FactoredQFunctionStateJAOHInterface *q;
@@ -161,7 +165,7 @@ int main(int argc, char **argv)
     double V=-DBL_MAX;
     Time.Start("PlanningUnit");
     
-    gmaa=new GMAA_MAA_ELSI(params, horizon, decpomdp);
+    gmaa=new GMAA_MAA_ELSI(horizon, decpomdp, &params);
 
     if(!args.dryrun)
     {
@@ -207,6 +211,57 @@ int main(int argc, char **argv)
     clock_t time_Qcomp = ticks_Qcomp - ticks_before;
     clock_t utime_Qcomp = ts_Qcomp.tms_utime - ts_before.tms_utime;
 
+    // check if the value corresponds to the optimal value in case
+    // this is an optimal method and we already computed it before
+    OptimalValueDatabase db(gmaa);
+    cout<<"OptimalValueDatabase: entry '"<<db.GetEntryName()<<"'"<<endl;
+    //cout<<db.SoftPrint()<<endl;
+    if(optimalSolutionMethod)
+    {
+        if(db.IsInDatabase())
+        {
+            if(!db.IsOptimal(V))
+            {
+                stringstream ss;
+                ss << "OptimalValueDatabase: GMAA error, computed value " << V 
+                   << " does not match"
+                   << " previously computed optimal value "
+                   << db.GetOptimalValue();
+                of << ss.str() << endl;
+                cout << ss.str() << endl;
+                errorOccurred=true;
+            }
+            else
+                cout<<"OptimalValueDatabase: Computed value matches with OptimalValueDatabase"<<endl;
+        }
+        else
+        {
+            cout << "OptimalValueDatabase: Optimal value unknown." << endl;
+            if (args.testMode) // raise error when testing
+                errorOccurred=true;
+            else // otherwise save new value
+                try { db.SetOptimalValue(V);}  
+                catch(E& e){ e.Print(); }
+        }
+    }
+    else // approximate methods
+    {
+        if(db.IsInDatabase())
+        {
+            cout << "OptimalValueDatabase: Computed value is " << V / db.GetOptimalValue()
+                 << " of optimal (value " << db.GetOptimalValue() << ")"
+                 << endl;
+            if (V>db.GetOptimalValue())
+                errorOccurred=true;
+        }
+        else
+        {
+            cout << "OptimalValueDatabase: Optimal value unknown." << endl;
+            if (args.testMode) // raise error when testing
+                errorOccurred=true;
+        }
+    }
+
     if(!args.dryrun)
     {
         of << horizon<<"\t";
@@ -240,4 +295,6 @@ int main(int argc, char **argv)
 
     }
     catch(E& e){ e.Print(); }
+
+    return errorOccurred;
 }

@@ -33,29 +33,17 @@ using namespace std;
 
 //Default constructor
 GeneralizedMAAStarPlannerForDecPOMDPDiscrete::GeneralizedMAAStarPlannerForDecPOMDPDiscrete(
-        const PlanningUnitMADPDiscreteParameters &params,
         size_t horizon, 
         DecPOMDPDiscreteInterface* p
+        , const PlanningUnitMADPDiscreteParameters * params
         , int verboseness) 
 :
-    PlanningUnitDecPOMDPDiscrete(params, horizon, p)
+    PlanningUnitDecPOMDPDiscrete(horizon, p, params)
     ,GeneralizedMAAStarPlanner(verboseness)
 {
     _m_qHeuristic=0;
     _m_useSparseBeliefs=GetParams().GetUseSparseJointBeliefs();
 }
-
-GeneralizedMAAStarPlannerForDecPOMDPDiscrete::
-GeneralizedMAAStarPlannerForDecPOMDPDiscrete(
-    size_t horizon, 
-    DecPOMDPDiscreteInterface* p) 
-:
-    PlanningUnitDecPOMDPDiscrete(horizon, p)
-{
-    _m_qHeuristic=0;
-    _m_useSparseBeliefs=GetParams().GetUseSparseJointBeliefs();
-}
-
 /*
 //Destructor
 GeneralizedMAAStarPlannerForDecPOMDPDiscrete::

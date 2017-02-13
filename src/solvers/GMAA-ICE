@@ -2,5 +2,4 @@
 # GMAA-ICE means calling GMAA with BG clustering enable and using an
 # incremental BGIP solver, in this case BaGaBaB
 
-DIR="$( cd "$( dirname "$0" )" && pwd )";
-$DIR/GMAA --GMAA=MAAstar --useBGclustering --BGIP_Solver=BnB --BnB-ordering=Prob $@
+$(dirname -- "$0")/GMAA --GMAA=MAAstar --useBGclustering --BGIP_Solver=BnB --BnB-ordering=Prob $@

@@ -167,9 +167,75 @@ Index Scope::GetPositionForIndex(Index i) const
     return(pos);
 }
 
-void Scope::Sort()
+Scope& Scope::Sort()
 {
     sort(this->begin(),this->end());
+    return *this;
+}
+
+// --------------------------------
+// sorting based on:
+// http://stackoverflow.com/questions/17074324/how-can-i-sort-two-vectors-in-the-same-way-with-criteria-that-uses-only-one-of
+// rewriten for C++98 and simplified
+template <typename T>
+class CompareVec
+{
+public:
+    typename std::vector<T> vec;
+    CompareVec(typename std::vector<T> vec) : vec(vec)
+    {}
+
+    bool operator()(std::size_t a,std::size_t b)
+    {  return vec[a]<vec[b];}
+};
+
+template <typename T>
+std::vector<std::size_t> sort_permutation(
+    const std::vector<T>& vec)
+{
+    std::vector<std::size_t> p(vec.size());
+    for (int i=0;i<vec.size();i++)
+        p[i]=i;
+
+    CompareVec<T> compareVec(vec);
+    std::sort(p.begin(), p.end(),compareVec);
+    return p;
+}
+
+template <typename T>
+std::vector<T> apply_permutation(
+    const std::vector<T>& vec,
+    const std::vector<std::size_t>& p)
+{
+    std::vector<T> sorted_vec(p.size());
+    for (int i=0;i<p.size();i++)
+        sorted_vec[i]=vec[p[i]];
+    return sorted_vec;
+}
+// --------------------------------
+
+void Scope::Sort(Scope& scope,ScopeInstance& scopeInstance)
+{
+    vector<std::size_t> permutation=sort_permutation(scope);
+    scope        =apply_permutation(scope        ,permutation);
+    scopeInstance=apply_permutation(scopeInstance,permutation);
+}
+
+Scope& Scope::SortAndUnique()
+{
+    Sort();
+    SDT::iterator prev=begin();
+    for (SDT::iterator it=++begin();it!=end();)
+    {
+        if (*it==*prev)
+            erase(it);
+        else
+        {
+            prev=it;
+            ++it;
+        }
+    }
+    return *this;
 }
 
 std::string Scope::SoftPrint() const
@@ -177,4 +243,12 @@ std::string Scope::SoftPrint() const
     stringstream ss; 
     ss << (*this);
     return(ss.str());
+}
+
+ScopeInstance Scope::Instantiate(const std::vector<Index>& values) const
+{
+    ScopeInstance instance;
+    for (Scope::const_iterator it=begin();it!=end();it++)
+        instance.Insert(values[*it]);
+    return instance;
 }

@@ -68,7 +68,10 @@ DecPOMDPDiscreteInterface* GetDecPOMDPDiscreteInterfaceFromArgs(const Arguments&
             ProblemFireFightingFactored* p = 
                 new ProblemFireFightingFactored(args.nrAgents,
                                                 args.nrHouses,
-                                                args.nrFLs);
+                                                args.nrFLs,
+                                                0.0,
+                                                false,
+                                                args.extinguishProb);
             if(args.cache_flat_models)
                 p->CacheFlatModels(args.sparse);
             dp = p;
@@ -78,7 +81,8 @@ DecPOMDPDiscreteInterface* GetDecPOMDPDiscreteInterfaceFromArgs(const Arguments&
         {
             ProblemFireFightingGraph* p = 
                 new ProblemFireFightingGraph(args.nrAgents,
-                                             args.nrFLs);
+                                             args.nrFLs,
+                                             args.extinguishProb);
             if(args.cache_flat_models)
                 p->CacheFlatModels(args.sparse);
             dp = p;
@@ -234,7 +238,7 @@ QFunctionJAOHInterface* GetQheuristicFromArgs(
     const PlanningUnitDecPOMDPDiscrete* pu,
     const ArgumentHandlers::Arguments &args)
 {
-    QFunctionJAOHInterface* q = 0;
+    QFunctionJAOHInterface* q=0;
 #if 0
     QAVParameters qavParams;
     bool useAV=false;
@@ -242,6 +246,7 @@ QFunctionJAOHInterface* GetQheuristicFromArgs(
     switch(args.qheur)
     {
     case eQMDP:
+    case eQheurUndefined: // if undefined,we default to QMDP
         q = new QMDP(pu,false);
         break;
     case eQPOMDP:
@@ -257,6 +262,7 @@ QFunctionJAOHInterface* GetQheuristicFromArgs(
     {
         //true means 'use incremental pruning'
         MonahanPOMDPPlanner *M=new MonahanPOMDPPlanner(pu,true);
+        M->SetAcceleratedPruningThreshold(args.acceleratedPruningThreshold);
         q = new QAV<MonahanPOMDPPlanner>(pu,M);
 
         break;
@@ -265,6 +271,7 @@ QFunctionJAOHInterface* GetQheuristicFromArgs(
     {
         //true means 'use incremental pruning'
         MonahanBGPlanner *M=new MonahanBGPlanner(pu,true);
+        M->SetAcceleratedPruningThreshold(args.acceleratedPruningThreshold);
         q = new QAV<MonahanBGPlanner>(pu,M);
 
         break;
@@ -403,6 +410,7 @@ QFunctionJAOHInterface* GetHybridQheuristicFromArgs(
 
                 planners.at(QHybridHorizonLastTimeSteps)=M;
 
+                M->SetAcceleratedPruningThreshold(args.acceleratedPruningThreshold);
                 M->SetMaxNrAlphas(maxNrAlphasForT);
 
                 try {
@@ -532,6 +540,7 @@ QFunctionJAOHInterface* GetHybridQheuristicFromArgs(
         case eQPOMDP:
         {
             MonahanPOMDPPlanner *M=new MonahanPOMDPPlanner(np,true);
+            M->SetAcceleratedPruningThreshold(args.acceleratedPruningThreshold);
             QAV<MonahanPOMDPPlanner> *qav=new QAV<MonahanPOMDPPlanner>(np,M);
             if(args.useQcache)
                 M->PlanWithCache(qav->GetCacheFilename());
@@ -544,6 +553,7 @@ QFunctionJAOHInterface* GetHybridQheuristicFromArgs(
         case eQBG:
         {
             MonahanBGPlanner *M=new MonahanBGPlanner(np,true);
+            M->SetAcceleratedPruningThreshold(args.acceleratedPruningThreshold);
             QAV<MonahanBGPlanner> *qav=new QAV<MonahanBGPlanner>(np,M);
             if(args.useQcache)
                 M->PlanWithCache(qav->GetCacheFilename());

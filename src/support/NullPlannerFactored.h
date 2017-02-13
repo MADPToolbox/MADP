@@ -37,10 +37,11 @@ public:
     /// (default) Constructor
     NullPlannerFactored(FactoredDecPOMDPDiscreteInterface* p);
 
-    NullPlannerFactored(size_t horizon, FactoredDecPOMDPDiscreteInterface* p);
-
-    NullPlannerFactored(const PlanningUnitMADPDiscreteParameters &params,
-                size_t horizon, FactoredDecPOMDPDiscreteInterface* p);
+    NullPlannerFactored(
+            size_t horizon, 
+            FactoredDecPOMDPDiscreteInterface* p = 0,
+            const PlanningUnitMADPDiscreteParameters * params = 0
+            );
 
     ~NullPlannerFactored(){};
 

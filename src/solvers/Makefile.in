@@ -14,17 +14,9 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.am 9372 2015-03-10 18:27:08Z mtjspaan $
+# $Id$
 
 # Contains several project-wide Makefile options
-
-#####################################################################
-# Optional software packages to be used, check configuration.h to
-# enable them
-
-# For using arbitrary length integers
-# Should be set if USE_ARBITRARY_PRECISION_INDEX is set to 1
-#GMP_LD=-lgmpxx -lgmp
 
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
@@ -100,9 +92,10 @@ bin_PROGRAMS = $(am__EXEEXT_2)
 subdir = src/solvers
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ac_cplex.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/cuda.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -112,7 +105,7 @@ CONFIG_CLEAN_VPATH_FILES =
 @HAVE_CPLEX_TRUE@am__EXEEXT_1 = DPLPC$(EXEEXT)
 am__EXEEXT_2 = Perseus$(EXEEXT) GMAA$(EXEEXT) GMAA_ELSI$(EXEEXT) \
 	JESP$(EXEEXT) DICEPS$(EXEEXT) BFS$(EXEEXT) \
-	MMDP_QLearner$(EXEEXT) MMDP_VI$(EXEEXT) $(am__EXEEXT_1)
+	MMDP_QLearner$(EXEEXT) MMDP_Solver$(EXEEXT) $(am__EXEEXT_1)
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
 am_BFS_OBJECTS = BFS-BFS.$(OBJEXT)
@@ -157,11 +150,11 @@ MMDP_QLearner_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(MMDP_QLearner_CXXFLAGS) $(CXXFLAGS) $(MMDP_QLearner_LDFLAGS) \
 	$(LDFLAGS) -o $@
-am_MMDP_VI_OBJECTS = MMDP_VI-MMDP_VI.$(OBJEXT)
-MMDP_VI_OBJECTS = $(am_MMDP_VI_OBJECTS)
-MMDP_VI_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(MMDP_VI_CXXFLAGS) \
-	$(CXXFLAGS) $(MMDP_VI_LDFLAGS) $(LDFLAGS) -o $@
+am_MMDP_Solver_OBJECTS = MMDP_Solver-MMDP_Solver.$(OBJEXT)
+MMDP_Solver_OBJECTS = $(am_MMDP_Solver_OBJECTS)
+MMDP_Solver_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(MMDP_Solver_CXXFLAGS) \
+	$(CXXFLAGS) $(MMDP_Solver_LDFLAGS) $(LDFLAGS) -o $@
 am_Perseus_OBJECTS = Perseus-Perseus.$(OBJEXT)
 Perseus_OBJECTS = $(am_Perseus_OBJECTS)
 Perseus_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
@@ -203,11 +196,12 @@ am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 SOURCES = $(BFS_SOURCES) $(DICEPS_SOURCES) $(DPLPC_SOURCES) \
 	$(GMAA_SOURCES) $(GMAA_ELSI_SOURCES) $(JESP_SOURCES) \
-	$(MMDP_QLearner_SOURCES) $(MMDP_VI_SOURCES) $(Perseus_SOURCES)
+	$(MMDP_QLearner_SOURCES) $(MMDP_Solver_SOURCES) \
+	$(Perseus_SOURCES)
 DIST_SOURCES = $(BFS_SOURCES) $(DICEPS_SOURCES) \
 	$(am__DPLPC_SOURCES_DIST) $(GMAA_SOURCES) $(GMAA_ELSI_SOURCES) \
-	$(JESP_SOURCES) $(MMDP_QLearner_SOURCES) $(MMDP_VI_SOURCES) \
-	$(Perseus_SOURCES)
+	$(JESP_SOURCES) $(MMDP_QLearner_SOURCES) \
+	$(MMDP_Solver_SOURCES) $(Perseus_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -254,6 +248,8 @@ CSTD = @CSTD@
 CSTD11 = @CSTD11@
 CSTDGNU = @CSTDGNU@
 CSTDGNU11 = @CSTDGNU11@
+CUDA_CPPFLAGS = @CUDA_CPPFLAGS@
+CUDA_LDFLAGS = @CUDA_LDFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
@@ -361,8 +357,36 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+#####################################################################
+# Optional software packages to be used, check configuration.h to
+# enable them
+
+# For using arbitrary length integers
+# Should be set if USE_ARBITRARY_PRECISION_INDEX is set to 1
+#GMP_LD=-lgmpxx -lgmp
 LIBDAI_NORMAL = $(top_builddir)/src/libDAI/libDAI.la
 LIBDAI_INCLUDES = -I$(top_srcdir)/src/libDAI
+
+# The following is necessary for calling Matlab from the C++ code
+# Just set the correct MATLAB_DIR and uncomment all three lines
+#MATLAB_DIR = /scratch/matlabR2008a
+#MATLAB_INCLUDES = -I$(MATLAB_DIR)/extern/include/
+#MATLAB_LD = -L$(MATLAB_DIR)/bin/glnxa64/ \
+# -lmat -leng -lmx -lut
+
+# the open PNL library
+#PNL_LD = #define PNL library path 
+#PNL_INCLUDES = #define the PNL includes.
+#typically something like
+#PNL_LD = -L/home/faolieho/Documents/software/PNL/high/source -L/home/faolieho/Documents/software/PNL/cxcore/cxcore/src -L/home/faolieho/Documents/software/PNL/c_pgmtk/src -lhigh -lpnl -lcxcore -lpthread
+#and
+#PNL_INCLUDES = -I$(HOME)/include/pnl -I$(HOME)/include/pnl/high -I$(HOME)/include/pnl/opencx  -I$(HOME)/include/pnl/cart
+#
+#NOTE: in order to build DEBUG libraries (i.e., include the debug version of 
+# the PNL lib), the PNL_LD path should point to where the PNL library is built,
+# rather than installed. For some reason things are not working smoothly when 
+# pointing to the installation libdir (something to do with libtool I think).
 
 #####################################################################
 # Compiler flags
@@ -391,13 +415,12 @@ MADP_CFLAGS =
 
 #####################################################################
 # The final include path
+# fao 2014-02-01: added $(INCLUDE) such that we can all add include paths, for e.g., cplex.
 MADP_INCLUDES = \
  $(INCLUDE) \
- $(LIBDAI_INCLUDES)\
- -I$(top_srcdir)/src/boost
+ $(LIBDAI_INCLUDES)
 
 MADP_LD = 
-# $(LPSOLVE_LD) 
 
 #####################################################################
 # Lists of libs to be linked with binaries.
@@ -428,7 +451,7 @@ MADPLIBS_NORMAL_NOPARSER = $(MADPLIBS_NORMAL)
 
 # Which programs to build. Only PROGRAMS_NORMAL will be installed.
 PROGRAMS_NORMAL = Perseus GMAA GMAA_ELSI JESP DICEPS BFS MMDP_QLearner \
-	MMDP_VI $(am__append_1)
+	MMDP_Solver $(am__append_1)
 
 ##############
 # Includedirs, libdirs, libs and cflags for all programs 
@@ -515,14 +538,14 @@ MMDP_QLearner_CPPFLAGS = $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 MMDP_QLearner_CXXFLAGS = 
 MMDP_QLearner_CFLAGS = 
 
-# Build MMDP_VI
-MMDP_VI_SOURCES = MMDP_VI.cpp
-MMDP_VI_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
-MMDP_VI_LDFLAGS = $(AM_LDFLAGS) 
-MMDP_VI_DEPENDENCIES = $(MADPLIBS_NORMAL)
-MMDP_VI_CPPFLAGS = $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
-MMDP_VI_CXXFLAGS = 
-MMDP_VI_CFLAGS = 
+# Build MMDP_Solver
+MMDP_Solver_SOURCES = MMDP_Solver.cpp
+MMDP_Solver_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
+MMDP_Solver_LDFLAGS = $(AM_LDFLAGS) 
+MMDP_Solver_DEPENDENCIES = $(MADPLIBS_NORMAL)
+MMDP_Solver_CPPFLAGS = $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
+MMDP_Solver_CXXFLAGS = 
+MMDP_Solver_CFLAGS = 
 all: all-am
 
 .SUFFIXES:
@@ -645,9 +668,9 @@ MMDP_QLearner$(EXEEXT): $(MMDP_QLearner_OBJECTS) $(MMDP_QLearner_DEPENDENCIES) $
 	@rm -f MMDP_QLearner$(EXEEXT)
 	$(AM_V_CXXLD)$(MMDP_QLearner_LINK) $(MMDP_QLearner_OBJECTS) $(MMDP_QLearner_LDADD) $(LIBS)
 
-MMDP_VI$(EXEEXT): $(MMDP_VI_OBJECTS) $(MMDP_VI_DEPENDENCIES) $(EXTRA_MMDP_VI_DEPENDENCIES) 
-	@rm -f MMDP_VI$(EXEEXT)
-	$(AM_V_CXXLD)$(MMDP_VI_LINK) $(MMDP_VI_OBJECTS) $(MMDP_VI_LDADD) $(LIBS)
+MMDP_Solver$(EXEEXT): $(MMDP_Solver_OBJECTS) $(MMDP_Solver_DEPENDENCIES) $(EXTRA_MMDP_Solver_DEPENDENCIES) 
+	@rm -f MMDP_Solver$(EXEEXT)
+	$(AM_V_CXXLD)$(MMDP_Solver_LINK) $(MMDP_Solver_OBJECTS) $(MMDP_Solver_LDADD) $(LIBS)
 
 Perseus$(EXEEXT): $(Perseus_OBJECTS) $(Perseus_DEPENDENCIES) $(EXTRA_Perseus_DEPENDENCIES) 
 	@rm -f Perseus$(EXEEXT)
@@ -666,7 +689,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GMAA_ELSI-GMAA_ELSI.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/JESP-JESP.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MMDP_QLearner-MMDP_QLearner.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MMDP_VI-MMDP_VI.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MMDP_Solver-MMDP_Solver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Perseus-Perseus.Po@am__quote@
 
 .cpp.o:
@@ -791,19 +814,19 @@ MMDP_QLearner-MMDP_QLearner.obj: MMDP_QLearner.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_QLearner_CPPFLAGS) $(CPPFLAGS) $(MMDP_QLearner_CXXFLAGS) $(CXXFLAGS) -c -o MMDP_QLearner-MMDP_QLearner.obj `if test -f 'MMDP_QLearner.cpp'; then $(CYGPATH_W) 'MMDP_QLearner.cpp'; else $(CYGPATH_W) '$(srcdir)/MMDP_QLearner.cpp'; fi`
 
-MMDP_VI-MMDP_VI.o: MMDP_VI.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_VI_CPPFLAGS) $(CPPFLAGS) $(MMDP_VI_CXXFLAGS) $(CXXFLAGS) -MT MMDP_VI-MMDP_VI.o -MD -MP -MF $(DEPDIR)/MMDP_VI-MMDP_VI.Tpo -c -o MMDP_VI-MMDP_VI.o `test -f 'MMDP_VI.cpp' || echo '$(srcdir)/'`MMDP_VI.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/MMDP_VI-MMDP_VI.Tpo $(DEPDIR)/MMDP_VI-MMDP_VI.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MMDP_VI.cpp' object='MMDP_VI-MMDP_VI.o' libtool=no @AMDEPBACKSLASH@
+MMDP_Solver-MMDP_Solver.o: MMDP_Solver.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_Solver_CPPFLAGS) $(CPPFLAGS) $(MMDP_Solver_CXXFLAGS) $(CXXFLAGS) -MT MMDP_Solver-MMDP_Solver.o -MD -MP -MF $(DEPDIR)/MMDP_Solver-MMDP_Solver.Tpo -c -o MMDP_Solver-MMDP_Solver.o `test -f 'MMDP_Solver.cpp' || echo '$(srcdir)/'`MMDP_Solver.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/MMDP_Solver-MMDP_Solver.Tpo $(DEPDIR)/MMDP_Solver-MMDP_Solver.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MMDP_Solver.cpp' object='MMDP_Solver-MMDP_Solver.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_VI_CPPFLAGS) $(CPPFLAGS) $(MMDP_VI_CXXFLAGS) $(CXXFLAGS) -c -o MMDP_VI-MMDP_VI.o `test -f 'MMDP_VI.cpp' || echo '$(srcdir)/'`MMDP_VI.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_Solver_CPPFLAGS) $(CPPFLAGS) $(MMDP_Solver_CXXFLAGS) $(CXXFLAGS) -c -o MMDP_Solver-MMDP_Solver.o `test -f 'MMDP_Solver.cpp' || echo '$(srcdir)/'`MMDP_Solver.cpp
 
-MMDP_VI-MMDP_VI.obj: MMDP_VI.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_VI_CPPFLAGS) $(CPPFLAGS) $(MMDP_VI_CXXFLAGS) $(CXXFLAGS) -MT MMDP_VI-MMDP_VI.obj -MD -MP -MF $(DEPDIR)/MMDP_VI-MMDP_VI.Tpo -c -o MMDP_VI-MMDP_VI.obj `if test -f 'MMDP_VI.cpp'; then $(CYGPATH_W) 'MMDP_VI.cpp'; else $(CYGPATH_W) '$(srcdir)/MMDP_VI.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/MMDP_VI-MMDP_VI.Tpo $(DEPDIR)/MMDP_VI-MMDP_VI.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MMDP_VI.cpp' object='MMDP_VI-MMDP_VI.obj' libtool=no @AMDEPBACKSLASH@
+MMDP_Solver-MMDP_Solver.obj: MMDP_Solver.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_Solver_CPPFLAGS) $(CPPFLAGS) $(MMDP_Solver_CXXFLAGS) $(CXXFLAGS) -MT MMDP_Solver-MMDP_Solver.obj -MD -MP -MF $(DEPDIR)/MMDP_Solver-MMDP_Solver.Tpo -c -o MMDP_Solver-MMDP_Solver.obj `if test -f 'MMDP_Solver.cpp'; then $(CYGPATH_W) 'MMDP_Solver.cpp'; else $(CYGPATH_W) '$(srcdir)/MMDP_Solver.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/MMDP_Solver-MMDP_Solver.Tpo $(DEPDIR)/MMDP_Solver-MMDP_Solver.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MMDP_Solver.cpp' object='MMDP_Solver-MMDP_Solver.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_VI_CPPFLAGS) $(CPPFLAGS) $(MMDP_VI_CXXFLAGS) $(CXXFLAGS) -c -o MMDP_VI-MMDP_VI.obj `if test -f 'MMDP_VI.cpp'; then $(CYGPATH_W) 'MMDP_VI.cpp'; else $(CYGPATH_W) '$(srcdir)/MMDP_VI.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(MMDP_Solver_CPPFLAGS) $(CPPFLAGS) $(MMDP_Solver_CXXFLAGS) $(CXXFLAGS) -c -o MMDP_Solver-MMDP_Solver.obj `if test -f 'MMDP_Solver.cpp'; then $(CYGPATH_W) 'MMDP_Solver.cpp'; else $(CYGPATH_W) '$(srcdir)/MMDP_Solver.cpp'; fi`
 
 Perseus-Perseus.o: Perseus.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(Perseus_CPPFLAGS) $(CPPFLAGS) $(Perseus_CXXFLAGS) $(CXXFLAGS) -MT Perseus-Perseus.o -MD -MP -MF $(DEPDIR)/Perseus-Perseus.Tpo -c -o Perseus-Perseus.o `test -f 'Perseus.cpp' || echo '$(srcdir)/'`Perseus.cpp
@@ -1033,6 +1056,15 @@ uninstall-am: uninstall-binPROGRAMS
 	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am \
 	uninstall-binPROGRAMS
 
+
+cleantags: cleantags-recursive
+
+cleantags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) cleantags) || exit 1; \
+	done; \
+	rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags; \
+	rm -f cscope.out cscope.in.out cscope.po.out cscope.files
 
 # the GMAA-ICE script should be installed as well
 install-exec-local:

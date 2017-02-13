@@ -36,10 +36,13 @@ public:
     /// (default) Constructor
     NullPlannerTOI(TOIDecPOMDPDiscrete* p);
 
-    NullPlannerTOI(size_t horizon, TOIDecPOMDPDiscrete* p);
+    /*NullPlannerTOI(size_t horizon, TOIDecPOMDPDiscrete* p);*/
 
-    NullPlannerTOI(const PlanningUnitMADPDiscreteParameters &params,
-                size_t horizon, TOIDecPOMDPDiscrete* p);
+    NullPlannerTOI(
+                size_t horizon,
+                TOIDecPOMDPDiscrete* p = 0, 
+                const PlanningUnitMADPDiscreteParameters * params = 0
+            );
 
     ~NullPlannerTOI(){};
 

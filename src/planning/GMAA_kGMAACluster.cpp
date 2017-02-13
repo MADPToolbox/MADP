@@ -29,16 +29,14 @@
 using namespace std;
 
 GMAA_kGMAACluster::GMAA_kGMAACluster(
-    const PlanningUnitMADPDiscreteParameters &params,
-    //const BGIP_SolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG> * bgs,
     const BGIP_SolverCreatorInterface * bgs,
     size_t horizon, 
     DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params,
     size_t nrPoliciesToProcess,
     BayesianGameWithClusterInfo::BGClusterAlgorithm clusterAlg
     ) :
-//    PlanningUnitDecPOMDPDiscrete(params, horizon, p), //virtual base must be called directly
-    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(params, horizon, p),
+    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(horizon, p, params),
     /// HACK, this should be BGIP_SolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG>*
     _m_newBGIP_Solver(dynamic_cast<const BGIP_IncrementalSolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG>* >(bgs)),
     _m_clusteredBGsizes(horizon,vector<int>(0,0)),

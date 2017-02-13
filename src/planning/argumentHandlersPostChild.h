@@ -16,6 +16,10 @@
 
 namespace ArgumentHandlers {
 
+template <typename T,unsigned N>
+unsigned size(T (&array)[N])
+{ return N;}
+
 static struct argp_option options_main[] = {
     { 0 }
 };
@@ -28,7 +32,7 @@ parse_main (int key, char *arg, struct argp_state *state)
         case ARGP_KEY_INIT:
             //give child_parsers access to the arguments structure on 
             //initialization.
-            for(int i = 0; i < nrChildParsers; i++)
+            for(unsigned i = 0; i < size(childVector); i++)
                 state->child_inputs[i] = theArgumentsStruc;
             break;
         default:

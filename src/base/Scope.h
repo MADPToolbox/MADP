@@ -31,6 +31,10 @@ namespace{
     typedef std::vector<Index> SDT;
 }
 
+class Scope;
+
+typedef Scope ScopeInstance; // for values of the variables in the scope
+
 class Scope : public SDT
 {
     private:
@@ -41,7 +45,7 @@ class Scope : public SDT
     {}
 
     //construct from a vector Index
-    Scope( SDT& o) : SDT(o)
+    Scope(const SDT& o) : SDT(o)
     {}
     
     //construct from a range
@@ -92,10 +96,15 @@ class Scope : public SDT
      */
     Index GetPositionForIndex(Index i) const;
     ///Sorts the indices.
-    void Sort();
+    Scope& Sort();
+    ///Sorts the indices of the scope and applies the same reordering to the scope instance
+    static void Sort(Scope& scope,ScopeInstance& scopeInstance);
+    ///First calls Sort() and then removes duplicate indices.
+    Scope& SortAndUnique();
 
     std::string SoftPrint() const;
 
+    ScopeInstance Instantiate(const std::vector<Index>& values) const;
 
     friend std::ostream& operator<< (std::ostream& o, const Scope& s);
     friend std::istream& operator>> (std::istream& i, Scope& s);
@@ -103,6 +112,7 @@ class Scope : public SDT
     
 };
 typedef std::vector<Scope> Scopes;
+
 
 #endif /* !_SCOPE_H_ */
 

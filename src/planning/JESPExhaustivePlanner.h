@@ -45,9 +45,10 @@ class JESPExhaustivePlanner : public PlanningUnitDecPOMDPDiscrete
         // (default) Constructor
         //JESPExhaustivePlanner();
         JESPExhaustivePlanner(
-            const PlanningUnitMADPDiscreteParameters &params,
-            size_t horizon, DecPOMDPDiscreteInterface* p);
-        JESPExhaustivePlanner(int horizon, DecPOMDPDiscreteInterface* p);
+            size_t horizon, 
+            DecPOMDPDiscreteInterface* p,
+            const PlanningUnitMADPDiscreteParameters * params = 0
+            );
 
         //operators:
 

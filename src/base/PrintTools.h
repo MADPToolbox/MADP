@@ -22,6 +22,94 @@
 #include <iomanip>
 #include "boost/numeric/ublas/vector.hpp"
 #include "boost/numeric/ublas/vector_sparse.hpp"
+#include <boost/bimap.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
+
+/// adding general stream operator for vector
+template<typename T>
+std::ostream &operator <<(std::ostream &os, const std::vector<T> &v) 
+{
+    os<<'<';
+    for (typename std::vector<T>::const_iterator it=v.begin();it!=v.end();it++)
+    {
+        if (it!=v.begin()) os<<',';
+        os<<*it;
+    }
+    os<<'>';
+    return os;
+}
+
+/// adding general stream operator for set
+template<typename T>
+std::ostream &operator <<(std::ostream &os, const std::set<T> &s) 
+{
+    os<<'{';
+    for (typename std::set<T>::const_iterator it=s.begin();it!=s.end();it++)
+    {
+        if (it!=s.begin()) os<<',';
+        os<<*it;
+    }
+    os<<'}';
+    return os;
+}
+
+/// adding general stream operator for map
+template<typename Key,typename Value>
+    std::ostream &operator <<(std::ostream &os, const std::map<Key,Value> &m) 
+{
+    os<<'[';
+    for (typename std::map<Key,Value>::const_iterator it=m.begin();it!=m.end();it++)
+    {
+        if (it!=m.begin()) os<<',';
+        os<<it->first<<"=>"<<it->second;
+    }
+    os<<']';
+    return os;
+}
+
+/// adding general stream operator for bimap
+template<typename Key,typename Value>
+    std::ostream &operator <<(std::ostream &os, const boost::bimap<Key,Value> &b) 
+{
+    os<<'[';
+    typename boost::bimap<Key,Value>::left_map::const_iterator it;
+    for (it=b.left.begin();it!=b.left.end();it++)
+    {
+        if (it!=b.left.begin()) os<<',';
+        os<<it->first<<"<=>"<<it->second;
+    }
+    os<<']';
+    return os;
+}
+
+/// adding general stream operator for unordered_map
+template<typename T,typename D,typename H,typename E>
+std::ostream &operator <<(std::ostream &os, const boost::unordered_map<T,D,H,E> &s) 
+{
+    os<<"{";
+    for (typename boost::unordered_map<T,D,H,E>::const_iterator it=s.begin();it!=s.end();it++)
+    {
+        if (it!=s.begin()) os<<",";
+        os<<it->first<<":"<<it->second;
+    }
+    os<<"}"<<std::endl;
+    return os;
+}
+
+/// adding general stream operator for unordered_set
+template<typename T,typename H,typename E>
+std::ostream &operator <<(std::ostream &os, const boost::unordered_set<T,H,E> &s) 
+{
+    os<<"<";
+    for (typename boost::unordered_set<T,H,E>::const_iterator it=s.begin();it!=s.end();it++)
+    {
+        if (it!=s.begin()) os<<",";
+        os<<*it;
+    }
+    os<<">"<<std::endl;
+    return os;
+}
 
 /// PrintTools contains functionality for printing vectors etc.
 /** The SoftPrint*() functions returns strings, the Print*() print to

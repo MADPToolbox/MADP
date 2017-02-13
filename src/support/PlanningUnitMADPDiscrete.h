@@ -305,11 +305,12 @@ public:
     /** Allows for specification of the planning horizon and a pointer
      * to the problem instance. */
     PlanningUnitMADPDiscrete(
-        const PlanningUnitMADPDiscreteParameters &params,
         size_t horizon=3, 
-        MultiAgentDecisionProcessDiscreteInterface* p=0
+        MultiAgentDecisionProcessDiscreteInterface* p = 0,
+        const PlanningUnitMADPDiscreteParameters * params = 0
         );
     /// Constructor with default parameters.
+    ///DEPRECATED?:
     /** Allows for specification of the planning horizon and a pointer
      * to the problem instance.  See
      * PlanningUnitMADPDiscreteParameters for the default settings. */

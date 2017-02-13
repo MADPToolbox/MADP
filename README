@@ -16,21 +16,30 @@ Please refer to the file 'AUTHORS' for contact information and current
 affiliations. MADP includes other software, for details see COPYING.
 
 ========================================================================
-Required software:
+Required software (as Debian package names):
 
 MADP includes all required software.
 
-Optional software (Debian package names):
+Optional software:
 
 Doxygen (doxygen) [for generating documentation]
 Graphviz (graphviz) [for dependency graphs in the generated documentation]
-lp-solve (liblpsolve55-dev and libufsparse-dev) [for alpha vector pruning]
+lp-solve (liblpsolve55-dev and libufsparse-dev) [see AgentIDMG]
+Matlab [can also be used a linear programming solver in AgentIDMG]
+GMPlib (libgmp3-dev) [for using arbitrary-length integers as indices] 
 libxml2 (libxml2-dev) [for using the XML-based factored model parser]
-
+Cuda [for policy iteration with GPU policy evaluation]
 cplex [for the DP-LPC solver]
 
 For enabling optional software, see src/Makefile.custom and
 src/include/configuration.h.
+
+---
+The lazy-bastards-copy-paste-line to set up most debian-based users:
+sudo aptitude install automake autoconf libtool ccache gcc g++ \
+libboost-dev libboost-serialization-dev libboost-test-dev \
+libsuitesparse-dev libgsl0-dev \
+libgmp3-dev libxml2-dev doxygen graphviz 
 
 ========================================================================
 Documentation and Installation Instructions
@@ -45,25 +54,9 @@ make htmldoc
 Open doc/html/index.html in a webbrowser
 
 To compile, Execute the following
-./configure [OPTIONS]
+sh autogen.sh
+./configure
 make
-make install (optional)
-
-A typical options for configure is '--prefix=$HOME' if you need to install in 
-your local directory. Also, if you need CPLEX, you may need to specify the
-locations. E.g.:
-
-CPLEX_LOCATION=/opt/ibm/ILOG/CPLEX_Studio125
-CPLEX_STRING="\
-    --with-cplex-includes=\"$INCLUDE -I$CPLEX_LOCATION/cplex/include/ -I$CPLEX_LOCATION/concert/include/\"  \
-    --with-cplex-libs=\"-lilocplex -lconcert -lcplex \" \
-    --with-cplex-ldflags=\"-L$CPLEX_LOCATION/cplex/lib/x86-64_sles10_4.1/static_pic -L$CPLEX_LOCATION/concert/lib/x86-64_sles10_4.1/static_pic\" \
-"
-./configure $CPLEX_STRING
-
-For all options, please use:
-./configure --help
-
 
 Problem descriptions can be loaded without specifying a path if
 ~/.madp/problems is a symlink to the problems subdir in the MADP tree.

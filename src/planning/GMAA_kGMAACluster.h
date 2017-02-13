@@ -137,11 +137,10 @@ class GMAA_kGMAACluster : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
          * takes place.  the booleans arguments are passed down to
          * PlanningUnitMADPDiscrete.  .*/
         GMAA_kGMAACluster(
-                const PlanningUnitMADPDiscreteParameters &params,
-                //const BGIP_SolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG> * bgs,
                 const BGIP_SolverCreatorInterface * bgs,
                 size_t horizon=3, 
                 DecPOMDPDiscreteInterface* p=0,
+                const PlanningUnitMADPDiscreteParameters * params = 0,
                 size_t nrPoliciesToProcess=1,
                 BayesianGameWithClusterInfo::BGClusterAlgorithm clusterAlg=BayesianGameWithClusterInfo::Lossless
                 );

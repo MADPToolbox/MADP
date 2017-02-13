@@ -110,11 +110,11 @@ class GMAA_MAAstar : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
          * a pointer to the DecPOMDPDiscreteInterface for which planning
          * takes place. */
         GMAA_MAAstar(
-                const PlanningUnitMADPDiscreteParameters &params,
-                const BGIP_SolverCreatorInterface/*_T<JointPolicyPureVector>*/ * bgs,
-                size_t horizon=3, 
-                DecPOMDPDiscreteInterface* p=0,
-                int verboseness=0
+                const BGIP_SolverCreatorInterface * bgs,
+                size_t horizon = 3, 
+                DecPOMDPDiscreteInterface* p = 0,
+                const PlanningUnitMADPDiscreteParameters * params = 0,
+                int verboseness= 0
                      );
 
 

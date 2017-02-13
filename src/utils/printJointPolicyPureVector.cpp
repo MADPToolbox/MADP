@@ -32,8 +32,6 @@ static char doc[] =
 "printJointPolicyPureVector - Prints out a JointPolicyPureVector  \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 3;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::solutionMethodOptions_child,

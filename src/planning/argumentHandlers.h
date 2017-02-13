@@ -42,12 +42,17 @@ using namespace BGIP_SolverType;
 using namespace ProblemType;
 using namespace BGIP_BnB;
 
+enum MMDP_method {ValueIteration,
+                  PolicyIteration,
+                  PolicyIterationGPU};
+
 /// Arguments contains all defined parameters to be set on the command line. 
 struct Arguments
 {
     //General options (globopt)
     int verbose;    // < 0 means quiet, > 0 is verbose
-    
+    bool testMode;  // fixed random seed and not printing variable output such as timings 
+
     //The dec-pomdp file argument (dpf)
     const char * dpf; //the dpomdp file string
     //do we use a standard (i.e. .cpp) problem rather than parsing:
@@ -56,6 +61,8 @@ struct Arguments
     size_t nrAgents;
     size_t nrHouses;
     size_t nrFLs;
+
+    double extinguishProb; 
     ProblemAloha::IslandConfiguration islandConf;
     ProblemAloha::AlohaVariation alohaVariation;
     size_t maxBacklog;
@@ -90,6 +97,7 @@ struct Arguments
     int saveTimings;
     int useQcache;
     bool requireQcache;
+    bool exactBGs; // construct BGs exactly (or using approximate inference?) using in GMAAF
     double slack;  // slack parameter to stop search before finding optimal solution
     size_t GMAAdeadline;
 
@@ -136,10 +144,12 @@ struct Arguments
     bool TreeIPpruneAfterUnion;
     bool TreeIPpruneAfterCrossSum;
     bool TreeIPuseVectorCache;
+    size_t acceleratedPruningThreshold;
 
     // Simulation options
     int nrRuns;
     int randomSeed;
+    double successfulCommProb;
 
     // TOI options
     int TOIpolicy;
@@ -155,7 +165,7 @@ struct Arguments
     size_t nrCESamplesForUpdate;
     bool CE_use_hard_threshold; //(gamma in CE papers)
     double CE_alpha; //the learning rate
-    size_t nrCEEvalutionRuns; // number of policy evaluation runs
+    size_t nrCEEvaluationRuns; // number of policy evaluation runs
 
     // online POMDP options
     int nrNodesExpanded;
@@ -181,17 +191,23 @@ struct Arguments
     const char * bgFilename;
     int startIndex;
     int endIndex;
+    bool useASCIIformat;
+    bool isCGBG;
 
     //Event-Driven POMDP options
     bool marginalize;
     size_t marginalizationIndex;
     int falseNegativeObs;
 
+    MMDP_method mmdp_method;
+
     //default values by constructor:
     Arguments()
     {
         // general
         verbose = 0;
+        testMode = false;
+
         // problem file
         dpf = 0;
         problem_type = PARSE;
@@ -234,6 +250,7 @@ struct Arguments
         saveTimings = 0; // also used for Perseus
         useQcache = 0;
         requireQcache = false;
+        exactBGs = true;
         slack = 0.0;
         GMAAdeadline = 0;
 
@@ -270,17 +287,19 @@ struct Arguments
         computeVectorForEachBelief = 0;
 
         // Qheur options
-        qheur = eQMDP;
+        qheur = eQheurUndefined;
         QHybridHorizonLastTimeSteps = 0;
         QHybridFirstTS = eQBG;
         QHybridLastTS = eQMDP;
         TreeIPpruneAfterUnion = true;
         TreeIPpruneAfterCrossSum = true;
         TreeIPuseVectorCache = true;
+        acceleratedPruningThreshold = 200;
 
         // Simulation options
         nrRuns = 1000;
         randomSeed = 42;
+        successfulCommProb = -1;
 
         // TOI options
         TOIpolicy = 0;
@@ -296,7 +315,7 @@ struct Arguments
         nrCESamplesForUpdate = 10;
         CE_use_hard_threshold = 1; //(gamma in CE papers)
         CE_alpha = 0.3; //the learning rate
-        nrCEEvalutionRuns = 0; // number of policy evaluation runs. 0 = exact evaluation
+        nrCEEvaluationRuns = 100; // number of policy evaluation runs. 0 = exact evaluation
 
         // online POMDP 
         nrNodesExpanded = 10;
@@ -305,7 +324,6 @@ struct Arguments
         nrRLruns=10000;
         nrIntermediateEvaluations=10;
         startAtRLrun=0;
-        
         // options for max-plus
         maxplus_maxiter = 25;
         maxplus_verbose = 0;
@@ -321,11 +339,15 @@ struct Arguments
         bgFilename = 0;
         startIndex = -1;
         endIndex = -1;
+        useASCIIformat = false;
+        isCGBG = false;
 
         // Event-Driven POMDP options
         marginalize = false;
         marginalizationIndex = false;
         falseNegativeObs = -1;
+
+        mmdp_method = ValueIteration;
     }
         
 };
@@ -385,6 +407,9 @@ error_t qheur_parse_argument (int key, char *arg,
                               struct argp_state *state);
 extern const struct argp_child qheur_child;
 
+error_t factoredQheur_parse_argument (int key, char *arg, 
+                              struct argp_state *state);
+extern const struct argp_child factoredQheur_child;
 
 error_t simulation_parse_argument (int key, char *arg, 
                                    struct argp_state *state);
@@ -421,10 +446,13 @@ error_t BnB_parse_argument (int key, char *arg,
                            struct argp_state *state);
 extern const struct argp_child BnB_child;
 
-
 error_t eventPomdp_parse_argument (int key, char *arg, 
                                     struct argp_state *state);
 extern const struct argp_child eventPomdp_child;
+
+error_t mmdp_method_parse_argument (int key, char *arg, 
+                                    struct argp_state *state);
+extern const struct argp_child mmdp_method_child;
 
 } //namespace
 

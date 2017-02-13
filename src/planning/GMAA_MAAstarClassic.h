@@ -99,15 +99,12 @@ class GMAA_MAAstarClassic : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
          * a pointer to the DecPOMDPDiscreteInterface for which planning
          * takes place. */
         GMAA_MAAstarClassic(
-                const PlanningUnitMADPDiscreteParameters &params,
                 size_t horizon=3, 
                 DecPOMDPDiscreteInterface* p=0,
+                const PlanningUnitMADPDiscreteParameters * params = 0,
                 int verboseness=0
                      );
 
-        /**\brief Default constructor.
-         */
-        GMAA_MAAstarClassic(size_t horizon=3, DecPOMDPDiscreteInterface* p=0);
 
 };
 

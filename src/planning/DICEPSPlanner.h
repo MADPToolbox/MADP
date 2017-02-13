@@ -82,24 +82,10 @@ protected:
     public:
         
         // Constructor, destructor and copy assignment.
-        // (default) Constructor
-        //DICEPSPlanner();
+        /// Constructor
         DICEPSPlanner(
-            const PlanningUnitMADPDiscreteParameters &params,
-            DecPOMDPDiscreteInterface* p,
             size_t horizon,
-            size_t nrRestarts,
-            size_t nrIterations,
-            size_t nrSamples,
-            size_t nrSamplesForUpdate,
-            bool use_hard_threshold, //(gamma in CE papers)
-            double CEalpha, //the learning rate
-            size_t nrEvalRuns, // policy evaluation runs (set 0 for exact eval)
-            int verbose = 0
-            );
-        DICEPSPlanner(
             DecPOMDPDiscreteInterface* p,
-            int horizon,
             size_t nrRestarts,
             size_t nrIterations,
             size_t nrSamples,
@@ -107,35 +93,9 @@ protected:
             bool use_hard_threshold, //(gamma in CE papers)
             double CEalpha, //the learning rate
             size_t nrEvalRuns, // policy evaluation runs (set 0 for exact eval)
-            int verbose = 0
-            );
-        DICEPSPlanner(
-            const PlanningUnitMADPDiscreteParameters &params,
-            DecPOMDPDiscreteInterface* p,
-            size_t horizon,
-            size_t nrRestarts,
-            size_t nrIterations,
-            size_t nrSamples,
-            size_t nrSamplesForUpdate,
-            bool use_hard_threshold, //(gamma in CE papers)
-            double CEalpha, //the learning rate
-            size_t nrEvalRuns, // policy evaluation runs (set 0 for exact eval)
-            bool convergenceStats,
-            std::ofstream & convergenceStatsFile,
-            int verbose = 0
-            );
-        DICEPSPlanner(
-            DecPOMDPDiscreteInterface* p,
-            int horizon,
-            size_t nrRestarts,
-            size_t nrIterations,
-            size_t nrSamples,
-            size_t nrSamplesForUpdate,
-            bool use_hard_threshold, //(gamma in CE papers)
-            double CEalpha, //the learning rate
-            size_t nrEvalRuns, // policy evaluation runs (set 0 for exact eval)
-            bool convergenceStats,
-            std::ofstream & convergenceStatsFile,
+            const PlanningUnitMADPDiscreteParameters * params = 0,
+            bool convergenceStats = false,
+            std::ofstream * convergenceStatsFile = 0,
             int verbose = 0
             );
 

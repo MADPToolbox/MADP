@@ -22,21 +22,11 @@ using namespace std;
 #define DEBUG_EXJESP 0
 
 JESPExhaustivePlanner::JESPExhaustivePlanner(
-    const PlanningUnitMADPDiscreteParameters &params,
     size_t horizon,
-    DecPOMDPDiscreteInterface* p
+    DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params
     ) :
-    PlanningUnitDecPOMDPDiscrete(params, horizon, p),
-    _m_foundPolicy()
-    //,_m_exhBRBestPol(*this)
-{
-}
-
-JESPExhaustivePlanner::JESPExhaustivePlanner(
-    int horizon,
-    DecPOMDPDiscreteInterface* p
-    ) :
-    PlanningUnitDecPOMDPDiscrete(horizon, p),
+    PlanningUnitDecPOMDPDiscrete(horizon, p, params),
     _m_foundPolicy()
     //,_m_exhBRBestPol(*this)
 {
@@ -102,7 +92,7 @@ double JESPExhaustivePlanner::ExhaustiveBestResponse(JointPolicyPureVector*
     while(!round)
     {
         ValueFunctionDecPOMDPDiscrete vf(this, jpol);
-        v = vf.CalculateV(true);
+        v = vf.CalculateV<true>();
         if(v > v_best)
         {
             best = (*jpol);

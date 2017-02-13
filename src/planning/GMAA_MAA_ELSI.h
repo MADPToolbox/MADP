@@ -79,12 +79,12 @@ class GMAA_MAA_ELSI
          * a pointer to the FactoredDecPOMDPDiscreteInterface for which planning
          * takes place.  the booleans arguments are passed down to
          * PlanningUnitMADPDiscrete.  .*/
-        GMAA_MAA_ELSI(const PlanningUnitMADPDiscreteParameters &params, size_t
-                horizon=3, FactoredDecPOMDPDiscreteInterface* p=0);
+        GMAA_MAA_ELSI(
+                size_t horizon=3, 
+                FactoredDecPOMDPDiscreteInterface* p=0,
+                const PlanningUnitMADPDiscreteParameters * params = 0 
+                );
 
-        /**\brief Default constructor.
-         */
-        GMAA_MAA_ELSI(size_t horizon=3, FactoredDecPOMDPDiscreteInterface* p=0);
 
         
 //auxil. functions check which are necessary...
@@ -114,6 +114,7 @@ class GMAA_MAA_ELSI
          * output args 
          *  Index& jaohI, double& PjaohI, double& ExpR_0_prevTS_thisJAOH 
          *  
+         *\todo TODO this is a strange function and should be updated i think...
          * */
         JointBeliefInterface* ProbRewardForjoahI(
                 Index ts, Index jtI, Index* jaI_arr, Index* joI_arr, 
@@ -142,7 +143,7 @@ class GMAA_MAA_ELSI
             size_t& nrJOHts,
             std::vector<Index>& firstOHtsI,
             double &ExpR_0_prevTS     
-        ) ;
+        ) ;//const;  // TODO SHOULD BE FIXED: can't make const because of timers
 
 
 

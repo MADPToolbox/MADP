@@ -30,8 +30,6 @@ static char doc[] =
 "printProblem - Print out the models of a problem. \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 2;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::modelOptions_child,

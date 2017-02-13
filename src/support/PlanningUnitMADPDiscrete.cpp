@@ -61,9 +61,10 @@ using namespace std;
 
 //Default constructor
 PlanningUnitMADPDiscrete::
-PlanningUnitMADPDiscrete(const PlanningUnitMADPDiscreteParameters &params,
+PlanningUnitMADPDiscrete(
                          size_t horizon,
-                         MultiAgentDecisionProcessDiscreteInterface* p
+                         MultiAgentDecisionProcessDiscreteInterface* p,
+                         const PlanningUnitMADPDiscreteParameters* params
     ) : 
     PlanningUnit(horizon,p),
     Interface_ProblemToPolicyDiscretePure()
@@ -71,12 +72,19 @@ PlanningUnitMADPDiscrete(const PlanningUnitMADPDiscreteParameters &params,
 {
     if(DEBUG_PU_CONSTRUCTORS) cout << "PlanningUnitMADPDiscrete(PlanningUnitMADPDiscreteParameters params, size_t horizon, MultiAgentDecisionProcessDiscreteInterface* p)  called" << endl;
     _m_initialized = false;
-    params.SanityCheck();
-    _m_params=params;
+    if(params != 0)
+    {
+        params->SanityCheck();
+        _m_params=*params;
+    }
+    //else _m_params stores the default PlanningUnitMADPDiscreteParameters 
+    //      object. Could also consider: _m_params.SetComputeAll(true);
+
     if(p != 0)
         Initialize();
 }
 
+///DEPRECATED?:
 PlanningUnitMADPDiscrete::
 PlanningUnitMADPDiscrete(size_t horizon,
                          MultiAgentDecisionProcessDiscreteInterface* p

@@ -33,8 +33,6 @@ static char doc[] =
 "evaluateJointPolicyPureVector - Evaluates a JointPolicyPureVector  \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 6;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::solutionMethodOptions_child,
@@ -67,7 +65,7 @@ int main(int argc, char **argv)
 #else
     params.SetComputeAll(false);
 #endif
-    NullPlanner np(params,h,decpomdp);
+    NullPlanner np(h, decpomdp, &params);
     JointPolicyPureVector jp(&np);
     jp.SetIndex(index);
 

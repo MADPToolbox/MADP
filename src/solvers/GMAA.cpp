@@ -81,8 +81,6 @@ static char doc[] =
 "GMAA - runs Generalized MAAStar planners \
 \vFor more information please consult the MADP documentation.";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 12;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -136,7 +134,8 @@ int main(int argc, char **argv)
 {
     ArgumentHandlers::Arguments args;
     argp_parse (&ArgumentHandlers::theArgpStruc, argc, argv, 0, 0, &args);
-
+    
+    bool errorOccurred=false;
 try 
 {
 
@@ -382,6 +381,8 @@ try
         // check if the value corresponds to the optimal value in case
         // this is an optimal method and we already computed it before
         OptimalValueDatabase db(gmaa);
+        cout<<"OptimalValueDatabase: entry '"<<db.GetEntryName()<<"'"<<endl;
+        //cout<<db.SoftPrint()<<endl;
         if(optimalSolutionMethod)
         {
             if(db.IsInDatabase())
@@ -389,7 +390,7 @@ try
                 if(!db.IsOptimal(V))
                 {
                     stringstream ss;
-                    ss << "GMAA error, computed value " << V 
+                    ss << "OptimalValueDatabase: GMAA error, computed value " << V 
                        << " does not match"
                        << " previously computed optimal value "
                        << db.GetOptimalValue();
@@ -398,22 +399,44 @@ try
                     errorOccurred=true;
                     continue;
                 }
+                else
+                    cout<<"OptimalValueDatabase: Computed value matches with OptimalValueDatabase"<<endl;
             }
             else
-                try {
-                    db.SetOptimalValue(V);
-                }  catch(E& e){ e.Print(); }
+            {
+                cout << "OptimalValueDatabase: Optimal value unknown." << endl;
+                if (args.testMode) // raise error when testing
+                {
+                    errorOccurred=true;
+                    continue;
+                }
+                else // otherwise save new value
+                    try { db.SetOptimalValue(V);}  
+                    catch(E& e){ e.Print(); }
+            }
         }
         else // approximate methods
         {
             if(db.IsInDatabase())
             {
-                cout << "Computed value is " << V / db.GetOptimalValue()
+                cout << "OptimalValueDatabase: Computed value is " << V / db.GetOptimalValue()
                      << " of optimal (value " << db.GetOptimalValue() << ")"
                      << endl;
+                if (V>db.GetOptimalValue())
+                {
+                    errorOccurred=true;
+                    continue;
+                }
             }
             else
-                cout << "Optimal value unknown." << endl;
+            {
+                cout << "OptimalValueDatabase: Optimal value unknown." << endl;
+                if (args.testMode) // raise error when testing
+                {
+                    errorOccurred=true;
+                    continue;
+                }
+            }
         }
 
     //simulations...
@@ -556,6 +579,8 @@ catch(E& e){
     e.Print(); 
     exit(-1); 
 }
+ 
+ return errorOccurred;
 }
 
 void SampleRandomPolicy(DecPOMDPDiscreteInterface* dpomdp,
@@ -754,16 +779,14 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
                     bgipsc_p->SoftPrintBrief() << " is not" << endl;
                 exit(1);
             }
-            gmaa=new GMAA_MAAstarCluster(params, bgipsc_p, args.horizon,
-                                         decpomdp, verboseness );
+            gmaa=new GMAA_MAAstarCluster(bgipsc_p, args.horizon, decpomdp, &params, verboseness );
             break;
         case FSPC:
             args.k=1; // fall through on purpose
         case kGMAA:
         {
             GMAA_kGMAACluster *gmaaCluster=
-                new GMAA_kGMAACluster(params, bgipsc_p,
-                                      args.horizon, decpomdp, args.k,
+                new GMAA_kGMAACluster(bgipsc_p, args.horizon, decpomdp, &params, args.k,
                                       static_cast<BayesianGameWithClusterInfo::BGClusterAlgorithm>(args.BGClusterAlgorithm));
             gmaaCluster->SetTresholdJB(args.thresholdJB);
             gmaaCluster->SetTresholdPjaoh(args.thresholdPjaoh);
@@ -788,15 +811,15 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
                     bgipsc_p->SoftPrintBrief() << " is not" << endl;
                 exit(1);
             }
-            gmaa=new GMAA_MAAstar(params, bgipsc_p, args.horizon, decpomdp, verboseness );
+            gmaa=new GMAA_MAAstar(bgipsc_p, args.horizon, decpomdp, &params, verboseness );
             break;
         case FSPC:
             args.k=1; // fall through on purpose
         case kGMAA:
-            gmaa=new GMAA_kGMAA(params, bgipsc_p, args.horizon, decpomdp, args.k);
+            gmaa=new GMAA_kGMAA(bgipsc_p, args.horizon, decpomdp, &params, args.k);
             break;
         case MAAstarClassic:
-            gmaa=new GMAA_MAAstarClassic(params, args.horizon, decpomdp, verboseness );
+            gmaa=new GMAA_MAAstarClassic(args.horizon, decpomdp, &params, verboseness );
             break;
         default:
             throw E("unrecognized GMAA type?!");

@@ -67,6 +67,7 @@ class BayesianGameIdenticalPayoff :
         // Constructor, destructor and copy assignment.
         // (default) Constructor
         BayesianGameIdenticalPayoff();
+        BayesianGameIdenticalPayoff(const BayesianGameIdenticalPayoff& o);
         BayesianGameIdenticalPayoff(size_t nrAgents, 
                                     const std::vector<size_t>& nrActions,  
                                     const std::vector<size_t>& nrTypes,

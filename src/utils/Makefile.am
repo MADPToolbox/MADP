@@ -56,7 +56,7 @@ evaluatePerseusPolicy_CXXFLAGS= $(CSTANDARD)
 evaluatePerseusPolicy_CFLAGS=
 # Build analyzeRewardResults
 analyzeRewardResults_SOURCES = analyzeRewardResults.cpp
-analyzeRewardResults_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
+analyzeRewardResults_LDADD = $(MADPLIBS_NORMAL_NOPARSER) $(MADP_LD)
 analyzeRewardResults_LDFLAGS = $(AM_LDFLAGS) 
 analyzeRewardResults_DEPENDENCIES = $(MADPLIBS_NORMAL_NOPARSER)
 analyzeRewardResults_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
@@ -65,9 +65,9 @@ analyzeRewardResults_CFLAGS=
 
 # Build getAvgReward
 getAvgReward_SOURCES = getAvgReward.cpp
-getAvgReward_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
+getAvgReward_LDADD = $(MADPLIBS_NORMAL_NOPARSER) $(MADP_LD)
 getAvgReward_LDFLAGS = $(AM_LDFLAGS) 
-getAvgReward_DEPENDENCIES = $(MADPLIBS_NORMAL)
+getAvgReward_DEPENDENCIES = $(MADPLIBS_NORMAL_NOPARSER)
 getAvgReward_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 getAvgReward_CXXFLAGS= $(CSTANDARD)
 getAvgReward_CFLAGS=

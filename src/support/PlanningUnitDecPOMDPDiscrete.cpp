@@ -24,19 +24,18 @@ using namespace std;
 
 //Default constructor
 PlanningUnitDecPOMDPDiscrete::PlanningUnitDecPOMDPDiscrete(
-    const PlanningUnitMADPDiscreteParameters &params,
     size_t horizon,
-    DecPOMDPDiscreteInterface* p
+    DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters* params
     ) :
-    //Referrer<DecPOMDPDiscreteInterface>(p),
-    PlanningUnitMADPDiscrete(params,horizon,p)
+    PlanningUnitMADPDiscrete(horizon,p, params)
     ,_m_DecPOMDP(p)
 {
     if(DEBUG_PU_CONSTRUCTORS) cout << "PlanningUnitDecPOMDPDiscrete(PlanningUnitMADPDiscreteParameters params, size_t horizon, DecPOMDPDiscreteInterface* p)  called" << endl;
     if(p!=0)
         SanityCheck();
 }
-
+/* 
 PlanningUnitDecPOMDPDiscrete::PlanningUnitDecPOMDPDiscrete(
     size_t horizon,
     DecPOMDPDiscreteInterface* p
@@ -49,6 +48,7 @@ PlanningUnitDecPOMDPDiscrete::PlanningUnitDecPOMDPDiscrete(
     if(p!=0)
         SanityCheck();
 }
+ * */
 
 void PlanningUnitDecPOMDPDiscrete::SetProblem(DecPOMDPDiscreteInterface* p)
 {
@@ -98,7 +98,7 @@ void PlanningUnitDecPOMDPDiscrete::ExportDecPOMDPFile(
     const string & filename,
     const DecPOMDPDiscreteInterface *decpomdp)
 {
-    int nrAg=decpomdp->GetNrAgents(),
+    size_t nrAg=decpomdp->GetNrAgents(),
         nrS=decpomdp->GetNrStates();
     ofstream fp(filename.c_str());
     if(!fp)
@@ -121,72 +121,96 @@ void PlanningUnitDecPOMDPDiscrete::ExportDecPOMDPFile(
     }
 
     fp << "states:";
-    for(int s=0;s<nrS;s++)
+    for(Index s=0;s<nrS;s++)
         fp << " "  << decpomdp->GetState(s)->SoftPrintBrief();
     fp << endl;
 
     StateDistribution* isd = decpomdp->GetISD();
-    fp << "start: ";
-    for(int s0=0;s0<nrS;s0++)
+    fp << "start:" << endl;
+    for(Index s0=0;s0<nrS;s0++)
     {
+        if(s0>0)
+            fp << " ";
         double bs = isd->GetProbability(s0);
-        fp <<  bs << " ";
+        fp <<  bs;
     }
     fp << endl;
 
-    delete isd;
-
     fp << "actions:" << endl;
-    for(int i=0;i!=nrAg;++i)
+    for(Index i=0;i!=nrAg;++i)
     {
-        for(int a=0;a<decpomdp->GetNrActions(i);a++)
-            fp << " "  << decpomdp->GetAction(i,a)->SoftPrintBrief();
+        for(Index a=0;a<decpomdp->GetNrActions(i);a++)
+        {
+            if(a>0)
+                fp << " ";
+            fp << decpomdp->GetAction(i,a)->SoftPrintBrief();
+        }
         fp << endl;
     }
 
-    fp << "observations:";
-    for(int i=0;i!=nrAg;++i)
+    fp << "observations:" << endl;
+    for(Index i=0;i!=nrAg;++i)
     {
-        for(int o=0;o<decpomdp->GetNrObservations(i);o++)
-            fp << " "  << decpomdp->GetObservation(i,o)->
-                SoftPrintBrief();
+        for(Index o=0;o<decpomdp->GetNrObservations(i);o++)
+        {
+            if(o>0)
+                fp << " ";
+            fp << decpomdp->GetObservation(i,o)->SoftPrintBrief();
+        }
         fp << endl;
     }
 
     double p;
-    for(int a=0;a<decpomdp->GetNrJointActions();a++)
-        for(int s0=0;s0<nrS;s0++)
-            for(int s1=0;s1<nrS;s1++)
+    for(Index a=0;a<decpomdp->GetNrJointActions();a++)
+        for(Index s0=0;s0<nrS;s0++)
+            for(Index s1=0;s1<nrS;s1++)
             {
                 p=decpomdp->GetTransitionProbability(s0,a,s1);
                 if(p!=0)
                 {
                     const vector<Index> &aIs=decpomdp->JointToIndividualActionIndices(a);
                     fp << "T:";
-                    for(int i=0;i!=nrAg;++i)
+                    for(Index i=0;i!=nrAg;++i)
                         fp << " " << aIs.at(i);
-                    fp << " : " << s0 << " : " << s1 << " " 
+                    fp << " : " << s0 << " : " << s1 << " : " 
                        << p << endl;
                 }
             }
 
-    for(int a=0;a<decpomdp->GetNrJointActions();a++)
-        for(int o=0;o<decpomdp->GetNrJointObservations();o++)
-            for(int s1=0;s1<nrS;s1++)
+    for(Index a=0;a<decpomdp->GetNrJointActions();a++)
+        for(Index o=0;o<decpomdp->GetNrJointObservations();o++)
+            for(Index s1=0;s1<nrS;s1++)
             {
                 p=decpomdp->GetObservationProbability(a,s1,o);
                 if(p!=0)
-                    fp << "O: " << a << " : " << s1 << " : " << o << " " 
-                       << p << endl;
+                {
+                    const vector<Index> &aIs=decpomdp->JointToIndividualActionIndices(a);
+                    const vector<Index> &oIs=decpomdp->JointToIndividualObservationIndices(o);
+                    fp << "O:";
+
+                    for(Index i=0;i!=nrAg;++i)
+                        fp << " " << aIs.at(i);
+
+                    fp << " : " << s1 << " :";
+
+                    for(Index i=0;i!=nrAg;++i)
+                        fp << " " << oIs.at(i);
+                    fp << " : " << p << endl;
+                }
             }
 
-    for(int a=0;a<decpomdp->GetNrJointActions();a++)
-        for(int s0=0;s0<nrS;s0++)
+    for(Index a=0;a<decpomdp->GetNrJointActions();a++)
+        for(Index s0=0;s0<nrS;s0++)
         {
             p=decpomdp->GetReward(s0,a);
             if(p!=0)
-                fp << "R: " << a << " : " << s0 << " : * : * "
-                   << p << endl;
-        }
+            {
+                const vector<Index> &aIs=decpomdp->JointToIndividualActionIndices(a);
+                fp << "R:";
 
+                for(Index i=0;i!=nrAg;++i)
+                    fp << " " << aIs.at(i);
+                fp << " : " << s0 << " : * : * : " << p << endl;
+            }
+        }
 }

@@ -36,10 +36,15 @@ public:
     /// (default) Constructor
     NullPlanner(DecPOMDPDiscreteInterface* p);
 
+    /*  
     NullPlanner(size_t horizon, DecPOMDPDiscreteInterface* p);
-
-    NullPlanner(const PlanningUnitMADPDiscreteParameters &params,
-                size_t horizon, DecPOMDPDiscreteInterface* p);
+    */ 
+    NullPlanner(
+                size_t horizon, 
+                DecPOMDPDiscreteInterface* p, 
+                const PlanningUnitMADPDiscreteParameters* params = 0
+            )
+        ;
 
     ~NullPlanner(){};
 

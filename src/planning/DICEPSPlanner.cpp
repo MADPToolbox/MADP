@@ -26,37 +26,8 @@ using namespace std;
 #define DEBUG_DICEPSPlannerTIMINGS 1
 
 DICEPSPlanner::DICEPSPlanner(
-    const PlanningUnitMADPDiscreteParameters &params,
-    DecPOMDPDiscreteInterface* p,
     size_t horizon,
-    size_t nrRestarts,
-    size_t nrIterations,
-    size_t nrSamples,
-    size_t nrSamplesForUpdate,
-    bool use_hard_threshold, //(gamma in CE papers)
-    double CEalpha, //the learning rate
-    size_t nrEvalRuns, // value approximation runs (set 0 for exact eval)
-    int verbose
-) :
-    PlanningUnitDecPOMDPDiscrete(params, horizon, p)    
-    ,_m_foundPolicy()
-
-{
-    _m_nrRestarts = 1;//nrRestarts;
-
-    _m_nrIterations = nrIterations;
-    _m_nrSampledJointPolicies = nrSamples;
-    _m_nrJointPoliciesForUpdate = nrSamplesForUpdate;
-    _m_use_gamma = use_hard_threshold;
-    _m_alpha = CEalpha;
-    _m_nrEvalRuns = nrEvalRuns;
-    _m_verbose = verbose;
-    _m_outputConvergenceStatistics = false;
-}
-
-DICEPSPlanner::DICEPSPlanner(
     DecPOMDPDiscreteInterface* p,
-    int horizon,
     size_t nrRestarts,
     size_t nrIterations,
     size_t nrSamples,
@@ -64,72 +35,15 @@ DICEPSPlanner::DICEPSPlanner(
     bool use_hard_threshold, //(gamma in CE papers)
     double CEalpha, //the learning rate
     size_t nrEvalRuns, // value approximation runs (set 0 for exact eval)
-    int verbose
-    ) :
-    PlanningUnitDecPOMDPDiscrete(horizon, p),
-    _m_foundPolicy()
-{
-    _m_nrRestarts = 1;//nrRestarts; 
-    _m_nrIterations = nrIterations;
-    _m_nrSampledJointPolicies = nrSamples;
-    _m_nrJointPoliciesForUpdate = nrSamplesForUpdate;
-    _m_use_gamma = use_hard_threshold;
-    _m_alpha = CEalpha;
-    _m_nrEvalRuns = nrEvalRuns;
-    _m_verbose = verbose;
-    _m_outputConvergenceStatistics = false;
-}
-
-DICEPSPlanner::DICEPSPlanner(
-    const PlanningUnitMADPDiscreteParameters &params,
-    DecPOMDPDiscreteInterface* p,
-    size_t horizon,
-    size_t nrRestarts,
-    size_t nrIterations,
-    size_t nrSamples,
-    size_t nrSamplesForUpdate,
-    bool use_hard_threshold, //(gamma in CE papers)
-    double CEalpha, //the learning rate
-    size_t nrEvalRuns, // value approximation runs (set 0 for exact eval)
-    bool convergenceStats,    
-    ofstream & convergenceStatsFile,
-    int verbose
-) :
-    PlanningUnitDecPOMDPDiscrete(params, horizon, p)
-    //,_m_outputConvergenceFile(convergenceStatsFile)
-    ,_m_foundPolicy()
-{
-    _m_nrRestarts = 1;//nrRestarts;
-
-    _m_nrIterations = nrIterations;
-    _m_nrSampledJointPolicies = nrSamples;
-    _m_nrJointPoliciesForUpdate = nrSamplesForUpdate;
-    _m_use_gamma = use_hard_threshold;
-    _m_alpha = CEalpha;
-    _m_nrEvalRuns = nrEvalRuns;
-    _m_outputConvergenceStatistics = convergenceStats;
-    _m_outputConvergenceFile = &convergenceStatsFile;
-    _m_verbose = verbose;
-}
-DICEPSPlanner::DICEPSPlanner(
-    DecPOMDPDiscreteInterface* p,
-    int horizon,
-    size_t nrRestarts,
-    size_t nrIterations,
-    size_t nrSamples,
-    size_t nrSamplesForUpdate,
-    bool use_hard_threshold, //(gamma in CE papers)
-    double CEalpha, //the learning rate
-    size_t nrEvalRuns, // value approximation runs (set 0 for exact eval)
+    const PlanningUnitMADPDiscreteParameters * params,
     bool convergenceStats,
-    ofstream & convergenceStatsFile,
+    ofstream * convergenceStatsFile,
     int verbose
     ) :
-    PlanningUnitDecPOMDPDiscrete(horizon, p)
-//    ,_m_outputConvergenceFile(convergenceStatsFile)
+    PlanningUnitDecPOMDPDiscrete(horizon, p, params)
     ,_m_foundPolicy()
 {
-    _m_nrRestarts = 1;//nrRestarts; 
+    _m_nrRestarts = nrRestarts; 
     _m_nrIterations = nrIterations;
     _m_nrSampledJointPolicies = nrSamples;
     _m_nrJointPoliciesForUpdate = nrSamplesForUpdate;
@@ -137,7 +51,7 @@ DICEPSPlanner::DICEPSPlanner(
     _m_alpha = CEalpha;
     _m_nrEvalRuns = nrEvalRuns;
     _m_outputConvergenceStatistics = convergenceStats;
-    _m_outputConvergenceFile = &convergenceStatsFile;
+    _m_outputConvergenceFile = convergenceStatsFile;
     _m_verbose = verbose;
 }
 
@@ -234,7 +148,7 @@ void DICEPSPlanner::Plan()
                     // use exact evaluation
                     
                     ValueFunctionDecPOMDPDiscrete vf(*this, *p_jpol);
-                    v = vf.CalculateV(true);
+                    v = vf.CalculateV<true>();
 #if DEBUG_CEPOMDP
                     cout << ", value="<<v<<endl;
 #endif
@@ -242,7 +156,6 @@ void DICEPSPlanner::Plan()
 #if DEBUG_DICEPSPlannerTIMINGS
                 StopTimer("DICEPS::(CE)sample evaluation");
 #endif
-
                 
 
                 //retain it if it ranks among the best...
@@ -295,7 +208,7 @@ void DICEPSPlanner::Plan()
             {
                 JPPVValuePair* back = best_samples.back();
                 v_gamma = back->GetValue();
-                if(_m_verbose >= 1)
+                if(_m_verbose >= 2)
                     cout << "new v_gamma="<<v_gamma<<endl;
             }
 
@@ -303,7 +216,7 @@ void DICEPSPlanner::Plan()
             double v_best_this_iter = best_samples.front()->GetValue();
             if(v_best_this_iter > v_best)
             {
-                if(_m_verbose >= 1)
+                if(_m_verbose >= 2)
                     cout << "new absolute best="<<v_best_this_iter <<
                         " (old="<< v_best <<")"<<endl;
                 v_best = v_best_this_iter;
@@ -361,6 +274,7 @@ void DICEPSPlanner::Plan()
 #endif
         } //end for iterations
         StopTimer("DICEPS::run(restart)");
+
         if(_m_outputConvergenceStatistics)
             (*_m_outputConvergenceFile) << endl;
     } // end for restarts
@@ -390,13 +304,17 @@ void DICEPSPlanner::Plan()
             StartTimer("DICEPS::FoundJPolExactEvaluation()");
             // so it is needed to evaluate it once using the exact method
             ValueFunctionDecPOMDPDiscrete vf(*this, jpol_best);
-            _m_expectedRewardFoundPolicy = vf.CalculateV(true);
+            _m_expectedRewardFoundPolicy = vf.CalculateV<true>();
             StopTimer("DICEPS::FoundJPolExactEvaluation()");
         }
     } else { 
         // the expected reward for the found policy is already given, use it
         _m_expectedRewardFoundPolicy = v_best;
     }
+
+    if(_m_verbose>=1)
+        cout << "DICE best value after " << _m_nrRestarts << " restarts: "
+             << v_best << endl;
 
     StopTimer("DICEPS::Plan()");
 }

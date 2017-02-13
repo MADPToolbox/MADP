@@ -43,10 +43,27 @@ private:
 
     static bool FindBelief(const AlphaVector &p,
                            const ValueFunctionPOMDPDiscrete &uU,
-                           std::vector<double> &belief);
+                           std::vector<double> &belief,
+                           size_t acceleratedPruningThreshold);
+    static bool FindBeliefAccelerated(const AlphaVector &p,
+                                      const ValueFunctionPOMDPDiscrete &uU,
+                                      std::vector<double> &belief);
 
     static bool LexGreater(const AlphaVector &alpha1,
                            const AlphaVector &alpha2);
+
+    static int GetVectorIndex(const AlphaVector &p,
+                              const ValueFunctionPOMDPDiscrete &uU,
+                              std::vector<double> &belief);
+    static bool FindBeliefNormal(const AlphaVector &p,
+                                 const ValueFunctionPOMDPDiscrete &uU,
+                                 std::vector<double> &belief);
+
+    static double GetBeliefDiff(std::vector<double> &belief0, std::vector<double> &belief1);
+
+    static double GetNormalObj(const AlphaVector &p,
+                               const ValueFunctionPOMDPDiscrete &uU);
+                           
 
 public:
     // Constructor, destructor and copy assignment.
@@ -55,7 +72,8 @@ public:
     /// Destructor.
     virtual ~AlphaVectorPruning();
 
-    static ValueFunctionPOMDPDiscrete Prune(const ValueFunctionPOMDPDiscrete &V);
+    static ValueFunctionPOMDPDiscrete Prune(const ValueFunctionPOMDPDiscrete &V,
+                                            size_t acceleratedPruningThreshold=200);
 
 };
 

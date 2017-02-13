@@ -26,13 +26,13 @@
 using namespace std;
 
 GMAA_MAAstar::GMAA_MAAstar(
-    const PlanningUnitMADPDiscreteParameters &params,
     const BGIP_SolverCreatorInterface * bgsc,
     size_t horizon, 
     DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params,
     int verboseness
     ) :
-    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(params, horizon, p, verboseness),
+    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(horizon, p, params, verboseness),
     _m_newBGIP_Solver(bgsc)
 {
     if(!_m_newBGIP_Solver->IsExactSolver())

@@ -19,18 +19,18 @@ using namespace std;
 
 //Default constructor
 PlanningUnitTOIDecPOMDPDiscrete::PlanningUnitTOIDecPOMDPDiscrete(
-    const PlanningUnitMADPDiscreteParameters &params,
     size_t horizon,
-    TOIDecPOMDPDiscrete* p
+    TOIDecPOMDPDiscrete* p,
+    const PlanningUnitMADPDiscreteParameters* params
     ) :
-    PlanningUnitDecPOMDPDiscrete(params,horizon,p),
+    PlanningUnitDecPOMDPDiscrete(horizon, p, params),
     _m_TOIDecPOMDPDiscrete(p)
 {
     if(DEBUG_PU_CONSTRUCTORS) cout << "PlanningUnitTOIDecPOMDPDiscrete(PlanningUnitMADPDiscreteParameters params, size_t horizon, DecPOMDPDiscreteInterface* p)  called" << endl;
     if(p!=0)
         SanityCheck();
 }
-
+/*
 PlanningUnitTOIDecPOMDPDiscrete::PlanningUnitTOIDecPOMDPDiscrete(
     size_t horizon,
     TOIDecPOMDPDiscrete* p
@@ -42,7 +42,7 @@ PlanningUnitTOIDecPOMDPDiscrete::PlanningUnitTOIDecPOMDPDiscrete(
     if(p!=0)
         SanityCheck();
 }
-
+*/
 void PlanningUnitTOIDecPOMDPDiscrete::SetProblem(TOIDecPOMDPDiscrete* p)
 {
     if(p == _m_TOIDecPOMDPDiscrete)

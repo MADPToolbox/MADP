@@ -67,7 +67,8 @@ AlphaVectorPlanning::AlphaVectorPlanning(const
     _m_TsForBackup(0),
     _m_OsForBackup(0),
     _m_eventOsForBackup(0),
-    _m_TsOsForBackup(0)
+    _m_TsOsForBackup(0),
+    _m_acceleratedPruningThreshold(200)
 {
     const TransitionModelMappingSparse *tms;
     const TransitionModelMapping *tm;
@@ -1004,7 +1005,7 @@ Prune(const ValueFunctionPOMDPDiscrete &V) const
         time.Start("Prune");
     }
 
-    V1=AlphaVectorPruning::Prune(V);
+    V1=AlphaVectorPruning::Prune(V,_m_acceleratedPruningThreshold);
        
 #if DEBUG_AlphaVectorPlanning_CheckPruning
 
@@ -1785,4 +1786,14 @@ bool AlphaVectorPlanning::EqualVS(const VectorSet &VS1, const VectorSet &VS2)
 
     // if we made it here the sets are equal
     return(true);
+}
+
+size_t AlphaVectorPlanning::GetAcceleratedPruningThreshold() const
+{
+    return(_m_acceleratedPruningThreshold);
+}
+
+void AlphaVectorPlanning::SetAcceleratedPruningThreshold(size_t acceleratedPruningThreshold)
+{
+    _m_acceleratedPruningThreshold=acceleratedPruningThreshold;
 }

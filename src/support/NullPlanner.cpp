@@ -24,7 +24,7 @@ NullPlanner::NullPlanner(DecPOMDPDiscreteInterface* p)
     SetProblem(p);
 
 }
-    
+/*     
 NullPlanner::NullPlanner(size_t horizon, DecPOMDPDiscreteInterface* p)
 {
     PlanningUnitMADPDiscreteParameters params;
@@ -34,10 +34,14 @@ NullPlanner::NullPlanner(size_t horizon, DecPOMDPDiscreteInterface* p)
     SetProblem(p);
     SetHorizon(horizon);
 }
+*/
 
-NullPlanner::NullPlanner(const PlanningUnitMADPDiscreteParameters &params,
-                         size_t horizon, DecPOMDPDiscreteInterface* p) :
-    PlanningUnitDecPOMDPDiscrete(params,horizon,p)
+NullPlanner::NullPlanner(
+                        size_t horizon, 
+                        DecPOMDPDiscreteInterface* p,
+                        const PlanningUnitMADPDiscreteParameters * params
+                         ) :
+    PlanningUnitDecPOMDPDiscrete(horizon, p, params)
 {
 }
 

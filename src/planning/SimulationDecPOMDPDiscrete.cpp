@@ -30,11 +30,12 @@ using namespace std;
 
 SimulationDecPOMDPDiscrete::
 SimulationDecPOMDPDiscrete(const PlanningUnitDecPOMDPDiscrete &pu, 
-                           int nrRuns, int seed) : 
+                           int nrRuns, int seed, bool verbose) : 
     Simulation(nrRuns, seed),
     _m_pu(&pu),
     _m_saveIntermediateResults(false)
 {
+    SetVerbose(verbose);
     Initialize();
 }
 
@@ -69,8 +70,9 @@ void SimulationDecPOMDPDiscrete::Initialize()
         
         _m_horizon=lrint(ceil((log(1e-6/maxAbsReward)/
                                log(_m_pu->GetDiscount()))));
-        if(GetVerbose())
-            cout << "Set horizon to " << _m_horizon << " (g "
+
+        //if(GetVerbose()) //FAO: I think this is always useful to print...?
+            cout << "SimulationDecPOMDPDiscrete: Set horizon to " << _m_horizon << " (g "
                  << _m_pu->GetDiscount() << " max|R| " << maxAbsReward
                  << ")" << endl;
     }

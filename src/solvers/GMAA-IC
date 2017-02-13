@@ -1,5 +1,5 @@
 #!/bin/sh
 # GMAA-IC means calling GMAA with BG clustering enabled
 
-./GMAA --useBGclustering $@
+$(dirname -- "$0")/GMAA --useBGclustering $@
 

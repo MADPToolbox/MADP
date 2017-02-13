@@ -24,7 +24,7 @@ NullPlannerFactored::NullPlannerFactored(FactoredDecPOMDPDiscreteInterface* p)
     SetProblem(p);
 
 }
-    
+    /*
 NullPlannerFactored::NullPlannerFactored(size_t horizon, FactoredDecPOMDPDiscreteInterface* p)
 {
     PlanningUnitMADPDiscreteParameters params;
@@ -34,10 +34,13 @@ NullPlannerFactored::NullPlannerFactored(size_t horizon, FactoredDecPOMDPDiscret
     SetProblem(p);
     SetHorizon(horizon);
 }
-
-NullPlannerFactored::NullPlannerFactored(const PlanningUnitMADPDiscreteParameters &params,
-                         size_t horizon, FactoredDecPOMDPDiscreteInterface* p) :
-    PlanningUnitFactoredDecPOMDPDiscrete(params,horizon,p)
+*/
+NullPlannerFactored::NullPlannerFactored(
+        size_t horizon, 
+        FactoredDecPOMDPDiscreteInterface* p,
+        const PlanningUnitMADPDiscreteParameters * params
+        ) :
+    PlanningUnitFactoredDecPOMDPDiscrete(horizon, p, params)
 {
 }
 

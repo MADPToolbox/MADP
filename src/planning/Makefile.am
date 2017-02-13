@@ -8,8 +8,14 @@ INCLUDEPATH		= -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/planning\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
-AM_LDFLAGS		= 
 AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
+AM_LDFLAGS		= 
+
+if HAVE_CUDA_CUSOLVERDN_H
+  AM_CPPFLAGS		+= $(CUDA_CPPFLAGS)
+  AM_LDFLAGS		+= $(CUDA_LDFLAGS) -lcuda -lcudart -lcusolver -lcublas -lgomp
+endif
+
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif
@@ -109,7 +115,8 @@ PLANNING_CPPFILES=\
  DICEPSPlanner.cpp\
  QBG.cpp QPOMDP.cpp QMDP.cpp\
  MDPSolver.cpp\
- MDPValueIteration.cpp \
+ MDPValueIteration.cpp\
+ MDPPolicyIteration.cpp\
  MaxPlusSolver.cpp\
  MaxPlusSolverForBGs.cpp\
  BGIP_SolverBruteForceSearch.cpp\
@@ -171,7 +178,12 @@ PLANNING_CPPFILES=\
  OptimalValueDatabase.cpp\
  argumentHandlers.cpp\
  argumentUtils.cpp\
- directories.cpp 
+ directories.cpp\
+ Problem_CGBG_FF.cpp
+
+if HAVE_CUDA_CUSOLVERDN_H
+  PLANNING_CPPFILES += MDPPolicyIterationGPU.cpp SystemOfLinearEquationsSolver.cpp
+endif
 
 PLANNING_HFILES=$(PLANNING_CPPFILES:.cpp=.h) \
  argumentHandlersPostChild.h\
@@ -180,7 +192,6 @@ PLANNING_HFILES=$(PLANNING_CPPFILES:.cpp=.h) \
  ValueFunction.h\
  QFunctionInterface.h\
  QFunctionForDecPOMDPInterface.h\
- QFunctionForFactoredDecPOMDP.h\
  QFunctionForFactoredDecPOMDPInterface.h\
  QFunctionJAOHInterface.h\
  QFunctionJointBeliefInterface.h\
@@ -189,7 +200,6 @@ PLANNING_HFILES=$(PLANNING_CPPFILES:.cpp=.h) \
  BGIP_IncrementalSolverCreatorInterface_T.h\
  BGIP_SolverCreatorInterface.h\
  BGIP_SolverCreator_AM.h\
- BGIP_SolverCreator_MP.h\
  BGIP_SolverCreator_CE.h\
  BGIP_SolverCreator_BFS.h\
  BGIP_SolverCreator_BFSNonInc.h\
@@ -224,5 +234,4 @@ libMADPPlanning_la_LDFLAGS = $(AM_LDFLAGS)
 libMADPPlanning_la_LIBADD = 
 # for installing the headers
 libMADPPlanning_ladir = $(pkgincludedir)#/planning
-libMADPPlanning_la_HEADERS = $(PLANNING_HFILES) $(SIMULATION_HFILES)\
- $(POMDP_HFILES) $(GMAA_HFILES)
+libMADPPlanning_la_HEADERS = $(PLANNING_HFILES) $(SIMULATION_HFILES) $(POMDP_HFILES) $(GMAA_HFILES)

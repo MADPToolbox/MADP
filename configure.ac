@@ -1,6 +1,8 @@
+#                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
+
 AC_PREREQ(2.61)
-AC_INIT([MADP],[0.4],[madp-users@omni.isr.ist.utl.pt])
+AC_INIT([MADP],[0.4.1],[madp-users@omni.isr.ist.utl.pt])
 # subdir-objects is used in src/libpomdp-solve
 AM_INIT_AUTOMAKE([1.9 tar-pax subdir-objects])
 AC_CONFIG_SRCDIR([config.h.in])
@@ -14,6 +16,11 @@ AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
+
+# whether to use serialization:
+#AC_ARG_ENABLE([serialization],
+#              AS_HELP_STRING([--enable-serialization], [Enable boost serialization (Experimental, requires c++11 standard)]))
+#AM_CONDITIONAL([USE_SERIALIZATION], [test x"$enable_serialization" = x"yes"])
 
 #CSTANDARD:
 #See https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html#C-Dialect-Options
@@ -57,6 +64,7 @@ AC_PROG_LIBTOOL
 
 #CHECK for standard c++ libs (and include the linkind directives...)
 AC_CHECK_LIB([stdc++],[__cxa_free_exception])
+
 # defining the libs doesn't work...
 # Don't check nor include lp-solve anymore until Tony Cassandra's code
 # has been updated for using the system-wide lp-solve
@@ -92,10 +100,16 @@ AC_TYPE_SIZE_T
 #check for cplex:
 AC_CPLEX
 
+#check for cuda:
+AX_CHECK_CUDA
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
 AC_CHECK_FUNCS([pow strtoull])
+
+# Allow the defined vars to come from a file instead of a slew of '-D'
+# compiler flags.
+#AM_CONFIG_HEADER([config.h])
 
 ## Option for using compile -g flag for debugging symbols
 ##
@@ -139,6 +153,8 @@ AC_PROG_CC
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lcplex':
 #AC_CHECK_LIB([cplex], [main])
+# FIXME: Replace `main' with a function in `-lm':
+AC_CHECK_LIB([m], [main])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -158,7 +174,7 @@ AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([bzero floor gettimeofday memset pow sqrt strstr])
 
-#---------------end of stuff required for pomdp-solve ------------------------------------
+
 
 #For OS-dependent compilation
 AC_CANONICAL_HOST
@@ -194,6 +210,7 @@ AC_CONFIG_FILES([Makefile
                  src/examples/Makefile
                  src/libDAI/Makefile
                  src/solvers/Makefile
+                 src/tests/Makefile
                  ])
 
 #avoid ": compiling `test_gsl.c' with per-target flags requires `AM_PROG_CC_C_O' in `configure.ac'"

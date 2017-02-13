@@ -39,8 +39,6 @@ static char doc[] =
 "calculateQheuristic - calculates and saves Q heuristics  \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 6;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -106,7 +104,7 @@ int main(int argc, char **argv)
 #endif
 
         times.Start("PlanningUnit");
-        NullPlanner np(params,horizon,decpomdp);
+        NullPlanner np(horizon,decpomdp, &params);
         times.Stop("PlanningUnit");
 
         struct timeval tvStart, tvEnd;
@@ -159,8 +157,9 @@ int main(int argc, char **argv)
         {
             stringstream ss;
             ss << directories::MADPGetResultsDir("GMAA",*decpomdp)
-               << "/calculateQheuristic" << q->SoftPrintBrief() << "_h"
-               << horizon;
+               << "/calculateQheuristic"
+               << q->SoftPrintBrief()
+               << "_h" << horizon;
             if(decpomdp->GetDiscount()!=1)
                 ss << "_g" << decpomdp->GetDiscount();
             ss << "_Timings";

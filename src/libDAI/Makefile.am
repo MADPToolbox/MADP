@@ -2,7 +2,7 @@
 
 # Don't build the directories with binaries by default, they need
 # an extra boost lib (program_options9
-SUBDIRS = . #utils tests MADP-integr-tests
+#SUBDIRS = #utils tests MADP-integr-tests
 
 include $(top_srcdir)/src/Makefile.custom
 include $(top_srcdir)/config/Make-rules

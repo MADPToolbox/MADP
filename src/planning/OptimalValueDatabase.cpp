@@ -164,10 +164,17 @@ string OptimalValueDatabase::SoftPrint() const
 void OptimalValueDatabase::Load()
 {
     _m_optimalValues.clear();
-    stringstream filename;
-    filename << directories::MADPGetResultsDir()
-             << "/GMAA/optimalValueDatabase";
-    ifstream fp(filename.str().c_str());
+    ifstream fp;
+    _filename="optimalValueDatabase"; // look in current directory first
+    fp.open(_filename.c_str(),ios_base::in);
+    if(!fp)
+    {
+        stringstream filename;
+        filename << directories::MADPGetResultsDir() // otherwise look in results dir
+                 << "/GMAA/optimalValueDatabase";
+        _filename=filename.str();
+        fp.open(_filename.c_str(),ios_base::in);
+    }
     if(!fp)
         return;
 
@@ -196,16 +203,12 @@ void OptimalValueDatabase::Load()
 
 void OptimalValueDatabase::Save() const
 {
-    stringstream filename;
-    filename << directories::MADPGetResultsDir()
-             << "/GMAA/optimalValueDatabase";
-
-    ofstream fp(filename.str().c_str());
+    ofstream fp(_filename.c_str());
     if(!fp)
     {
         stringstream ss;
         ss << "OptimalValueDatabase::Save() failed to open file "
-           << filename.str() << endl;
+           << _filename << endl;
         throw E(ss.str());
     }
 
@@ -213,4 +216,12 @@ void OptimalValueDatabase::Save() const
     
     fp << "problem discount horizon value" << endl;
     fp << SoftPrint();
+}
+
+string OptimalValueDatabase::GetEntryName() const
+{
+    stringstream ss;
+    ss.precision(16);
+    ss<<_m_problemName<<" "<<_m_discount<<" "<<_m_horizon;
+    return ss.str();
 }

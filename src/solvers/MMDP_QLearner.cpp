@@ -42,8 +42,6 @@ This only works for infinite horizon, so you have the specify a discount < 1. \
 \vFor more information please consult the MADP documentation. \
 ";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 6;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,

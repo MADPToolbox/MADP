@@ -22,6 +22,15 @@
 #include "Globals.h"
 #include "Scope.h"
 
+template <typename T2,typename T1>
+std::vector<T2> convertVector(std::vector<T1> v)
+{
+    std::vector<T2> r;
+    for (typename std::vector<T1>::iterator it=v.begin();it!=v.end();it++)
+        r.push_back(*it);
+    return r;
+}
+
 /// IndexTools contains functionality for manipulating indices.
 /** A detailed description of how joint indices etc are constructed,
  * see doc/manually_maintained/MADPToolbox-Histories+indices.ps.gz .

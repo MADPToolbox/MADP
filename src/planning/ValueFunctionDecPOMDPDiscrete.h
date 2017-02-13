@@ -19,12 +19,12 @@
 
 /* the include directives */
 #include <iostream>
-#include <map>
+#include <set>
 #include "Globals.h"
 #include "ValueFunction.h"
 #include "PlanningUnitDecPOMDPDiscrete.h"
 #include "JointPolicyDiscretePure.h"
-#include "boost/numeric/ublas/matrix.hpp"
+#include <boost/numeric/ublas/matrix.hpp>
 
 /** \brief ValueFunctionDecPOMDPDiscrete represents and calculates the
  * value function of a (pure) joint policy for a discrete Dec-POMDP.
@@ -49,14 +49,14 @@ class ValueFunctionDecPOMDPDiscrete :
     typedef boost::numeric::ublas::matrix<double> Matrix;
 
     Matrix* _m_p_V; //stores V(sI, JOHistI)
-    std::map<Index, bool> _m_cached; // (s,JOHist)-index -> bool
+    std::set<Index> _m_cached; // indexes already calculated
 
     Index GetCombinedIndex(Index sI, Index JOHI) const
     //{  return( sI*GetPU()->GetNrJointObservationHistories() + JOHI ); }
     {  return( sI*_m_nrJOH + JOHI ); }
-    bool IsCached(Index sI, Index JOHI)
-    {    return(_m_cached[GetCombinedIndex(sI, JOHI)]); }
-    void SetCached(Index sI, Index JOHI);
+
+    inline bool IsCached(Index sI, Index JOHI);
+    inline void SetCached(Index sI, Index JOHI);
 
     /// Deletes the current value function.
     void DeleteV();
@@ -77,13 +77,11 @@ class ValueFunctionDecPOMDPDiscrete :
     /**Function used by CalculateV0Recursively. This recursively 
      * Calculates the expected payoff of the joint policy starting from 
      * state sI and joint observation history johI.*/
-    double CalculateVsjohRecursivelyNotCached(Index sI, Index johI,Index stage);
-    /**Function used by CalculateV0Recursively. This recursively 
-     * Calculates the expected payoff of the joint policy starting from 
-     * state sI and joint observation history johI.*/
-    double CalculateVsjohRecursivelyCached(Index sI, Index johI, Index stage);
-    double CalculateV0RecursivelyCached();
-    double CalculateV0RecursivelyNotCached();
+    template <bool CACHED> 
+    double CalculateVsjohRecursively(Index sI, Index johI, unsigned int stage);
+    
+    /**Wraps and adds caching to method CalculateVsjohRecursively()*/
+    inline double CalculateVsjohRecursively_cached(Index sI, Index johI, unsigned int stage);
 
     protected:
     
@@ -101,10 +99,11 @@ class ValueFunctionDecPOMDPDiscrete :
     ~ValueFunctionDecPOMDPDiscrete();
 
     /// Calculates the value function, which is stored and returns V(0).
-    double CalculateV(bool cache = true);    
-
+    /// call with "CalculateV<true>()" for the cached version or
+    /// call with "CalculateV<false>()" for the non-cached version
+    template <bool CACHED>
+    double CalculateV();
 };
-
 
 #endif /* !_VALUEFUNCTIONDECPOMDPDISCRETE_H_ */
 

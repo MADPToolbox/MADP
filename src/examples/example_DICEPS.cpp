@@ -40,8 +40,6 @@ static char doc[] =
 +-------------------------------------------------------------------------+ \
 ";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 5;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -58,7 +56,6 @@ int main(int argc, char **argv)
     // parse the command line arguments
     ArgumentHandlers::Arguments args;
     argp_parse (&ArgumentHandlers::theArgpStruc, argc, argv, 0, 0, &args);
-    int restarts = args.nrCERestarts;
 
     if(args.verbose >= 0)
         cout << "DICE: direct CE Policy Search"<<endl;
@@ -94,23 +91,24 @@ int main(int argc, char **argv)
     else
         params.SetUseSparseJointBeliefs(false);
     DICEPSPlanner* planner;
-    planner = new DICEPSPlanner (params, &decpomdp,
+    planner = new DICEPSPlanner (
         horizon,
+        &decpomdp,
         //CE params
-        args.nrCERestarts,
+        1, // the restarts loop is executed here, not in DICEPSPlanner
         args.nrCEIterations,
         args.nrCESamples,
         args.nrCESamplesForUpdate, 
         args.CE_use_hard_threshold, //(gamma in CE papers)
         args.CE_alpha, //the learning rate
-        args.nrCEEvalutionRuns //the number of evaluation runs
-        , args.verbose
+        args.nrCEEvaluationRuns, //the number of evaluation runs
+        &params, false, 0, args.verbose
     );
     Time.Stop("PlanningUnit");
     if(args.verbose >= 0)
         cout << "DICEPSPlanner initialized" << endl;
 
-    for(int restartI = 0; restartI < restarts; restartI++)
+    for(Index restartI = 0; restartI < args.nrCERestarts; restartI++)
     {
         Time.Start("Plan");
         planner->Plan();

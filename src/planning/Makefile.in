@@ -16,14 +16,6 @@
 
 # Contains several project-wide Makefile options
 
-#####################################################################
-# Optional software packages to be used, check configuration.h to
-# enable them
-
-# For using arbitrary length integers
-# Should be set if USE_ARBITRARY_PRECISION_INDEX is set to 1
-#GMP_LD=-lgmpxx -lgmp
-
 
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
@@ -92,14 +84,18 @@ host_triplet = @host@
 DIST_COMMON = $(top_srcdir)/src/Makefile.custom \
 	$(top_srcdir)/config/Make-rules $(srcdir)/Makefile.in \
 	$(srcdir)/Makefile.am $(top_srcdir)/depcomp \
-	$(libMADPPlanning_la_HEADERS)
-@DARWIN_TRUE@am__append_1 = -DDARWIN
+	$(am__libMADPPlanning_la_HEADERS_DIST)
+@HAVE_CUDA_CUSOLVERDN_H_TRUE@am__append_1 = $(CUDA_CPPFLAGS)
+@HAVE_CUDA_CUSOLVERDN_H_TRUE@am__append_2 = $(CUDA_LDFLAGS) -lcuda -lcudart -lcusolver -lcublas -lgomp
+@DARWIN_TRUE@am__append_3 = -DDARWIN
+@HAVE_CUDA_CUSOLVERDN_H_TRUE@am__append_4 = MDPPolicyIterationGPU.cpp SystemOfLinearEquationsSolver.cpp
 subdir = src/planning
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ac_cplex.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/cuda.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -137,13 +133,165 @@ am__installdirs = "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(libMADPPlanning_ladir)"
 LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES)
 libMADPPlanning_la_DEPENDENCIES =
-am__objects_1 = libMADPPlanning_la-BruteForceSearchPlanner.lo \
+am__libMADPPlanning_la_SOURCES_DIST = BruteForceSearchPlanner.cpp \
+	JESPExhaustivePlanner.cpp JESPDynamicProgrammingPlanner.cpp \
+	DICEPSPlanner.cpp QBG.cpp QPOMDP.cpp QMDP.cpp MDPSolver.cpp \
+	MDPValueIteration.cpp MDPPolicyIteration.cpp MaxPlusSolver.cpp \
+	MaxPlusSolverForBGs.cpp BGIP_SolverBruteForceSearch.cpp \
+	BGIP_SolverBFSNonIncremental.cpp BGIP_SolverBranchAndBound.cpp \
+	BGIP_BnB_Node.cpp BnB_JointTypeOrdering.cpp \
+	BayesianGameIdenticalPayoffSolver.cpp \
+	BayesianGameIdenticalPayoffSolver_T.cpp \
+	BGIP_SolverAlternatingMaximization.cpp BGIP_SolverCE.cpp \
+	BGIP_SolverMaxPlus.cpp BGIP_SolverRandom.cpp \
+	BGIP_SolverCreator_MP.cpp BGCG_Solver.cpp \
+	BGCG_SolverNonserialDynamicProgramming.cpp \
+	BGCG_SolverMaxPlus.cpp BGCG_SolverRandom.cpp \
+	BGCG_SolverCreator.cpp BGCG_SolverFG.cpp \
+	BG_FactorGraphCreator.cpp FG_Solver.cpp FG_SolverMaxPlus.cpp \
+	FG_SolverNDP.cpp QFunction.cpp QFunctionForDecPOMDP.cpp \
+	QFunctionForFactoredDecPOMDP.cpp QFunctionJAOHInterface.cpp \
+	QFunctionJAOH.cpp QFunctionJAOHTree.cpp \
+	QFunctionJointBelief.cpp QHybrid.cpp qheur.cpp gmaatype.cpp \
+	JESPtype.cpp BGIP_SolverType.cpp BayesianGameBase.cpp \
+	BayesianGame.cpp BayesianGameIdenticalPayoff.cpp \
+	BayesianGameCollaborativeGraphical.cpp \
+	BayesianGameForDecPOMDPStage.cpp BGforStageCreation.cpp \
+	BayesianGameForDecPOMDPStageInterface.cpp \
+	BayesianGameWithClusterInfo.cpp \
+	JointPolicyPureVectorForClusteredBG.cpp TypeCluster.cpp \
+	Type.cpp Type_PointerTuple.cpp Type_AOHIndex.cpp \
+	LocalBGValueFunctionVector.cpp \
+	LocalBGValueFunctionInterface.cpp \
+	LocalBGValueFunctionBGCGWrapper.cpp BGIPSolution.cpp \
+	ValueFunctionDecPOMDPDiscrete.cpp \
+	FactoredQLastTimeStepOrElse.cpp \
+	FactoredQLastTimeStepOrQMDP.cpp \
+	FactoredQLastTimeStepOrQPOMDP.cpp \
+	FactoredQLastTimeStepOrQBG.cpp OptimalValueDatabase.cpp \
+	argumentHandlers.cpp argumentUtils.cpp directories.cpp \
+	Problem_CGBG_FF.cpp MDPPolicyIterationGPU.cpp \
+	SystemOfLinearEquationsSolver.cpp BruteForceSearchPlanner.h \
+	JESPExhaustivePlanner.h JESPDynamicProgrammingPlanner.h \
+	DICEPSPlanner.h QBG.h QPOMDP.h QMDP.h MDPSolver.h \
+	MDPValueIteration.h MDPPolicyIteration.h MaxPlusSolver.h \
+	MaxPlusSolverForBGs.h BGIP_SolverBruteForceSearch.h \
+	BGIP_SolverBFSNonIncremental.h BGIP_SolverBranchAndBound.h \
+	BGIP_BnB_Node.h BnB_JointTypeOrdering.h \
+	BayesianGameIdenticalPayoffSolver.h \
+	BayesianGameIdenticalPayoffSolver_T.h \
+	BGIP_SolverAlternatingMaximization.h BGIP_SolverCE.h \
+	BGIP_SolverMaxPlus.h BGIP_SolverRandom.h \
+	BGIP_SolverCreator_MP.h BGCG_Solver.h \
+	BGCG_SolverNonserialDynamicProgramming.h BGCG_SolverMaxPlus.h \
+	BGCG_SolverRandom.h BGCG_SolverCreator.h BGCG_SolverFG.h \
+	BG_FactorGraphCreator.h FG_Solver.h FG_SolverMaxPlus.h \
+	FG_SolverNDP.h QFunction.h QFunctionForDecPOMDP.h \
+	QFunctionForFactoredDecPOMDP.h QFunctionJAOHInterface.h \
+	QFunctionJAOH.h QFunctionJAOHTree.h QFunctionJointBelief.h \
+	QHybrid.h qheur.h gmaatype.h JESPtype.h BGIP_SolverType.h \
+	BayesianGameBase.h BayesianGame.h \
+	BayesianGameIdenticalPayoff.h \
+	BayesianGameCollaborativeGraphical.h \
+	BayesianGameForDecPOMDPStage.h BGforStageCreation.h \
+	BayesianGameForDecPOMDPStageInterface.h \
+	BayesianGameWithClusterInfo.h \
+	JointPolicyPureVectorForClusteredBG.h TypeCluster.h Type.h \
+	Type_PointerTuple.h Type_AOHIndex.h \
+	LocalBGValueFunctionVector.h LocalBGValueFunctionInterface.h \
+	LocalBGValueFunctionBGCGWrapper.h BGIPSolution.h \
+	ValueFunctionDecPOMDPDiscrete.h FactoredQLastTimeStepOrElse.h \
+	FactoredQLastTimeStepOrQMDP.h FactoredQLastTimeStepOrQPOMDP.h \
+	FactoredQLastTimeStepOrQBG.h OptimalValueDatabase.h \
+	argumentHandlers.h argumentUtils.h directories.h \
+	Problem_CGBG_FF.h MDPPolicyIterationGPU.h \
+	SystemOfLinearEquationsSolver.h argumentHandlersPostChild.h \
+	JointPolicyValuePair.h PartialJointPolicyValuePair.h \
+	ValueFunction.h QFunctionInterface.h \
+	QFunctionForDecPOMDPInterface.h \
+	QFunctionForFactoredDecPOMDPInterface.h \
+	QFunctionJointBeliefInterface.h \
+	FactoredQFunctionStateJAOHInterface.h \
+	BGIP_SolverCreatorInterface_T.h \
+	BGIP_IncrementalSolverCreatorInterface_T.h \
+	BGIP_SolverCreatorInterface.h BGIP_SolverCreator_AM.h \
+	BGIP_SolverCreator_CE.h BGIP_SolverCreator_BFS.h \
+	BGIP_SolverCreator_BFSNonInc.h BGIP_SolverCreator_BnB.h \
+	BGIP_SolverCreator_Random.h BGCG_SolverCreator_NDP.h \
+	BGCG_SolverCreator_MP.h BGCG_SolverCreator_FG.h \
+	BGCG_SolverCreator_Random.h \
+	BayesianGameIdenticalPayoffInterface.h \
+	BGIP_IncrementalSolverInterface_T.h \
+	BGIP_IncrementalSolverInterface.h OnlineMDPPlanner.h \
+	SimulationResult.cpp SimulationDecPOMDPDiscrete.cpp \
+	SimulationTOIDecPOMDPDiscrete.cpp \
+	SimulationFactoredDecPOMDPDiscrete.cpp AgentPOMDP.cpp \
+	AgentBG.cpp AgentQMDP.cpp AgentRandom.cpp AgentMDP.cpp \
+	AgentOnlinePlanningMDP.cpp AgentQLearner.cpp \
+	SimulationResult.h SimulationDecPOMDPDiscrete.h \
+	SimulationTOIDecPOMDPDiscrete.h \
+	SimulationFactoredDecPOMDPDiscrete.h AgentPOMDP.h AgentBG.h \
+	AgentQMDP.h AgentRandom.h AgentMDP.h AgentOnlinePlanningMDP.h \
+	AgentQLearner.h Simulation.h SimulationAgent.h \
+	AgentDecPOMDPDiscrete.h AgentDelayedSharedObservations.h \
+	AgentFullyObservable.h AgentSharedObservations.h \
+	AgentLocalObservations.h \
+	AgentTOIFullyObservableSyncedSpecialReward.h \
+	AgentTOIFullyObservableSynced.h BeliefValue.cpp \
+	BeliefSetNonStationary.cpp AlphaVector.cpp \
+	AlphaVectorPlanning.cpp AlphaVectorPruning.cpp Perseus.cpp \
+	AlphaVectorPOMDP.cpp AlphaVectorConstrainedPOMDP.cpp \
+	PerseusPOMDPPlanner.cpp PerseusConstrainedPOMDPPlanner.cpp \
+	MonahanPOMDPPlanner.cpp AlphaVectorBG.cpp MonahanBGPlanner.cpp \
+	MonahanPlanner.cpp QMonahanPOMDP.cpp PerseusBGPlanner.cpp \
+	QMonahanBG.cpp QAlphaVector.cpp TreeIncPruneBGPlanner.cpp \
+	QBGPlanner_TreeIncPruneBnB.cpp QTreeIncPruneBG.cpp \
+	PerseusBGPOMDPPlanner.cpp AlphaVectorWeighted.cpp \
+	PerseusWeightedPlanner.cpp PerseusQFunctionPlanner.cpp \
+	PerseusStationary.cpp PerseusNonStationary.cpp \
+	PerseusNonStationaryQPlanner.cpp PerseusBGNSPlanner.cpp \
+	BeliefValue.h BeliefSetNonStationary.h AlphaVector.h \
+	AlphaVectorPlanning.h AlphaVectorPruning.h Perseus.h \
+	AlphaVectorPOMDP.h AlphaVectorConstrainedPOMDP.h \
+	PerseusPOMDPPlanner.h PerseusConstrainedPOMDPPlanner.h \
+	MonahanPOMDPPlanner.h AlphaVectorBG.h MonahanBGPlanner.h \
+	MonahanPlanner.h QMonahanPOMDP.h PerseusBGPlanner.h \
+	QMonahanBG.h QAlphaVector.h TreeIncPruneBGPlanner.h \
+	QBGPlanner_TreeIncPruneBnB.h QTreeIncPruneBG.h \
+	PerseusBGPOMDPPlanner.h AlphaVectorWeighted.h \
+	PerseusWeightedPlanner.h PerseusQFunctionPlanner.h \
+	PerseusStationary.h PerseusNonStationary.h \
+	PerseusNonStationaryQPlanner.h PerseusBGNSPlanner.h \
+	ValueFunctionPOMDPDiscrete.h BGBackupType.h \
+	PerseusBackupType.h BeliefSet.h QAV.h QAVParameters.h \
+	GeneralizedMAAStarPlanner.cpp \
+	GeneralizedMAAStarPlannerForDecPOMDPDiscrete.cpp \
+	GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete.cpp \
+	GMAA_MAAstar.cpp GMAA_MAAstarClassic.cpp \
+	GMAA_MAAstarCluster.cpp GMAA_kGMAACluster.cpp \
+	PolicyPoolJPolValPair.cpp PolicyPoolPartialJPolValPair.cpp \
+	JPPVValuePair.cpp JPPVIndexValuePair.cpp \
+	PartialJPDPValuePair.cpp PartialJPPVIndexValuePair.cpp \
+	GMAA_kGMAA.cpp GMAA_MAA_ELSI.cpp GeneralizedMAAStarPlanner.h \
+	GeneralizedMAAStarPlannerForDecPOMDPDiscrete.h \
+	GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete.h \
+	GMAA_MAAstar.h GMAA_MAAstarClassic.h GMAA_MAAstarCluster.h \
+	GMAA_kGMAACluster.h PolicyPoolJPolValPair.h \
+	PolicyPoolPartialJPolValPair.h JPPVValuePair.h \
+	JPPVIndexValuePair.h PartialJPDPValuePair.h \
+	PartialJPPVIndexValuePair.h GMAA_kGMAA.h GMAA_MAA_ELSI.h \
+	PolicyPoolInterface.h PartialPolicyPoolInterface.h \
+	PartialPolicyPoolItemInterface.h PolicyPoolItemInterface.h
+@HAVE_CUDA_CUSOLVERDN_H_TRUE@am__objects_1 = libMADPPlanning_la-MDPPolicyIterationGPU.lo \
+@HAVE_CUDA_CUSOLVERDN_H_TRUE@	libMADPPlanning_la-SystemOfLinearEquationsSolver.lo
+am__objects_2 = libMADPPlanning_la-BruteForceSearchPlanner.lo \
 	libMADPPlanning_la-JESPExhaustivePlanner.lo \
 	libMADPPlanning_la-JESPDynamicProgrammingPlanner.lo \
 	libMADPPlanning_la-DICEPSPlanner.lo libMADPPlanning_la-QBG.lo \
 	libMADPPlanning_la-QPOMDP.lo libMADPPlanning_la-QMDP.lo \
 	libMADPPlanning_la-MDPSolver.lo \
 	libMADPPlanning_la-MDPValueIteration.lo \
+	libMADPPlanning_la-MDPPolicyIteration.lo \
 	libMADPPlanning_la-MaxPlusSolver.lo \
 	libMADPPlanning_la-MaxPlusSolverForBGs.lo \
 	libMADPPlanning_la-BGIP_SolverBruteForceSearch.lo \
@@ -202,10 +350,12 @@ am__objects_1 = libMADPPlanning_la-BruteForceSearchPlanner.lo \
 	libMADPPlanning_la-OptimalValueDatabase.lo \
 	libMADPPlanning_la-argumentHandlers.lo \
 	libMADPPlanning_la-argumentUtils.lo \
-	libMADPPlanning_la-directories.lo
-am__objects_2 =
-am__objects_3 = $(am__objects_2)
-am__objects_4 = libMADPPlanning_la-SimulationResult.lo \
+	libMADPPlanning_la-directories.lo \
+	libMADPPlanning_la-Problem_CGBG_FF.lo $(am__objects_1)
+am__objects_3 =
+am__objects_4 = $(am__objects_3)
+am__objects_5 = $(am__objects_4)
+am__objects_6 = libMADPPlanning_la-SimulationResult.lo \
 	libMADPPlanning_la-SimulationDecPOMDPDiscrete.lo \
 	libMADPPlanning_la-SimulationTOIDecPOMDPDiscrete.lo \
 	libMADPPlanning_la-SimulationFactoredDecPOMDPDiscrete.lo \
@@ -215,7 +365,7 @@ am__objects_4 = libMADPPlanning_la-SimulationResult.lo \
 	libMADPPlanning_la-AgentMDP.lo \
 	libMADPPlanning_la-AgentOnlinePlanningMDP.lo \
 	libMADPPlanning_la-AgentQLearner.lo
-am__objects_5 = libMADPPlanning_la-BeliefValue.lo \
+am__objects_7 = libMADPPlanning_la-BeliefValue.lo \
 	libMADPPlanning_la-BeliefSetNonStationary.lo \
 	libMADPPlanning_la-AlphaVector.lo \
 	libMADPPlanning_la-AlphaVectorPlanning.lo \
@@ -244,7 +394,7 @@ am__objects_5 = libMADPPlanning_la-BeliefValue.lo \
 	libMADPPlanning_la-PerseusNonStationary.lo \
 	libMADPPlanning_la-PerseusNonStationaryQPlanner.lo \
 	libMADPPlanning_la-PerseusBGNSPlanner.lo
-am__objects_6 = libMADPPlanning_la-GeneralizedMAAStarPlanner.lo \
+am__objects_8 = libMADPPlanning_la-GeneralizedMAAStarPlanner.lo \
 	libMADPPlanning_la-GeneralizedMAAStarPlannerForDecPOMDPDiscrete.lo \
 	libMADPPlanning_la-GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete.lo \
 	libMADPPlanning_la-GMAA_MAAstar.lo \
@@ -259,10 +409,10 @@ am__objects_6 = libMADPPlanning_la-GeneralizedMAAStarPlanner.lo \
 	libMADPPlanning_la-PartialJPPVIndexValuePair.lo \
 	libMADPPlanning_la-GMAA_kGMAA.lo \
 	libMADPPlanning_la-GMAA_MAA_ELSI.lo
-am__objects_7 = $(am__objects_1) $(am__objects_3) $(am__objects_4) \
-	$(am__objects_3) $(am__objects_5) $(am__objects_3) \
-	$(am__objects_6) $(am__objects_3)
-am_libMADPPlanning_la_OBJECTS = $(am__objects_7)
+am__objects_9 = $(am__objects_2) $(am__objects_5) $(am__objects_6) \
+	$(am__objects_4) $(am__objects_7) $(am__objects_4) \
+	$(am__objects_8) $(am__objects_4)
+am_libMADPPlanning_la_OBJECTS = $(am__objects_9)
 libMADPPlanning_la_OBJECTS = $(am_libMADPPlanning_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -325,12 +475,97 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libMADPPlanning_la_SOURCES)
-DIST_SOURCES = $(libMADPPlanning_la_SOURCES)
+DIST_SOURCES = $(am__libMADPPlanning_la_SOURCES_DIST)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+am__libMADPPlanning_la_HEADERS_DIST = BruteForceSearchPlanner.h \
+	JESPExhaustivePlanner.h JESPDynamicProgrammingPlanner.h \
+	DICEPSPlanner.h QBG.h QPOMDP.h QMDP.h MDPSolver.h \
+	MDPValueIteration.h MDPPolicyIteration.h MaxPlusSolver.h \
+	MaxPlusSolverForBGs.h BGIP_SolverBruteForceSearch.h \
+	BGIP_SolverBFSNonIncremental.h BGIP_SolverBranchAndBound.h \
+	BGIP_BnB_Node.h BnB_JointTypeOrdering.h \
+	BayesianGameIdenticalPayoffSolver.h \
+	BayesianGameIdenticalPayoffSolver_T.h \
+	BGIP_SolverAlternatingMaximization.h BGIP_SolverCE.h \
+	BGIP_SolverMaxPlus.h BGIP_SolverRandom.h \
+	BGIP_SolverCreator_MP.h BGCG_Solver.h \
+	BGCG_SolverNonserialDynamicProgramming.h BGCG_SolverMaxPlus.h \
+	BGCG_SolverRandom.h BGCG_SolverCreator.h BGCG_SolverFG.h \
+	BG_FactorGraphCreator.h FG_Solver.h FG_SolverMaxPlus.h \
+	FG_SolverNDP.h QFunction.h QFunctionForDecPOMDP.h \
+	QFunctionForFactoredDecPOMDP.h QFunctionJAOHInterface.h \
+	QFunctionJAOH.h QFunctionJAOHTree.h QFunctionJointBelief.h \
+	QHybrid.h qheur.h gmaatype.h JESPtype.h BGIP_SolverType.h \
+	BayesianGameBase.h BayesianGame.h \
+	BayesianGameIdenticalPayoff.h \
+	BayesianGameCollaborativeGraphical.h \
+	BayesianGameForDecPOMDPStage.h BGforStageCreation.h \
+	BayesianGameForDecPOMDPStageInterface.h \
+	BayesianGameWithClusterInfo.h \
+	JointPolicyPureVectorForClusteredBG.h TypeCluster.h Type.h \
+	Type_PointerTuple.h Type_AOHIndex.h \
+	LocalBGValueFunctionVector.h LocalBGValueFunctionInterface.h \
+	LocalBGValueFunctionBGCGWrapper.h BGIPSolution.h \
+	ValueFunctionDecPOMDPDiscrete.h FactoredQLastTimeStepOrElse.h \
+	FactoredQLastTimeStepOrQMDP.h FactoredQLastTimeStepOrQPOMDP.h \
+	FactoredQLastTimeStepOrQBG.h OptimalValueDatabase.h \
+	argumentHandlers.h argumentUtils.h directories.h \
+	Problem_CGBG_FF.h MDPPolicyIterationGPU.h \
+	SystemOfLinearEquationsSolver.h argumentHandlersPostChild.h \
+	JointPolicyValuePair.h PartialJointPolicyValuePair.h \
+	ValueFunction.h QFunctionInterface.h \
+	QFunctionForDecPOMDPInterface.h \
+	QFunctionForFactoredDecPOMDPInterface.h \
+	QFunctionJointBeliefInterface.h \
+	FactoredQFunctionStateJAOHInterface.h \
+	BGIP_SolverCreatorInterface_T.h \
+	BGIP_IncrementalSolverCreatorInterface_T.h \
+	BGIP_SolverCreatorInterface.h BGIP_SolverCreator_AM.h \
+	BGIP_SolverCreator_CE.h BGIP_SolverCreator_BFS.h \
+	BGIP_SolverCreator_BFSNonInc.h BGIP_SolverCreator_BnB.h \
+	BGIP_SolverCreator_Random.h BGCG_SolverCreator_NDP.h \
+	BGCG_SolverCreator_MP.h BGCG_SolverCreator_FG.h \
+	BGCG_SolverCreator_Random.h \
+	BayesianGameIdenticalPayoffInterface.h \
+	BGIP_IncrementalSolverInterface_T.h \
+	BGIP_IncrementalSolverInterface.h OnlineMDPPlanner.h \
+	SimulationResult.h SimulationDecPOMDPDiscrete.h \
+	SimulationTOIDecPOMDPDiscrete.h \
+	SimulationFactoredDecPOMDPDiscrete.h AgentPOMDP.h AgentBG.h \
+	AgentQMDP.h AgentRandom.h AgentMDP.h AgentOnlinePlanningMDP.h \
+	AgentQLearner.h Simulation.h SimulationAgent.h \
+	AgentDecPOMDPDiscrete.h AgentDelayedSharedObservations.h \
+	AgentFullyObservable.h AgentSharedObservations.h \
+	AgentLocalObservations.h \
+	AgentTOIFullyObservableSyncedSpecialReward.h \
+	AgentTOIFullyObservableSynced.h BeliefValue.h \
+	BeliefSetNonStationary.h AlphaVector.h AlphaVectorPlanning.h \
+	AlphaVectorPruning.h Perseus.h AlphaVectorPOMDP.h \
+	AlphaVectorConstrainedPOMDP.h PerseusPOMDPPlanner.h \
+	PerseusConstrainedPOMDPPlanner.h MonahanPOMDPPlanner.h \
+	AlphaVectorBG.h MonahanBGPlanner.h MonahanPlanner.h \
+	QMonahanPOMDP.h PerseusBGPlanner.h QMonahanBG.h QAlphaVector.h \
+	TreeIncPruneBGPlanner.h QBGPlanner_TreeIncPruneBnB.h \
+	QTreeIncPruneBG.h PerseusBGPOMDPPlanner.h \
+	AlphaVectorWeighted.h PerseusWeightedPlanner.h \
+	PerseusQFunctionPlanner.h PerseusStationary.h \
+	PerseusNonStationary.h PerseusNonStationaryQPlanner.h \
+	PerseusBGNSPlanner.h ValueFunctionPOMDPDiscrete.h \
+	BGBackupType.h PerseusBackupType.h BeliefSet.h QAV.h \
+	QAVParameters.h GeneralizedMAAStarPlanner.h \
+	GeneralizedMAAStarPlannerForDecPOMDPDiscrete.h \
+	GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete.h \
+	GMAA_MAAstar.h GMAA_MAAstarClassic.h GMAA_MAAstarCluster.h \
+	GMAA_kGMAACluster.h PolicyPoolJPolValPair.h \
+	PolicyPoolPartialJPolValPair.h JPPVValuePair.h \
+	JPPVIndexValuePair.h PartialJPDPValuePair.h \
+	PartialJPPVIndexValuePair.h GMAA_kGMAA.h GMAA_MAA_ELSI.h \
+	PolicyPoolInterface.h PartialPolicyPoolInterface.h \
+	PartialPolicyPoolItemInterface.h PolicyPoolItemInterface.h
 HEADERS = $(libMADPPlanning_la_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
@@ -373,6 +608,8 @@ CSTD = @CSTD@
 CSTD11 = @CSTD11@
 CSTDGNU = @CSTDGNU@
 CSTDGNU11 = @CSTDGNU11@
+CUDA_CPPFLAGS = @CUDA_CPPFLAGS@
+CUDA_LDFLAGS = @CUDA_LDFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
@@ -480,8 +717,36 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+#####################################################################
+# Optional software packages to be used, check configuration.h to
+# enable them
+
+# For using arbitrary length integers
+# Should be set if USE_ARBITRARY_PRECISION_INDEX is set to 1
+#GMP_LD=-lgmpxx -lgmp
 LIBDAI_NORMAL = $(top_builddir)/src/libDAI/libDAI.la
 LIBDAI_INCLUDES = -I$(top_srcdir)/src/libDAI
+
+# The following is necessary for calling Matlab from the C++ code
+# Just set the correct MATLAB_DIR and uncomment all three lines
+#MATLAB_DIR = /scratch/matlabR2008a
+#MATLAB_INCLUDES = -I$(MATLAB_DIR)/extern/include/
+#MATLAB_LD = -L$(MATLAB_DIR)/bin/glnxa64/ \
+# -lmat -leng -lmx -lut
+
+# the open PNL library
+#PNL_LD = #define PNL library path 
+#PNL_INCLUDES = #define the PNL includes.
+#typically something like
+#PNL_LD = -L/home/faolieho/Documents/software/PNL/high/source -L/home/faolieho/Documents/software/PNL/cxcore/cxcore/src -L/home/faolieho/Documents/software/PNL/c_pgmtk/src -lhigh -lpnl -lcxcore -lpthread
+#and
+#PNL_INCLUDES = -I$(HOME)/include/pnl -I$(HOME)/include/pnl/high -I$(HOME)/include/pnl/opencx  -I$(HOME)/include/pnl/cart
+#
+#NOTE: in order to build DEBUG libraries (i.e., include the debug version of 
+# the PNL lib), the PNL_LD path should point to where the PNL library is built,
+# rather than installed. For some reason things are not working smoothly when 
+# pointing to the installation libdir (something to do with libtool I think).
 
 #####################################################################
 # Compiler flags
@@ -510,13 +775,12 @@ MADP_CFLAGS =
 
 #####################################################################
 # The final include path
+# fao 2014-02-01: added $(INCLUDE) such that we can all add include paths, for e.g., cplex.
 MADP_INCLUDES = \
  $(INCLUDE) \
- $(LIBDAI_INCLUDES)\
- -I$(top_srcdir)/src/boost
+ $(LIBDAI_INCLUDES)
 
 MADP_LD = 
-# $(LPSOLVE_LD) 
 
 #####################################################################
 # Lists of libs to be linked with binaries.
@@ -553,9 +817,9 @@ INCLUDEPATH = -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
 
-AM_LDFLAGS = 
 AM_CPPFLAGS = -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH) \
-	$(am__append_1)
+	$(am__append_1) $(am__append_3)
+AM_LDFLAGS = $(am__append_2)
 AM_CXXFLAGS = $(CSTANDARD)
 SIMULATION_CPPFILES = SimulationResult.cpp\
  SimulationDecPOMDPDiscrete.cpp \
@@ -641,77 +905,44 @@ POMDP_HFILES = $(POMDP_CPPFILES:.cpp=.h)\
  BeliefSet.h \
  QAV.h QAVParameters.h
 
-PLANNING_CPPFILES = \
- BruteForceSearchPlanner.cpp\
- JESPExhaustivePlanner.cpp\
- JESPDynamicProgrammingPlanner.cpp\
- DICEPSPlanner.cpp\
- QBG.cpp QPOMDP.cpp QMDP.cpp\
- MDPSolver.cpp\
- MDPValueIteration.cpp \
- MaxPlusSolver.cpp\
- MaxPlusSolverForBGs.cpp\
- BGIP_SolverBruteForceSearch.cpp\
- BGIP_SolverBFSNonIncremental.cpp\
- BGIP_SolverBranchAndBound.cpp\
- BGIP_BnB_Node.cpp\
- BnB_JointTypeOrdering.cpp\
- BayesianGameIdenticalPayoffSolver.cpp\
- BayesianGameIdenticalPayoffSolver_T.cpp\
- BGIP_SolverAlternatingMaximization.cpp \
- BGIP_SolverCE.cpp \
- BGIP_SolverMaxPlus.cpp \
- BGIP_SolverRandom.cpp \
- BGIP_SolverCreator_MP.cpp \
- BGCG_Solver.cpp\
- BGCG_SolverNonserialDynamicProgramming.cpp\
- BGCG_SolverMaxPlus.cpp\
- BGCG_SolverRandom.cpp\
- BGCG_SolverCreator.cpp \
- BGCG_SolverFG.cpp\
- BG_FactorGraphCreator.cpp\
- FG_Solver.cpp\
- FG_SolverMaxPlus.cpp\
- FG_SolverNDP.cpp\
- QFunction.cpp\
- QFunctionForDecPOMDP.cpp\
- QFunctionForFactoredDecPOMDP.cpp\
- QFunctionJAOHInterface.cpp\
- QFunctionJAOH.cpp\
- QFunctionJAOHTree.cpp\
- QFunctionJointBelief.cpp \
- QHybrid.cpp \
- qheur.cpp\
- gmaatype.cpp\
- JESPtype.cpp\
- BGIP_SolverType.cpp\
- BayesianGameBase.cpp \
- BayesianGame.cpp \
- BayesianGameIdenticalPayoff.cpp\
- BayesianGameCollaborativeGraphical.cpp\
- BayesianGameForDecPOMDPStage.cpp\
- BGforStageCreation.cpp\
- BayesianGameForDecPOMDPStageInterface.cpp\
- BayesianGameWithClusterInfo.cpp\
- JointPolicyPureVectorForClusteredBG.cpp\
- TypeCluster.cpp\
- Type.cpp\
- Type_PointerTuple.cpp\
- Type_AOHIndex.cpp\
- LocalBGValueFunctionVector.cpp\
- LocalBGValueFunctionInterface.cpp\
- LocalBGValueFunctionBGCGWrapper.cpp\
- BGIPSolution.cpp\
- ValueFunctionDecPOMDPDiscrete.cpp\
- FactoredQLastTimeStepOrElse.cpp\
- FactoredQLastTimeStepOrQMDP.cpp \
- FactoredQLastTimeStepOrQPOMDP.cpp\
- FactoredQLastTimeStepOrQBG.cpp \
- OptimalValueDatabase.cpp\
- argumentHandlers.cpp\
- argumentUtils.cpp\
- directories.cpp 
-
+PLANNING_CPPFILES = BruteForceSearchPlanner.cpp \
+	JESPExhaustivePlanner.cpp JESPDynamicProgrammingPlanner.cpp \
+	DICEPSPlanner.cpp QBG.cpp QPOMDP.cpp QMDP.cpp MDPSolver.cpp \
+	MDPValueIteration.cpp MDPPolicyIteration.cpp MaxPlusSolver.cpp \
+	MaxPlusSolverForBGs.cpp BGIP_SolverBruteForceSearch.cpp \
+	BGIP_SolverBFSNonIncremental.cpp BGIP_SolverBranchAndBound.cpp \
+	BGIP_BnB_Node.cpp BnB_JointTypeOrdering.cpp \
+	BayesianGameIdenticalPayoffSolver.cpp \
+	BayesianGameIdenticalPayoffSolver_T.cpp \
+	BGIP_SolverAlternatingMaximization.cpp BGIP_SolverCE.cpp \
+	BGIP_SolverMaxPlus.cpp BGIP_SolverRandom.cpp \
+	BGIP_SolverCreator_MP.cpp BGCG_Solver.cpp \
+	BGCG_SolverNonserialDynamicProgramming.cpp \
+	BGCG_SolverMaxPlus.cpp BGCG_SolverRandom.cpp \
+	BGCG_SolverCreator.cpp BGCG_SolverFG.cpp \
+	BG_FactorGraphCreator.cpp FG_Solver.cpp FG_SolverMaxPlus.cpp \
+	FG_SolverNDP.cpp QFunction.cpp QFunctionForDecPOMDP.cpp \
+	QFunctionForFactoredDecPOMDP.cpp QFunctionJAOHInterface.cpp \
+	QFunctionJAOH.cpp QFunctionJAOHTree.cpp \
+	QFunctionJointBelief.cpp QHybrid.cpp qheur.cpp gmaatype.cpp \
+	JESPtype.cpp BGIP_SolverType.cpp BayesianGameBase.cpp \
+	BayesianGame.cpp BayesianGameIdenticalPayoff.cpp \
+	BayesianGameCollaborativeGraphical.cpp \
+	BayesianGameForDecPOMDPStage.cpp BGforStageCreation.cpp \
+	BayesianGameForDecPOMDPStageInterface.cpp \
+	BayesianGameWithClusterInfo.cpp \
+	JointPolicyPureVectorForClusteredBG.cpp TypeCluster.cpp \
+	Type.cpp Type_PointerTuple.cpp Type_AOHIndex.cpp \
+	LocalBGValueFunctionVector.cpp \
+	LocalBGValueFunctionInterface.cpp \
+	LocalBGValueFunctionBGCGWrapper.cpp BGIPSolution.cpp \
+	ValueFunctionDecPOMDPDiscrete.cpp \
+	FactoredQLastTimeStepOrElse.cpp \
+	FactoredQLastTimeStepOrQMDP.cpp \
+	FactoredQLastTimeStepOrQPOMDP.cpp \
+	FactoredQLastTimeStepOrQBG.cpp OptimalValueDatabase.cpp \
+	argumentHandlers.cpp argumentUtils.cpp directories.cpp \
+	Problem_CGBG_FF.cpp $(am__append_4)
 PLANNING_HFILES = $(PLANNING_CPPFILES:.cpp=.h) \
  argumentHandlersPostChild.h\
  JointPolicyValuePair.h\
@@ -719,7 +950,6 @@ PLANNING_HFILES = $(PLANNING_CPPFILES:.cpp=.h) \
  ValueFunction.h\
  QFunctionInterface.h\
  QFunctionForDecPOMDPInterface.h\
- QFunctionForFactoredDecPOMDP.h\
  QFunctionForFactoredDecPOMDPInterface.h\
  QFunctionJAOHInterface.h\
  QFunctionJointBeliefInterface.h\
@@ -728,7 +958,6 @@ PLANNING_HFILES = $(PLANNING_CPPFILES:.cpp=.h) \
  BGIP_IncrementalSolverCreatorInterface_T.h\
  BGIP_SolverCreatorInterface.h\
  BGIP_SolverCreator_AM.h\
- BGIP_SolverCreator_MP.h\
  BGIP_SolverCreator_CE.h\
  BGIP_SolverCreator_BFS.h\
  BGIP_SolverCreator_BFSNonInc.h\
@@ -764,9 +993,7 @@ libMADPPlanning_la_LDFLAGS = $(AM_LDFLAGS)
 libMADPPlanning_la_LIBADD = 
 # for installing the headers
 libMADPPlanning_ladir = $(pkgincludedir)#/planning
-libMADPPlanning_la_HEADERS = $(PLANNING_HFILES) $(SIMULATION_HFILES)\
- $(POMDP_HFILES) $(GMAA_HFILES)
-
+libMADPPlanning_la_HEADERS = $(PLANNING_HFILES) $(SIMULATION_HFILES) $(POMDP_HFILES) $(GMAA_HFILES)
 all: all-am
 
 .SUFFIXES:
@@ -930,6 +1157,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-LocalBGValueFunctionBGCGWrapper.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-LocalBGValueFunctionInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-LocalBGValueFunctionVector.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-MDPPolicyIteration.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-MDPPolicyIterationGPU.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-MDPSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-MDPValueIteration.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-MaxPlusSolver.Plo@am__quote@
@@ -953,6 +1182,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-PerseusWeightedPlanner.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-PolicyPoolJPolValPair.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-PolicyPoolPartialJPolValPair.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-Problem_CGBG_FF.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-QAlphaVector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-QBG.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-QBGPlanner_TreeIncPruneBnB.Plo@am__quote@
@@ -973,6 +1203,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-SimulationFactoredDecPOMDPDiscrete.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-SimulationResult.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-SimulationTOIDecPOMDPDiscrete.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-SystemOfLinearEquationsSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-TreeIncPruneBGPlanner.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-Type.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMADPPlanning_la-TypeCluster.Plo@am__quote@
@@ -1071,6 +1302,13 @@ libMADPPlanning_la-MDPValueIteration.lo: MDPValueIteration.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MDPValueIteration.cpp' object='libMADPPlanning_la-MDPValueIteration.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libMADPPlanning_la-MDPValueIteration.lo `test -f 'MDPValueIteration.cpp' || echo '$(srcdir)/'`MDPValueIteration.cpp
+
+libMADPPlanning_la-MDPPolicyIteration.lo: MDPPolicyIteration.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libMADPPlanning_la-MDPPolicyIteration.lo -MD -MP -MF $(DEPDIR)/libMADPPlanning_la-MDPPolicyIteration.Tpo -c -o libMADPPlanning_la-MDPPolicyIteration.lo `test -f 'MDPPolicyIteration.cpp' || echo '$(srcdir)/'`MDPPolicyIteration.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libMADPPlanning_la-MDPPolicyIteration.Tpo $(DEPDIR)/libMADPPlanning_la-MDPPolicyIteration.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MDPPolicyIteration.cpp' object='libMADPPlanning_la-MDPPolicyIteration.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libMADPPlanning_la-MDPPolicyIteration.lo `test -f 'MDPPolicyIteration.cpp' || echo '$(srcdir)/'`MDPPolicyIteration.cpp
 
 libMADPPlanning_la-MaxPlusSolver.lo: MaxPlusSolver.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libMADPPlanning_la-MaxPlusSolver.lo -MD -MP -MF $(DEPDIR)/libMADPPlanning_la-MaxPlusSolver.Tpo -c -o libMADPPlanning_la-MaxPlusSolver.lo `test -f 'MaxPlusSolver.cpp' || echo '$(srcdir)/'`MaxPlusSolver.cpp
@@ -1505,6 +1743,27 @@ libMADPPlanning_la-directories.lo: directories.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='directories.cpp' object='libMADPPlanning_la-directories.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libMADPPlanning_la-directories.lo `test -f 'directories.cpp' || echo '$(srcdir)/'`directories.cpp
+
+libMADPPlanning_la-Problem_CGBG_FF.lo: Problem_CGBG_FF.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libMADPPlanning_la-Problem_CGBG_FF.lo -MD -MP -MF $(DEPDIR)/libMADPPlanning_la-Problem_CGBG_FF.Tpo -c -o libMADPPlanning_la-Problem_CGBG_FF.lo `test -f 'Problem_CGBG_FF.cpp' || echo '$(srcdir)/'`Problem_CGBG_FF.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libMADPPlanning_la-Problem_CGBG_FF.Tpo $(DEPDIR)/libMADPPlanning_la-Problem_CGBG_FF.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Problem_CGBG_FF.cpp' object='libMADPPlanning_la-Problem_CGBG_FF.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libMADPPlanning_la-Problem_CGBG_FF.lo `test -f 'Problem_CGBG_FF.cpp' || echo '$(srcdir)/'`Problem_CGBG_FF.cpp
+
+libMADPPlanning_la-MDPPolicyIterationGPU.lo: MDPPolicyIterationGPU.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libMADPPlanning_la-MDPPolicyIterationGPU.lo -MD -MP -MF $(DEPDIR)/libMADPPlanning_la-MDPPolicyIterationGPU.Tpo -c -o libMADPPlanning_la-MDPPolicyIterationGPU.lo `test -f 'MDPPolicyIterationGPU.cpp' || echo '$(srcdir)/'`MDPPolicyIterationGPU.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libMADPPlanning_la-MDPPolicyIterationGPU.Tpo $(DEPDIR)/libMADPPlanning_la-MDPPolicyIterationGPU.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MDPPolicyIterationGPU.cpp' object='libMADPPlanning_la-MDPPolicyIterationGPU.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libMADPPlanning_la-MDPPolicyIterationGPU.lo `test -f 'MDPPolicyIterationGPU.cpp' || echo '$(srcdir)/'`MDPPolicyIterationGPU.cpp
+
+libMADPPlanning_la-SystemOfLinearEquationsSolver.lo: SystemOfLinearEquationsSolver.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libMADPPlanning_la-SystemOfLinearEquationsSolver.lo -MD -MP -MF $(DEPDIR)/libMADPPlanning_la-SystemOfLinearEquationsSolver.Tpo -c -o libMADPPlanning_la-SystemOfLinearEquationsSolver.lo `test -f 'SystemOfLinearEquationsSolver.cpp' || echo '$(srcdir)/'`SystemOfLinearEquationsSolver.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libMADPPlanning_la-SystemOfLinearEquationsSolver.Tpo $(DEPDIR)/libMADPPlanning_la-SystemOfLinearEquationsSolver.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='SystemOfLinearEquationsSolver.cpp' object='libMADPPlanning_la-SystemOfLinearEquationsSolver.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libMADPPlanning_la-SystemOfLinearEquationsSolver.lo `test -f 'SystemOfLinearEquationsSolver.cpp' || echo '$(srcdir)/'`SystemOfLinearEquationsSolver.cpp
 
 libMADPPlanning_la-SimulationResult.lo: SimulationResult.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libMADPPlanning_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libMADPPlanning_la-SimulationResult.lo -MD -MP -MF $(DEPDIR)/libMADPPlanning_la-SimulationResult.Tpo -c -o libMADPPlanning_la-SimulationResult.lo `test -f 'SimulationResult.cpp' || echo '$(srcdir)/'`SimulationResult.cpp
@@ -2127,6 +2386,15 @@ uninstall-am: uninstall-libLTLIBRARIES \
 	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES \
 	uninstall-libMADPPlanning_laHEADERS
 
+
+cleantags: cleantags-recursive
+
+cleantags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) cleantags) || exit 1; \
+	done; \
+	rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags; \
+	rm -f cscope.out cscope.in.out cscope.po.out cscope.files
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

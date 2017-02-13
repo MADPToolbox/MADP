@@ -34,21 +34,15 @@ using namespace std;
 #define DEBUG_GMAA_EM 0
 
 GMAA_MAA_ELSI::GMAA_MAA_ELSI(
-    const PlanningUnitMADPDiscreteParameters &params,
     size_t horizon, 
-    FactoredDecPOMDPDiscreteInterface* p) :
-    GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete(params, horizon, p)
+    FactoredDecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params
+    ) :
+    GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete(horizon, p, params)
 {
     if(DEBUG_PU_CONSTRUCTORS) cout << "GMAA_MAA_ELSI::GMAA_MAA_ELSI(PlanningUnitMADPDiscreteParameters params, size_t horizon, FactoredDecPOMDPDiscreteInterface* p)  called"<<endl;
 }
 
-GMAA_MAA_ELSI::GMAA_MAA_ELSI(
-    size_t horizon, 
-    FactoredDecPOMDPDiscreteInterface* p) :
-    GeneralizedMAAStarPlannerForFactoredDecPOMDPDiscrete(horizon, p)
-{
-    if(DEBUG_PU_CONSTRUCTORS) cout << "GMAA_MAA_ELSI::GMAA_MAA_ELSI(size_t horizon, FactoredDecPOMDPDiscreteInterface* p)  called"<<endl;
-}
 
 void GMAA_MAA_ELSI::ResetPlanner()
 {

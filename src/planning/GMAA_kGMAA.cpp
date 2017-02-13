@@ -26,13 +26,12 @@
 using namespace std;
 
 GMAA_kGMAA::GMAA_kGMAA(
-    const PlanningUnitMADPDiscreteParameters &params,
-    //const BGIP_SolverCreatorInterface_T<JointPolicyPureVector> * bgsc,
     const BGIP_SolverCreatorInterface * bgsc,
     size_t horizon, 
     DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params,
     size_t nrPoliciesToProcess) :
-    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(params, horizon, p),
+    GeneralizedMAAStarPlannerForDecPOMDPDiscrete(horizon, p, params),
     _m_newBGIP_Solver(bgsc)
 {
     _m_nrPoliciesToProcess=nrPoliciesToProcess;

@@ -45,8 +45,6 @@ const char *argp_program_version = "DP-LPC";
 static char doc[] = "DP-LPC - runs Abdeslam Boularias's Dynamic Programming with Lossless Policy Compression  \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 5;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,

@@ -44,14 +44,15 @@ class PlanningUnitDecPOMDPDiscrete :
         // Constructor, destructor and copy assignment.
         ///the (default) Constructor. 
         PlanningUnitDecPOMDPDiscrete(
-                const PlanningUnitMADPDiscreteParameters &params,
+                size_t horizon=3,
+                DecPOMDPDiscreteInterface* p=0,
+                const PlanningUnitMADPDiscreteParameters * params = 0
+            );
+/*         PlanningUnitDecPOMDPDiscrete(
                 size_t horizon=3,
                 DecPOMDPDiscreteInterface* p=0
             );
-        PlanningUnitDecPOMDPDiscrete(
-                size_t horizon=3,
-                DecPOMDPDiscreteInterface* p=0
-            );
+*/
 
         //operators:
 

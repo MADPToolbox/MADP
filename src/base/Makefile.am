@@ -85,6 +85,7 @@ MADP_HFILES=$(MADP_CPPFILES:.cpp=.h) Action.h Observation.h State.h Agent.h\
  StateDistribution.h StateDistributionVector.h\
  TGet.h RGet.h OGet.h
 
+
 BASE_FILES=$(MADP_CPPFILES) $(MADP_HFILES)\
  $(GENERAL_CPPFILES) $(GENERAL_HFILES)
 

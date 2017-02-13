@@ -37,8 +37,6 @@ static char doc[] =
 "BFS - runs the BruteForceSearchPlanner \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 5;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::globalOptions_child,
@@ -81,7 +79,7 @@ int main(int argc, char **argv)
     else
         params.SetUseSparseJointBeliefs(false);
 
-    BruteForceSearchPlanner bfs(params,args.horizon,decpomdp);
+    BruteForceSearchPlanner bfs(args.horizon, decpomdp, &params);
 
     cout << "BruteForceSearchPlanner initialized" << endl;
 

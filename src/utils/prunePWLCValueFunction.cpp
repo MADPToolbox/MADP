@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 {
     if(argc!=2)
     {
-        cout << "Use as follows: " << argv[0] << "  "
+        cout << "Use as follows: prunePWLCQfunction "
              << "<QFunctionFile>" << endl;
         return(1);
     }

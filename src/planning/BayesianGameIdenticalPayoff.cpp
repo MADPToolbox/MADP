@@ -22,7 +22,8 @@
 using namespace std;
 
 //Default constructor
-BayesianGameIdenticalPayoff::BayesianGameIdenticalPayoff()
+BayesianGameIdenticalPayoff::BayesianGameIdenticalPayoff():
+    _m_utilFunction(0)
 {
     _m_initialized=false;
 }
@@ -42,6 +43,9 @@ BayesianGameIdenticalPayoff::BayesianGameIdenticalPayoff(size_t nrAgents,
         _m_utilFunction=new RewardModelMapping(_m_nrJTypes, _m_nrJA, "type", "ja");
 }
 
+BayesianGameIdenticalPayoff::BayesianGameIdenticalPayoff(const BayesianGameIdenticalPayoff& o)
+{ *this=o; /* use assignment operator */}
+
 BayesianGameIdenticalPayoff::~BayesianGameIdenticalPayoff()
 {
     if (_m_utilFunction != 0)
@@ -60,7 +64,6 @@ BayesianGameIdenticalPayoff& BayesianGameIdenticalPayoff::operator= (const Bayes
     BayesianGameIdenticalPayoffInterface::operator=(o);
     _m_initialized=o._m_initialized;
     _m_utilFunction=o._m_utilFunction->Clone();
-
     return *this;
 }
 

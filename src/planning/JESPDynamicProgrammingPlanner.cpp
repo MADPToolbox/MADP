@@ -27,21 +27,11 @@ using namespace std;
 #define DEBUG_DPJESP 0
 
 JESPDynamicProgrammingPlanner::JESPDynamicProgrammingPlanner(
-    const PlanningUnitMADPDiscreteParameters &params,
-    size_t horizon,
-    DecPOMDPDiscreteInterface* p
-    ) :
-    PlanningUnitDecPOMDPDiscrete(params, horizon, p),
-    _m_foundPolicy()
-    //,_m_exhBRBestPol(*this)
-{
-}
-
-JESPDynamicProgrammingPlanner::JESPDynamicProgrammingPlanner(
     int horizon,
-    DecPOMDPDiscreteInterface* p
+    DecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters * params
     ) :
-    PlanningUnitDecPOMDPDiscrete(horizon, p),
+    PlanningUnitDecPOMDPDiscrete(horizon, p, params),
     _m_foundPolicy()
     //,_m_exhBRBestPol(*this)
 {

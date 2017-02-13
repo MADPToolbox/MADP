@@ -16,7 +16,7 @@
 
 #include <iostream>
 #include "DecPOMDPDiscrete.h"
-#include "parser/MADPParser.h"
+#include "MADPParser.h"
 #include "PolicyPureVector.h"
 #include "NullPlanner.h"
 #include "directories.h"
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     PlanningUnitMADPDiscreteParameters params;
     params.SetComputeAll(true);
     params.SetComputeJointBeliefs(false);
-    NullPlanner np(params,h,&decpomdp);
+    NullPlanner np(h, &decpomdp, &params);
     PolicyPureVector p(&np,0, np.GetDefaultIndexDomCat());
     p.SetIndex(policyIndex);
 

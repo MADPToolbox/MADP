@@ -41,15 +41,16 @@ class PlanningUnitFactoredDecPOMDPDiscrete :
         // Constructor, destructor and copy assignment.
         /**the (default) Constructor. */
         PlanningUnitFactoredDecPOMDPDiscrete(
-                const PlanningUnitMADPDiscreteParameters &params,
                 size_t horizon=3,
-                FactoredDecPOMDPDiscreteInterface* p=0
+                FactoredDecPOMDPDiscreteInterface* p=0,
+                const PlanningUnitMADPDiscreteParameters * params = 0
             );
+/*  
         PlanningUnitFactoredDecPOMDPDiscrete(
                 size_t horizon=3,
                 FactoredDecPOMDPDiscreteInterface* p=0
             );
-
+*/
         //operators:
 
         //data manipulation (set) functions:

@@ -6,7 +6,7 @@ include $(top_srcdir)/config/Make-rules
 lib_LTLIBRARIES = libMADP.la
 libMADP_la_SOURCES =
 # Dummy C++ source to cause C++ linking.
-nodist_EXTRA_libMADP_la_SOURCES = dummy.cxx
+#nodist_EXTRA_libMADP_la_SOURCES = dummy.cxx
 libMADP_la_LIBADD = \
   ../planning/libMADPPlanning.la \
   ../support/libMADPSupport.la \

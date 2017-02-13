@@ -35,8 +35,6 @@ static char doc[] =
 "evaluateRandomPolicy - Evaluates a random policy  \
 \v";
 
-//NOTE: make sure that the below value (nrChildParsers) is correct!
-const int nrChildParsers = 6;
 const struct argp_child childVector[] = {
     ArgumentHandlers::problemFile_child,
     ArgumentHandlers::outputFileOptions_child,
@@ -65,12 +63,16 @@ int main(int argc, char **argv)
     if(fdecpomdp)
         factoredModel=true;
 
+    // no need to compute all histories
+    PlanningUnitMADPDiscreteParameters params;
+    params.SetComputeAll(false);
+
     NullPlanner *np=0;
     NullPlannerFactored *npFactored=0;
     if(factoredModel)
-        npFactored=new NullPlannerFactored(args.horizon,fdecpomdp);
+        npFactored=new NullPlannerFactored(args.horizon,fdecpomdp,&params);
     else
-        np=new NullPlanner(args.horizon,decpomdp);
+        np=new NullPlanner(args.horizon,decpomdp,&params);
 
     ofstream of;
     if(!args.dryrun)

@@ -8,7 +8,8 @@
  * This file has been written and/or modified by the following people:
  *
  * Frans Oliehoek 
- * Matthijs Spaan 
+ * Matthijs Spaan
+ * Erwin Walraven
  *
  * For contact information please see the included AUTHORS file.
  */
@@ -35,7 +36,8 @@ AlphaVectorPruning::~AlphaVectorPruning()
 {
 }
 
-ValueFunctionPOMDPDiscrete AlphaVectorPruning::Prune(const ValueFunctionPOMDPDiscrete &Vin)
+ValueFunctionPOMDPDiscrete AlphaVectorPruning::Prune(const ValueFunctionPOMDPDiscrete &Vin,
+                                                     size_t acceleratedPruningThreshold)
 {
     if(Vin.size()==0)
         return(Vin);
@@ -68,7 +70,7 @@ ValueFunctionPOMDPDiscrete AlphaVectorPruning::Prune(const ValueFunctionPOMDPDis
         AlphaVector curr=all.at(0);
         bool foundBelief=false;
         vector<double> belief(nrStates,0);
-        foundBelief = FindBelief(curr, Vpruned, belief);
+        foundBelief = FindBelief(curr, Vpruned, belief, acceleratedPruningThreshold);
         if(foundBelief)
         {
             // we found a belief for which curr is not dominated, now
@@ -126,7 +128,225 @@ ValueFunctionPOMDPDiscrete AlphaVectorPruning::ParetoPrune(const ValueFunctionPO
     return(result);
 }
 
+int AlphaVectorPruning::GetVectorIndex(const AlphaVector &p,
+                                    const ValueFunctionPOMDPDiscrete &uU,
+                                    vector<double> &belief)
+{
+    double currentMin = std::numeric_limits<double>::infinity();
+    Index currentIndex = 0;
+    size_t nrStates = p.GetNrValues();
+
+    for(Index i=0; i<uU.size();i++)
+    {
+        AlphaVector curr = uU.at(i);
+        double currentVal = 0.0;
+
+        for(Index j=0; j<nrStates; j++)
+        {
+            currentVal = currentVal + (p.GetValue(j)-curr.GetValue(j)) * belief.at(j);
+        }
+
+        if(currentVal < currentMin) 
+        {
+            currentMin = currentVal;
+            currentIndex = i;
+        }
+    }
+
+    return currentIndex;
+}
+
+double AlphaVectorPruning::GetBeliefDiff(vector<double> &belief0, vector<double> &belief1)
+{
+    size_t nrStates = belief0.size();
+    double totalDiff = 0.0;
+
+    for(Index j=0; j<nrStates; j++)
+    {
+        totalDiff = totalDiff + std::abs(belief0.at(j)-belief1.at(j));
+    }
+
+    return totalDiff;
+}
+
 bool AlphaVectorPruning::FindBelief(const AlphaVector &p,
+                                    const ValueFunctionPOMDPDiscrete &uU,
+                                    vector<double> &belief,
+                                    size_t acceleratedPruningThreshold)
+{
+    // if the threshold is set to 0, accelerated pruning is disabled
+    if(acceleratedPruningThreshold==0 ||
+       uU.size() < acceleratedPruningThreshold)
+    {
+        return FindBeliefNormal(p, uU, belief);
+    }
+    else
+    {
+        return FindBeliefAccelerated(p, uU, belief);
+    }
+}
+
+double AlphaVectorPruning::GetNormalObj(const AlphaVector &p,
+                                    const ValueFunctionPOMDPDiscrete &uU)
+{
+    // we use this function for debugging only
+
+    size_t nrStates = p.GetNrValues();
+    lprec *lp = make_lp(0, nrStates+1);
+        
+    set_verbose(lp, 1);
+    set_maxim(lp);
+    
+    for(Index i=0; i<uU.size();i++)
+    {
+        double constraint[nrStates+2];
+        
+        AlphaVector curr = uU.at(i);
+        for(Index j=0; j<nrStates; j++)
+            constraint[j+1] = (p.GetValue(j)-curr.GetValue(j));
+        
+        constraint[nrStates+1]=-1;
+        add_constraint(lp, constraint, ROWTYPE_GE, 0);
+    }
+    
+    double wConstraint[nrStates+2];
+    for(Index j=0; j<=nrStates; j++)
+        wConstraint[j+1] = 1;
+    
+    wConstraint[nrStates+1]=0;
+    set_unbounded(lp,nrStates+1);
+    add_constraint(lp, wConstraint, ROWTYPE_EQ, 1);
+
+
+    double objective[nrStates+2];
+    for(Index j=0; j<=nrStates; j++)
+        objective[j+1] = 0;
+        
+    objective[nrStates+1]=1;
+    set_obj_fn(lp,objective);
+
+    solve(lp);
+
+    return get_objective(lp);
+}
+
+bool AlphaVectorPruning::FindBeliefAccelerated(const AlphaVector &p,
+                                    const ValueFunctionPOMDPDiscrete &uU,
+                                    vector<double> &belief)
+{
+    // Source: Walraven, E., & Spaan, M. T. J. (2017). Accelerated Vector Pruning for Optimal POMDP Solvers.
+    // In Proceedings of the 31st AAAI Conference on Artificial Intelligence.
+
+    bool foundBelief=false;
+#ifdef HAVE_LIBLPSOLVE55_PIC
+    size_t nrStates = p.GetNrValues();
+    belief=vector<double>(nrStates,0);
+
+    // in case the input value function is empty, we return a belief with first
+    // element equal to 1.0 (in fact any belief can be returned).
+    if(uU.size()==0)
+    {
+        belief=vector<double>(nrStates, 0.0);
+        belief[0] = 1.0;
+        return(true);
+    }
+
+    lprec *lp = make_lp(0, nrStates+1);
+        
+    set_verbose(lp, 1);
+    set_maxim(lp);
+
+    double wConstraint[nrStates+2];
+    for(Index j=0; j<=nrStates; j++)
+        wConstraint[j+1] = 1;
+    
+    wConstraint[nrStates+1]=0;
+    set_unbounded(lp,nrStates+1);
+    add_constraint(lp, wConstraint, ROWTYPE_EQ, 1);
+
+    double objective[nrStates+2];
+    for(Index j=0; j<=nrStates; j++)
+        objective[j+1] = 0;
+        
+    objective[nrStates+1]=1;
+    set_obj_fn(lp,objective);
+
+    // choose arbitrary belief
+    vector<double> currentBelief = vector<double>(nrStates, 0.0);
+    currentBelief[0] = 1.0;
+    double currentObjective = std::numeric_limits<double>::infinity();
+
+//    int iter = 0;
+    while(true)
+    {
+        // find new constraint to add
+        int vectorIndex = GetVectorIndex(p, uU, currentBelief);
+
+        // add constraint
+        double constraint[nrStates+2];
+        AlphaVector curr = uU.at(vectorIndex);
+        for(Index j=0; j<nrStates; j++)
+            constraint[j+1] = (p.GetValue(j)-curr.GetValue(j));
+        
+        constraint[nrStates+1]=-1;
+        add_constraint(lp, constraint, ROWTYPE_GE, 0);
+
+        // solve LP
+        solve(lp);
+
+        // get solution
+        vector<double> newBelief = vector<double>(nrStates, 0.0);
+        double *var;
+        get_ptr_variables(lp,&var);
+        double beliefSum = 0.0;
+        for (Index i = 0; i < nrStates; i++)
+        {
+            newBelief.at(i)=var[i];
+            beliefSum += newBelief.at(i);
+        }
+
+        double newObjective = get_objective(lp);
+
+        double beliefDiff = GetBeliefDiff(newBelief, currentBelief);
+        double objectiveDiff = std::abs(currentObjective-newObjective);
+
+//         iter++;
+//         cout << "Iter: " << iter << endl;
+//         cout << "Belief sum: " << beliefSum << endl;
+//         cout << "Old obj: " << currentObjective << endl;
+//         cout << "New obj: " << newObjective << endl;
+//         cout << "Diff belief: " << beliefDiff << endl;
+//         cout << "Diff obj: " << objectiveDiff << endl << endl;
+
+        if((beliefDiff < PROB_PRECISION && objectiveDiff < REWARD_PRECISION) || currentObjective <= 0.0)
+        {
+            break;
+        }
+        else 
+        {
+            currentBelief = newBelief;
+            currentObjective = newObjective;
+        }
+    }
+
+//    cout << "Objective found: " << currentObjective << endl;
+//    cout << "Expected objective: " << GetNormalObj(p, uU) << endl << endl;
+
+    if(currentObjective > 0.0) 
+    {
+        foundBelief = true;
+        belief = currentBelief;
+    }
+  
+    // delete the problem and free memory
+    delete_lp(lp);
+#else // HAVE_LIBLPSOLVE55_PIC
+    throw(E("AlphaVectorPruning: lpsolve was not installed"));
+#endif // HAVE_LIBLPSOLVE55_PIC    
+    return(foundBelief);
+}
+
+bool AlphaVectorPruning::FindBeliefNormal(const AlphaVector &p,
                                     const ValueFunctionPOMDPDiscrete &uU,
                                     vector<double> &belief)
 {

@@ -25,9 +25,10 @@ bak-recursive:
 htmldoc:
 	doxygen doc/doxygen.conf;
 
+MADPVER="0.4.1"
 package:
-	rm -fr madp-0.3.1
-	cp madp-0.3.1.tar.gz madp_0.3.1.orig.tar.gz
-	tar xf madp_0.3.1.orig.tar.gz
-	cp -r debian madp-0.3.1/
-	cd madp-0.3.1 && debuild -us -uc
+	rm -fr madp-$(MADPVER)
+	cp madp-(MADPVER).tar.gz madp_(MADPVER).orig.tar.gz
+	tar xf madp_(MADPVER).orig.tar.gz
+	cp -r debian madp-(MADPVER)/
+	cd madp-(MADPVER) && debuild -us -uc

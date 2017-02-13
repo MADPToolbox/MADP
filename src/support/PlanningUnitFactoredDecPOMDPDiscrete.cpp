@@ -21,16 +21,17 @@ using namespace std;
 
 //Default constructor
 PlanningUnitFactoredDecPOMDPDiscrete::PlanningUnitFactoredDecPOMDPDiscrete(
-    const PlanningUnitMADPDiscreteParameters &params,
     size_t horizon,
-    FactoredDecPOMDPDiscreteInterface* p
+    FactoredDecPOMDPDiscreteInterface* p,
+    const PlanningUnitMADPDiscreteParameters *params
     ) :
-    PlanningUnitDecPOMDPDiscrete(params,horizon,p) 
+    PlanningUnitDecPOMDPDiscrete(horizon,p, params) 
     ,_m_fDecPOMDP(p)
 {
     if(DEBUG_PU_CONSTRUCTORS) cout << "PlanningUnitFactoredDecPOMDPDiscrete(PlanningUnitMADPDiscreteParameters params, size_t horizon, FactoredDecPOMDPDiscreteInterface* p  called" << endl;
 }
 
+/*
 PlanningUnitFactoredDecPOMDPDiscrete::PlanningUnitFactoredDecPOMDPDiscrete(
     size_t horizon,
     FactoredDecPOMDPDiscreteInterface* p
@@ -40,6 +41,7 @@ PlanningUnitFactoredDecPOMDPDiscrete::PlanningUnitFactoredDecPOMDPDiscrete(
 {
     if(DEBUG_PU_CONSTRUCTORS) cout << "PlanningUnitFactoredDecPOMDPDiscrete(size_t horizon, FactoredDecPOMDPDiscreteInterface* p  called" << endl;
 }
+ * */
 
 /*
 //Copy assignment constructor.    

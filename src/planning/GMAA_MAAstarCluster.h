@@ -125,19 +125,12 @@ class GMAA_MAAstarCluster : public GeneralizedMAAStarPlannerForDecPOMDPDiscrete
          * takes place.  the booleans arguments are passed down to
          * PlanningUnitMADPDiscrete.  .*/
         GMAA_MAAstarCluster(
-                const PlanningUnitMADPDiscreteParameters &params,
-                //const BGIP_IncrementalSolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG> * bgs,
                 const BGIP_SolverCreatorInterface * bgsc,
-                size_t horizon=3, 
-                DecPOMDPDiscreteInterface* p=0,
-                int verboseness=0
+                size_t horizon = 3, 
+                DecPOMDPDiscreteInterface* p = 0,
+                const PlanningUnitMADPDiscreteParameters * params = 0,
+                int verboseness = 0
                 );
-
-        /**\brief Default constructor.
-         */
-        GMAA_MAAstarCluster(
-            const BGIP_IncrementalSolverCreatorInterface_T<JointPolicyPureVectorForClusteredBG> * bgs = 0,
-            size_t horizon=3, DecPOMDPDiscreteInterface* p=0);
 
         ~GMAA_MAAstarCluster();
 
