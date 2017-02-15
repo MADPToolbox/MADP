@@ -1,0 +1,131 @@
+running in 'testMode'
+---------------------
+BFS 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+---------------------
+AM 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+---------------------
+CE 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_IdentityMapping 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_MaxContribution 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_MinContribution 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_MaxContributionDifference 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_DescendingProbability 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_BasisTypes 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_ConsistentMaxContribution 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_ConsistentMinContribution 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
+---------------------
+BGIP_SolverBranchAndBound_ConsistentMaxContributionDifference 7.75564
+---------------------
+JointPolicyPureVector: 
+JPolComponent_VectorImplementation index 0
+Policy for agent 0 (index 0):
+BGType0 --> BGAction0
+Policy for agent 1 (index 0):
+BGType0 --> BGAction0
+BGType1 --> BGAction0
+
