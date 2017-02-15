@@ -13,7 +13,7 @@
 
 	* Includes spirit parser for .pomdp files
 
-	* Includes new code for pruning POMDP vectors; obviates dependence on 
+	* Includes new code for pruning POMDP vectors; obviates dependence on
 	  Cassandra's code and old LP solve version.
 
 	* Includes new factor graph solution code
@@ -63,7 +63,7 @@
 2010-03-12  Matthijs Spaan  <mtjspaan@isr.ist.utl.pt>
 
 	* Release 0.2.1, bugfix release mainly.
-	
+
 	* Update code to compile with GCC 4.4.
 
 	* Allow for sparse reward models, and don't add zero
