@@ -189,6 +189,7 @@ bool AlphaVectorPruning::FindBelief(const AlphaVector &p,
 double AlphaVectorPruning::GetNormalObj(const AlphaVector &p,
                                     const ValueFunctionPOMDPDiscrete &uU)
 {
+#ifdef HAVE_LIBLPSOLVE55_PIC
     // we use this function for debugging only
 
     size_t nrStates = p.GetNrValues();
@@ -228,6 +229,10 @@ double AlphaVectorPruning::GetNormalObj(const AlphaVector &p,
     solve(lp);
 
     return get_objective(lp);
+#else // HAVE_LIBLPSOLVE55_PIC
+    throw(E("AlphaVectorPruning: lpsolve was not installed"));
+    return(0);
+#endif // HAVE_LIBLPSOLVE55_PIC    
 }
 
 bool AlphaVectorPruning::FindBeliefAccelerated(const AlphaVector &p,
