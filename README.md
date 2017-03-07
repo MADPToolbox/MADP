@@ -9,7 +9,7 @@ is designed to be rather general, but most effort has been put in
 planning algorithms for discrete Dec-POMDPs.
 
 Comments, bug reports, patches, etc, are welcome. A mailinglist is
-available at madp-users@isr.ist.utl.pt .
+available at madp-users@isr.ist.utl.pt.
 
 Authors:
 * Frans Oliehoek,
@@ -21,8 +21,8 @@ Please refer to the file [AUTHORS](AUTHORS) for contact information and current
 affiliations. MADP includes other software, for details see [COPYING](COPYING).
 
 
-Required software (as Debian package names)
--------------------------------------------
+### Required software (as Debian package names)
+-----------------------------------------------
 
 MADP includes all required software.
 
@@ -40,7 +40,6 @@ Optional software:
 For enabling optional software, see [src/Makefile.custom](src/Makefile.custom) and
 [src/include/configuration.h](src/include/configuration.h).
 
----
 The lazy-bastards-copy-paste-line to set up most debian-based users:
 ```
 sudo aptitude install automake autoconf libtool ccache gcc g++ \
@@ -49,19 +48,19 @@ libsuitesparse-dev libgsl0-dev \
 libgmp3-dev libxml2-dev doxygen graphviz 
 ```
 
-Documentation and Installation Instructions
--------------------------------------------
+### Documentation and Installation Instructions
+-----------------------------------------------
 
-See doc/MADPToolbox-0.XXX.pdf, which also includes detailed 
+See `doc/MADPToolbox-0.XXX.pdf`, which also includes detailed 
 installation instructions.
 
 To (re)generate API documentation from source, run:
 ```
 make htmldoc
 ```
-Open doc/html/index.html in a webbrowser
+Open `doc/html/index.html` in a webbrowser
 
-To compile, Execute the following
+To compile, execute the following
 ```
 sh autogen.sh
 ./configure
@@ -69,8 +68,8 @@ make
 ```
 
 Problem descriptions can be loaded without specifying a path if
-~/.madp/problems is a symlink to the problems subdir in the MADP tree.
-Similarly, results are saved in (subdirs of) ~/.madp/results, so will
+`~/.madp/problems` is a symlink to the problems subdir in the MADP tree.
+Similarly, results are saved in (subdirs of) `~/.madp/results`, so it will
 be convenient to make a symlink to the desired results locations.
 This can be accomplished as follows:
 ```
@@ -80,7 +79,7 @@ ln -s ~/<PATHTOMADP>/problems
 ln -s ~/<PATHTOMADP>/results
 ```
 
-Acknowledgments
----------------
+### Acknowledgments
+-------------------
 
-Please see the AUTHORS file.
+Please see the [AUTHORS](AUTHORS) file.
