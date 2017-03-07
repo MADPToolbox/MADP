@@ -1,0 +1,26 @@
+language: cpp
+
+sudo: required
+dist: trusty
+
+branches:
+  only:
+    - master
+
+compiler:
+  - gcc
+
+cache:
+  - apt
+
+before_install:
+  - export REPOSITORY_NAME=${PWD##*/}
+  - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
+
+  # dependency installation
+  - sudo apt-get update
+  - sudo apt-get -y install automake autoconf libtool ccache gcc g++ libboost-dev libboost-serialization-dev libboost-test-dev libsuitesparse-dev libgsl0-dev libgmp3-dev libxml2-dev doxygen graphviz
+
+# script:
+#  ./configure
+#  make
