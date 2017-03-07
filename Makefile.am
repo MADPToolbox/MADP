@@ -1,3 +1,4 @@
+AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src 
 EXTRA_DIST = src/include/versions.h \
