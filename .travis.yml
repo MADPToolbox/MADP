@@ -21,6 +21,6 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install automake autoconf libtool ccache gcc g++ libboost-dev libboost-serialization-dev libboost-test-dev libsuitesparse-dev libgsl0-dev libgmp3-dev libxml2-dev doxygen graphviz
 
-# script:
-#  ./configure
-#  make
+script:
+  ./configure
+  make
