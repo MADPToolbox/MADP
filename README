@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MADPToolbox/MADP.svg?branch=master)](https://travis-ci.org/MADPToolbox/MADP)
+
 MultiAgentDecisionProcess (MADP) is a toolbox for scientific research
 in decision-theoretic planning and learning in multiagent systems.  It
 is designed to be rather general, but most effort has been put in
