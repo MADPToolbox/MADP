@@ -1,7 +1,12 @@
 language: cpp
 
+os:
+  - linux
+  - osx
+  
 sudo: required
 dist: trusty
+# osx_image: xcode8
 
 branches:
   only:
@@ -14,12 +19,11 @@ cache:
   - apt
 
 before_install:
-  - export REPOSITORY_NAME=${PWD##*/}
-  - echo "Testing branch $TRAVIS_BRANCH of $REPOSITORY_NAME"
-
   # dependency installation
-  - sudo apt-get update
-  - sudo apt-get -y install automake autoconf libtool ccache gcc g++ libboost-dev libboost-serialization-dev libboost-test-dev libsuitesparse-dev libgsl0-dev libgmp3-dev libxml2-dev doxygen graphviz
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                 ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install argp-standalone; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qy update   ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qy install automake autoconf libtool ccache gcc g++ libboost-dev libboost-serialization-dev libboost-test-dev libsuitesparse-dev libgsl0-dev libgmp3-dev libxml2-dev doxygen graphviz; fi
 
 script:
   ./configure && make
