@@ -14,7 +14,6 @@ BOOSTTEST_LD=-lboost_unit_test_framework
 PROGRAMS_NORMAL = \
  tst_parse\
  tst_np\
- tst_indextools\
  tst_bgipsolving\
  tst_GMAA_MAAstar\
  tst_GMAA_MAAstarCluster\
@@ -32,11 +31,9 @@ PROGRAMS_NORMAL = \
 ###########
 # All test programs which will be run by 'make check'
 check_PROGRAMS =\
- tst_indextools\
  tst_jpol_index\
  tst_serialize\
  tst_OptimalValue\
- tst_indextools\
  tst_jpol_index\
  tst_serialize
 dist_check_SCRIPTS =\
@@ -97,13 +94,6 @@ tst_parse_DEPENDENCIES = $(MADPLIBS_NORMAL)
 tst_parse_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS) 
 tst_parse_CXXFLAGS= $(CSTANDARD)
 tst_parse_CFLAGS=
-
-tst_indextools_SOURCES =  test_indextools.cpp $(additional_test_sources)
-tst_indextools_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD) $(BOOSTTEST_LD)
-tst_indextools_DEPENDENCIES = $(MADPLIBS_NORMAL)
-tst_indextools_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
-tst_indextools_CXXFLAGS= $(CSTANDARD)
-tst_indextools_CFLAGS= 
 
 tst_BGIP_Solvers_SOURCES =   test_BGIP_Solvers.cpp $(additional_test_sources)
 tst_BGIP_Solvers_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
