@@ -15,6 +15,7 @@ src/planning
 src/solvers
 src/support
 src/utils
+src/tests
 
 Included other software:
 

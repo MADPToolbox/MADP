@@ -1,29 +1,18 @@
-/**\file test_pomdp.cpp
+/* This file is part of the Multiagent Decision Process (MADP) Toolbox. 
  *
- * Authors:
- * Frans Oliehoek <faolieho@science.uva.nl>
- * Matthijs Spaan <mtjspaan@isr.ist.utl.pt>
+ * The majority of MADP is free software released under GNUP GPL v.3. However,
+ * some of the included libraries are released under a different license. For 
+ * more information, see the included COPYING file. For other information, 
+ * please refer to the included README file.
  *
- * Copyright 2008 Universiteit van Amsterdam, Instituto Superior Tecnico
+ * This file has been written and/or modified by the following people:
  *
- * This file is part of MultiAgentDecisionProcess.
+ * Frans Oliehoek 
+ * Bas Terwijn
  *
- * MultiAgentDecisionProcess is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- *
- * MultiAgentDecisionProcess is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MultiAgentDecisionProcess.  If not, see
- * <http://www.gnu.org/licenses/>.
- *
- * $Id$
+ * For contact information please see the included AUTHORS file.
  */
+
 
 #include "PerseusPOMDPPlanner.h"
 #include "ProblemDecTiger.h"
@@ -37,8 +26,6 @@
 #include "directories.h"
 #include "NullPlanner.h"
 #include "GMAA_kGMAA.h"
-//#include "AgentImplicitWaiting.h"
-//#include "PerseusImplicitWaitingPlanner.h"
 #include "AlphaVectorPlanning.h"
 #include "JointBelief.h"
 
