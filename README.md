@@ -24,14 +24,13 @@ affiliations. MADP includes other software, for details see [COPYING](COPYING).
 ### Required software (as Debian package names)
 -----------------------------------------------
 
-MADP includes all required software.
+MADP includes all required software, although for OSX argp-standalone needs to be installed.
 
 Optional software:
 
 * Doxygen (doxygen) [for generating documentation]
 * Graphviz (graphviz) [for dependency graphs in the generated documentation]
-* lp-solve (liblpsolve55-dev and libufsparse-dev) [see AgentIDMG]
-* Matlab [can also be used a linear programming solver in AgentIDMG]
+* lp-solve (liblpsolve55-dev) [for POMDP vector pruning]
 * GMPlib (libgmp3-dev) [for using arbitrary-length integers as indices] 
 * libxml2 (libxml2-dev) [for using the XML-based factored model parser]
 * Cuda [for policy iteration with GPU policy evaluation]
@@ -39,14 +38,6 @@ Optional software:
 
 For enabling optional software, see [src/Makefile.custom](src/Makefile.custom) and
 [src/include/configuration.h](src/include/configuration.h).
-
-The lazy-bastards-copy-paste-line to set up most debian-based users:
-```
-sudo aptitude install automake autoconf libtool ccache gcc g++ \
-libboost-dev libboost-serialization-dev libboost-test-dev \
-libsuitesparse-dev libgsl0-dev \
-libgmp3-dev libxml2-dev doxygen graphviz 
-```
 
 ### Documentation and Installation Instructions
 -----------------------------------------------
