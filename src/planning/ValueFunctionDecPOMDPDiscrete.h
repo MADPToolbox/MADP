@@ -24,7 +24,7 @@
 #include "ValueFunction.h"
 #include "PlanningUnitDecPOMDPDiscrete.h"
 #include "JointPolicyDiscretePure.h"
-#include <boost/numeric/ublas/matrix.hpp>
+#include "boost/numeric/ublas/matrix.hpp"
 
 /** \brief ValueFunctionDecPOMDPDiscrete represents and calculates the
  * value function of a (pure) joint policy for a discrete Dec-POMDP.

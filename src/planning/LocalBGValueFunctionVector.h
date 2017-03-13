@@ -22,7 +22,7 @@
 #include "Globals.h"
 #include "IndexTools.h"
 #include "LocalBGValueFunctionInterface.h"
-#include <boost/shared_ptr.hpp>
+#include "boost/shared_ptr.hpp"
 
 class BayesianGameCollaborativeGraphical;
 //class Scope;

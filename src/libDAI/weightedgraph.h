@@ -31,8 +31,8 @@
 #include <limits.h> // changed from "#include <limits>" to satisfy GCC
                     // 4.3, Matthijs
 
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/prim_minimum_spanning_tree.hpp>
+#include "boost/graph/adjacency_list.hpp"
+#include "boost/graph/prim_minimum_spanning_tree.hpp"
 
 
 namespace libDAI {

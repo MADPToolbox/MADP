@@ -7,6 +7,7 @@ EXTRA_DIST = src/include/versions.h \
  src/parser/pomdp.spirit \
  problems \
  doc \
+ README.md \
  src/boost \
  src/solvers/GMAA-IC \
  src/solvers/GMAA-ICE

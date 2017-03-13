@@ -88,9 +88,8 @@ DIST_COMMON = $(srcdir)/../Makefile.custom \
 	$(top_srcdir)/config/Make-rules $(srcdir)/Makefile.in \
 	$(srcdir)/Makefile.am $(dist_check_SCRIPTS) \
 	$(top_srcdir)/depcomp $(top_srcdir)/test-driver
-check_PROGRAMS = tst_indextools$(EXEEXT) tst_jpol_index$(EXEEXT) \
-	tst_serialize$(EXEEXT) tst_OptimalValue$(EXEEXT) \
-	tst_indextools$(EXEEXT) tst_jpol_index$(EXEEXT) \
+check_PROGRAMS = tst_jpol_index$(EXEEXT) tst_serialize$(EXEEXT) \
+	tst_OptimalValue$(EXEEXT) tst_jpol_index$(EXEEXT) \
 	tst_serialize$(EXEEXT)
 noinst_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_2)
 bin_PROGRAMS =
@@ -139,9 +138,8 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libdir)" \
 LIBRARIES = $(lib_LIBRARIES)
 LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES)
 am__EXEEXT_1 = tst_parse$(EXEEXT) tst_np$(EXEEXT) \
-	tst_indextools$(EXEEXT) tst_bgipsolving$(EXEEXT) \
-	tst_GMAA_MAAstar$(EXEEXT) tst_GMAA_MAAstarCluster$(EXEEXT) \
-	tst_GMAA_MAA_ELSI$(EXEEXT) \
+	tst_bgipsolving$(EXEEXT) tst_GMAA_MAAstar$(EXEEXT) \
+	tst_GMAA_MAAstarCluster$(EXEEXT) tst_GMAA_MAA_ELSI$(EXEEXT) \
 	tst_ProblemFireFightingGraph$(EXEEXT) \
 	tst_BGIP_Solvers$(EXEEXT) tst_BGIP_IncrementalSolvers$(EXEEXT) \
 	tst_jpol_index$(EXEEXT) tst_serialize$(EXEEXT) \
@@ -220,13 +218,6 @@ tst_bgipsolving_OBJECTS = $(am_tst_bgipsolving_OBJECTS)
 tst_bgipsolving_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(tst_bgipsolving_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_tst_indextools_OBJECTS = tst_indextools-test_indextools.$(OBJEXT) \
-	$(am__objects_1)
-tst_indextools_OBJECTS = $(am_tst_indextools_OBJECTS)
-tst_indextools_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(tst_indextools_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 am_tst_jpol_index_OBJECTS = tst_jpol_index-test_jpol_index.$(OBJEXT) \
 	$(am__objects_1)
@@ -319,18 +310,16 @@ SOURCES = $(tst_BGIP_IncrementalSolvers_SOURCES) \
 	$(tst_GMAA_MAA_ELSI_SOURCES) $(tst_GMAA_MAAstar_SOURCES) \
 	$(tst_GMAA_MAAstarCluster_SOURCES) $(tst_OptimalValue_SOURCES) \
 	$(tst_ProblemFireFightingGraph_SOURCES) \
-	$(tst_bgipsolving_SOURCES) $(tst_indextools_SOURCES) \
-	$(tst_jpol_index_SOURCES) $(tst_np_SOURCES) \
-	$(tst_parse_SOURCES) $(tst_pomdp_SOURCES) \
+	$(tst_bgipsolving_SOURCES) $(tst_jpol_index_SOURCES) \
+	$(tst_np_SOURCES) $(tst_parse_SOURCES) $(tst_pomdp_SOURCES) \
 	$(tst_serialize_SOURCES) $(tst_sim_SOURCES)
 DIST_SOURCES = $(tst_BGIP_IncrementalSolvers_SOURCES) \
 	$(tst_BGIP_Solvers_SOURCES) $(tst_CGBG_FF_SOURCES) \
 	$(tst_GMAA_MAA_ELSI_SOURCES) $(tst_GMAA_MAAstar_SOURCES) \
 	$(tst_GMAA_MAAstarCluster_SOURCES) $(tst_OptimalValue_SOURCES) \
 	$(tst_ProblemFireFightingGraph_SOURCES) \
-	$(tst_bgipsolving_SOURCES) $(tst_indextools_SOURCES) \
-	$(tst_jpol_index_SOURCES) $(tst_np_SOURCES) \
-	$(tst_parse_SOURCES) $(tst_pomdp_SOURCES) \
+	$(tst_bgipsolving_SOURCES) $(tst_jpol_index_SOURCES) \
+	$(tst_np_SOURCES) $(tst_parse_SOURCES) $(tst_pomdp_SOURCES) \
 	$(tst_serialize_SOURCES) $(tst_sim_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
@@ -808,7 +797,6 @@ BOOSTTEST_LD = -lboost_unit_test_framework
 PROGRAMS_NORMAL = \
  tst_parse\
  tst_np\
- tst_indextools\
  tst_bgipsolving\
  tst_GMAA_MAAstar\
  tst_GMAA_MAAstarCluster\
@@ -874,12 +862,6 @@ tst_parse_DEPENDENCIES = $(MADPLIBS_NORMAL)
 tst_parse_CPPFLAGS = $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS) 
 tst_parse_CXXFLAGS = $(CSTANDARD)
 tst_parse_CFLAGS = 
-tst_indextools_SOURCES = test_indextools.cpp $(additional_test_sources)
-tst_indextools_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD) $(BOOSTTEST_LD)
-tst_indextools_DEPENDENCIES = $(MADPLIBS_NORMAL)
-tst_indextools_CPPFLAGS = $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
-tst_indextools_CXXFLAGS = $(CSTANDARD)
-tst_indextools_CFLAGS = 
 tst_BGIP_Solvers_SOURCES = test_BGIP_Solvers.cpp $(additional_test_sources)
 tst_BGIP_Solvers_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
 tst_BGIP_Solvers_DEPENDENCIES = $(MADPLIBS_NORMAL)
@@ -1218,10 +1200,6 @@ tst_bgipsolving$(EXEEXT): $(tst_bgipsolving_OBJECTS) $(tst_bgipsolving_DEPENDENC
 	@rm -f tst_bgipsolving$(EXEEXT)
 	$(AM_V_CXXLD)$(tst_bgipsolving_LINK) $(tst_bgipsolving_OBJECTS) $(tst_bgipsolving_LDADD) $(LIBS)
 
-tst_indextools$(EXEEXT): $(tst_indextools_OBJECTS) $(tst_indextools_DEPENDENCIES) $(EXTRA_tst_indextools_DEPENDENCIES) 
-	@rm -f tst_indextools$(EXEEXT)
-	$(AM_V_CXXLD)$(tst_indextools_LINK) $(tst_indextools_OBJECTS) $(tst_indextools_LDADD) $(LIBS)
-
 tst_jpol_index$(EXEEXT): $(tst_jpol_index_OBJECTS) $(tst_jpol_index_DEPENDENCIES) $(EXTRA_tst_jpol_index_DEPENDENCIES) 
 	@rm -f tst_jpol_index$(EXEEXT)
 	$(AM_V_CXXLD)$(tst_jpol_index_LINK) $(tst_jpol_index_OBJECTS) $(tst_jpol_index_LDADD) $(LIBS)
@@ -1261,7 +1239,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_OptimalValue-test_OptimalValue.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_ProblemFireFightingGraph-test_ProblemFireFightingGraph.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_bgipsolving-test_bgipsolving.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_indextools-test_indextools.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_jpol_index-test_jpol_index.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_np-test_no_parse.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_parse-test_parse.Po@am__quote@
@@ -1418,20 +1395,6 @@ tst_bgipsolving-test_bgipsolving.obj: test_bgipsolving.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_bgipsolving.cpp' object='tst_bgipsolving-test_bgipsolving.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_bgipsolving_CPPFLAGS) $(CPPFLAGS) $(tst_bgipsolving_CXXFLAGS) $(CXXFLAGS) -c -o tst_bgipsolving-test_bgipsolving.obj `if test -f 'test_bgipsolving.cpp'; then $(CYGPATH_W) 'test_bgipsolving.cpp'; else $(CYGPATH_W) '$(srcdir)/test_bgipsolving.cpp'; fi`
-
-tst_indextools-test_indextools.o: test_indextools.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_indextools_CPPFLAGS) $(CPPFLAGS) $(tst_indextools_CXXFLAGS) $(CXXFLAGS) -MT tst_indextools-test_indextools.o -MD -MP -MF $(DEPDIR)/tst_indextools-test_indextools.Tpo -c -o tst_indextools-test_indextools.o `test -f 'test_indextools.cpp' || echo '$(srcdir)/'`test_indextools.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tst_indextools-test_indextools.Tpo $(DEPDIR)/tst_indextools-test_indextools.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_indextools.cpp' object='tst_indextools-test_indextools.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_indextools_CPPFLAGS) $(CPPFLAGS) $(tst_indextools_CXXFLAGS) $(CXXFLAGS) -c -o tst_indextools-test_indextools.o `test -f 'test_indextools.cpp' || echo '$(srcdir)/'`test_indextools.cpp
-
-tst_indextools-test_indextools.obj: test_indextools.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_indextools_CPPFLAGS) $(CPPFLAGS) $(tst_indextools_CXXFLAGS) $(CXXFLAGS) -MT tst_indextools-test_indextools.obj -MD -MP -MF $(DEPDIR)/tst_indextools-test_indextools.Tpo -c -o tst_indextools-test_indextools.obj `if test -f 'test_indextools.cpp'; then $(CYGPATH_W) 'test_indextools.cpp'; else $(CYGPATH_W) '$(srcdir)/test_indextools.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tst_indextools-test_indextools.Tpo $(DEPDIR)/tst_indextools-test_indextools.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_indextools.cpp' object='tst_indextools-test_indextools.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_indextools_CPPFLAGS) $(CPPFLAGS) $(tst_indextools_CXXFLAGS) $(CXXFLAGS) -c -o tst_indextools-test_indextools.obj `if test -f 'test_indextools.cpp'; then $(CYGPATH_W) 'test_indextools.cpp'; else $(CYGPATH_W) '$(srcdir)/test_indextools.cpp'; fi`
 
 tst_jpol_index-test_jpol_index.o: test_jpol_index.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_jpol_index_CPPFLAGS) $(CPPFLAGS) $(tst_jpol_index_CXXFLAGS) $(CXXFLAGS) -MT tst_jpol_index-test_jpol_index.o -MD -MP -MF $(DEPDIR)/tst_jpol_index-test_jpol_index.Tpo -c -o tst_jpol_index-test_jpol_index.o `test -f 'test_jpol_index.cpp' || echo '$(srcdir)/'`test_jpol_index.cpp
@@ -1763,13 +1726,6 @@ recheck: all $(check_PROGRAMS) $(dist_check_SCRIPTS)
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
-tst_indextools.log: tst_indextools$(EXEEXT)
-	@p='tst_indextools$(EXEEXT)'; \
-	b='tst_indextools'; \
-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
-	--log-file $$b.log --trs-file $$b.trs \
-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
-	"$$tst" $(AM_TESTS_FD_REDIRECT)
 tst_jpol_index.log: tst_jpol_index$(EXEEXT)
 	@p='tst_jpol_index$(EXEEXT)'; \
 	b='tst_jpol_index'; \

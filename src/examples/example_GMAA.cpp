@@ -350,6 +350,8 @@ GeneralizedMAAStarPlannerForDecPOMDPDiscrete* GetGMAAInstance(
                     static_cast<BayesianGameWithClusterInfo::BGClusterAlgorithm>(
                         args.BGClusterAlgorithm)
                     );
+            gmaaCluster->SetTresholdJB(args.thresholdJB);
+            gmaaCluster->SetTresholdPjaoh(args.thresholdPjaoh);
             gmaa=gmaaCluster;
             break;
         }

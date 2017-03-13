@@ -7,14 +7,10 @@ SUBDIRS =
 include ../Makefile.custom
 include $(top_srcdir)/config/Make-rules
 
-# lib of the Boost Test Library
-BOOSTTEST_LD=-lboost_unit_test_framework
-
 # Which programs to build.
 PROGRAMS_NORMAL = \
  tst_parse\
  tst_np\
- tst_indextools\
  tst_bgipsolving\
  tst_GMAA_MAAstar\
  tst_GMAA_MAAstarCluster\
@@ -23,7 +19,6 @@ PROGRAMS_NORMAL = \
  tst_BGIP_Solvers\
  tst_BGIP_IncrementalSolvers\
  tst_jpol_index\
- tst_serialize\
  tst_CGBG_FF\
  tst_OptimalValue\
  tst_pomdp\
@@ -32,13 +27,10 @@ PROGRAMS_NORMAL = \
 ###########
 # All test programs which will be run by 'make check'
 check_PROGRAMS =\
- tst_indextools\
  tst_jpol_index\
- tst_serialize\
  tst_OptimalValue\
- tst_indextools\
- tst_jpol_index\
- tst_serialize
+ tst_jpol_index
+
 dist_check_SCRIPTS =\
  runGMAA-GMAAstarClassic-QQMDP_DecTiger.sh\
  runGMAA-GMAAstar-BBFS-QQPOMDP-Aloha.sh\
@@ -98,13 +90,6 @@ tst_parse_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 tst_parse_CXXFLAGS= $(CSTANDARD)
 tst_parse_CFLAGS=
 
-tst_indextools_SOURCES =  test_indextools.cpp $(additional_test_sources)
-tst_indextools_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD) $(BOOSTTEST_LD)
-tst_indextools_DEPENDENCIES = $(MADPLIBS_NORMAL)
-tst_indextools_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
-tst_indextools_CXXFLAGS= $(CSTANDARD)
-tst_indextools_CFLAGS= 
-
 tst_BGIP_Solvers_SOURCES =   test_BGIP_Solvers.cpp $(additional_test_sources)
 tst_BGIP_Solvers_LDADD = $(MADPLIBS_NORMAL) $(MADP_LD)
 tst_BGIP_Solvers_DEPENDENCIES = $(MADPLIBS_NORMAL)
@@ -142,15 +127,6 @@ tst_pomdp_DEPENDENCIES = $(MADPLIBS_NORMAL)
 tst_pomdp_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 tst_pomdp_CXXFLAGS= $(CSTANDARD)
 tst_pomdp_CFLAGS=
-
-# Build tst_serialize
-tst_serialize_SOURCES = test_serialize.cpp
-tst_serialize_LDADD = -lboost_serialization 
-tst_serialize_LDFLAGS = $(AM_LDFLAGS)
-tst_serialize_DEPENDENCIES = 
-tst_serialize_CPPFLAGS= $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
-tst_serialize_CXXFLAGS= $(CSTANDARD)
-tst_serialize_CFLAGS=
 
 # tst_GMAA_MAAstarCluster
 tst_GMAA_MAAstarCluster_SOURCES =  test_GMAA_MAAstarCluster.cpp $(additional_test_sources)

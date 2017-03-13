@@ -22,15 +22,15 @@
 #include "DecPOMDPDiscrete.h"
 #include "EParse.h"
 
-#include <boost/version.hpp>
+#include "boost/version.hpp"
 
 #if USE_BOOST_SPIRIT_CLASSIC
-#include <boost/spirit/include/classic_core.hpp>
-#include <boost/spirit/include/classic_iterator.hpp>
+#include "boost/spirit/include/classic_core.hpp"
+#include "boost/spirit/include/classic_iterator.hpp"
 #else
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/iterator/file_iterator.hpp>
-#include <boost/spirit/iterator/position_iterator.hpp>
+#include "boost/spirit/core.hpp"
+#include "boost/spirit/iterator/file_iterator.hpp"
+#include "boost/spirit/iterator/position_iterator.hpp"
 #endif
 
 #include "CommentOrBlankParser.h"            
