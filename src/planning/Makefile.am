@@ -8,7 +8,7 @@ INCLUDEPATH		= -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/planning\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
+AM_CPPFLAGS		= -Wall -Wno-unused-local-typedefs -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 AM_LDFLAGS		= 
 
 if HAVE_CUDA_CUSOLVERDN_H

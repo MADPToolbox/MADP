@@ -8,7 +8,7 @@ INCLUDEPATH		= -I$(top_srcdir)/src/base\
  $(MADP_INCLUDES) 
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
+AM_CPPFLAGS		= -Wall -Wno-unused-local-typedefs -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
