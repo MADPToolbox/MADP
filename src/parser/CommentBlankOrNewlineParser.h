@@ -18,9 +18,9 @@
 #define _COMMENTBLANKORNEWLINEPARSER_H_ 1
 
 #if USE_BOOST_SPIRIT_CLASSIC
-#include <boost/spirit/include/classic_core.hpp>
+#include "boost/spirit/include/classic_core.hpp"
 #else
-#include <boost/spirit/core.hpp>
+#include "boost/spirit/core.hpp"
 #endif
 
 #include "CommentOrBlankParser.h"

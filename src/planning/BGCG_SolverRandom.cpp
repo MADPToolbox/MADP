@@ -18,7 +18,7 @@
 #include <float.h>
 #include <iostream>
 #include <fstream>
-#include <boost/make_shared.hpp>
+#include "boost/make_shared.hpp"
 
 #include "BayesianGameCollaborativeGraphical.h"
 
