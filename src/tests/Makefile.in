@@ -88,9 +88,8 @@ DIST_COMMON = $(srcdir)/../Makefile.custom \
 	$(top_srcdir)/config/Make-rules $(srcdir)/Makefile.in \
 	$(srcdir)/Makefile.am $(dist_check_SCRIPTS) \
 	$(top_srcdir)/depcomp $(top_srcdir)/test-driver
-check_PROGRAMS = tst_jpol_index$(EXEEXT) tst_serialize$(EXEEXT) \
-	tst_OptimalValue$(EXEEXT) tst_jpol_index$(EXEEXT) \
-	tst_serialize$(EXEEXT)
+check_PROGRAMS = tst_jpol_index$(EXEEXT) tst_OptimalValue$(EXEEXT) \
+	tst_jpol_index$(EXEEXT)
 noinst_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_2)
 bin_PROGRAMS =
 subdir = src/tests
@@ -142,9 +141,8 @@ am__EXEEXT_1 = tst_parse$(EXEEXT) tst_np$(EXEEXT) \
 	tst_GMAA_MAAstarCluster$(EXEEXT) tst_GMAA_MAA_ELSI$(EXEEXT) \
 	tst_ProblemFireFightingGraph$(EXEEXT) \
 	tst_BGIP_Solvers$(EXEEXT) tst_BGIP_IncrementalSolvers$(EXEEXT) \
-	tst_jpol_index$(EXEEXT) tst_serialize$(EXEEXT) \
-	tst_CGBG_FF$(EXEEXT) tst_OptimalValue$(EXEEXT) \
-	tst_pomdp$(EXEEXT) tst_sim$(EXEEXT)
+	tst_jpol_index$(EXEEXT) tst_CGBG_FF$(EXEEXT) \
+	tst_OptimalValue$(EXEEXT) tst_pomdp$(EXEEXT) tst_sim$(EXEEXT)
 am__EXEEXT_2 =
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
 am__objects_1 =
@@ -241,12 +239,6 @@ tst_pomdp_OBJECTS = $(am_tst_pomdp_OBJECTS)
 tst_pomdp_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(tst_pomdp_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-am_tst_serialize_OBJECTS = tst_serialize-test_serialize.$(OBJEXT)
-tst_serialize_OBJECTS = $(am_tst_serialize_OBJECTS)
-tst_serialize_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(tst_serialize_CXXFLAGS) $(CXXFLAGS) $(tst_serialize_LDFLAGS) \
-	$(LDFLAGS) -o $@
 am_tst_sim_OBJECTS = tst_sim-test_simulation.$(OBJEXT) \
 	$(am__objects_1)
 tst_sim_OBJECTS = $(am_tst_sim_OBJECTS)
@@ -312,7 +304,7 @@ SOURCES = $(tst_BGIP_IncrementalSolvers_SOURCES) \
 	$(tst_ProblemFireFightingGraph_SOURCES) \
 	$(tst_bgipsolving_SOURCES) $(tst_jpol_index_SOURCES) \
 	$(tst_np_SOURCES) $(tst_parse_SOURCES) $(tst_pomdp_SOURCES) \
-	$(tst_serialize_SOURCES) $(tst_sim_SOURCES)
+	$(tst_sim_SOURCES)
 DIST_SOURCES = $(tst_BGIP_IncrementalSolvers_SOURCES) \
 	$(tst_BGIP_Solvers_SOURCES) $(tst_CGBG_FF_SOURCES) \
 	$(tst_GMAA_MAA_ELSI_SOURCES) $(tst_GMAA_MAAstar_SOURCES) \
@@ -320,7 +312,7 @@ DIST_SOURCES = $(tst_BGIP_IncrementalSolvers_SOURCES) \
 	$(tst_ProblemFireFightingGraph_SOURCES) \
 	$(tst_bgipsolving_SOURCES) $(tst_jpol_index_SOURCES) \
 	$(tst_np_SOURCES) $(tst_parse_SOURCES) $(tst_pomdp_SOURCES) \
-	$(tst_serialize_SOURCES) $(tst_sim_SOURCES)
+	$(tst_sim_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
 	install-data-recursive install-dvi-recursive \
@@ -759,7 +751,8 @@ MADP_CFLAGS =
 # fao 2014-02-01: added $(INCLUDE) such that we can all add include paths, for e.g., cplex.
 MADP_INCLUDES = \
  $(INCLUDE) \
- $(LIBDAI_INCLUDES)
+ $(LIBDAI_INCLUDES)\
+ -I$(top_srcdir)/src/boost
 
 MADP_LD = 
 
@@ -790,9 +783,6 @@ MADPLIBS_NORMAL_NOPARSER_NOPLANNING = $(MADPLIBS_NORMAL_BASE)
 MADPLIBS_NORMAL_NOPLANNING = $(MADPLIBS_NORMAL_BASE_PARSER_SUPPORT)
 MADPLIBS_NORMAL_NOPARSER = $(MADPLIBS_NORMAL)
 
-# lib of the Boost Test Library
-BOOSTTEST_LD = -lboost_unit_test_framework
-
 # Which programs to build.
 PROGRAMS_NORMAL = \
  tst_parse\
@@ -805,7 +795,6 @@ PROGRAMS_NORMAL = \
  tst_BGIP_Solvers\
  tst_BGIP_IncrementalSolvers\
  tst_jpol_index\
- tst_serialize\
  tst_CGBG_FF\
  tst_OptimalValue\
  tst_pomdp\
@@ -898,15 +887,6 @@ tst_pomdp_DEPENDENCIES = $(MADPLIBS_NORMAL)
 tst_pomdp_CPPFLAGS = $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
 tst_pomdp_CXXFLAGS = $(CSTANDARD)
 tst_pomdp_CFLAGS = 
-
-# Build tst_serialize
-tst_serialize_SOURCES = test_serialize.cpp
-tst_serialize_LDADD = -lboost_serialization 
-tst_serialize_LDFLAGS = $(AM_LDFLAGS)
-tst_serialize_DEPENDENCIES = 
-tst_serialize_CPPFLAGS = $(AM_CPPFLAGS) $(CPP_OPTIMIZATION_FLAGS)
-tst_serialize_CXXFLAGS = $(CSTANDARD)
-tst_serialize_CFLAGS = 
 
 # tst_GMAA_MAAstarCluster
 tst_GMAA_MAAstarCluster_SOURCES = test_GMAA_MAAstarCluster.cpp $(additional_test_sources)
@@ -1216,10 +1196,6 @@ tst_pomdp$(EXEEXT): $(tst_pomdp_OBJECTS) $(tst_pomdp_DEPENDENCIES) $(EXTRA_tst_p
 	@rm -f tst_pomdp$(EXEEXT)
 	$(AM_V_CXXLD)$(tst_pomdp_LINK) $(tst_pomdp_OBJECTS) $(tst_pomdp_LDADD) $(LIBS)
 
-tst_serialize$(EXEEXT): $(tst_serialize_OBJECTS) $(tst_serialize_DEPENDENCIES) $(EXTRA_tst_serialize_DEPENDENCIES) 
-	@rm -f tst_serialize$(EXEEXT)
-	$(AM_V_CXXLD)$(tst_serialize_LINK) $(tst_serialize_OBJECTS) $(tst_serialize_LDADD) $(LIBS)
-
 tst_sim$(EXEEXT): $(tst_sim_OBJECTS) $(tst_sim_DEPENDENCIES) $(EXTRA_tst_sim_DEPENDENCIES) 
 	@rm -f tst_sim$(EXEEXT)
 	$(AM_V_CXXLD)$(tst_sim_LINK) $(tst_sim_OBJECTS) $(tst_sim_LDADD) $(LIBS)
@@ -1243,7 +1219,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_np-test_no_parse.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_parse-test_parse.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_pomdp-test_pomdp.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_serialize-test_serialize.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tst_sim-test_simulation.Po@am__quote@
 
 .cpp.o:
@@ -1451,20 +1426,6 @@ tst_pomdp-test_pomdp.obj: test_pomdp.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_pomdp.cpp' object='tst_pomdp-test_pomdp.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_pomdp_CPPFLAGS) $(CPPFLAGS) $(tst_pomdp_CXXFLAGS) $(CXXFLAGS) -c -o tst_pomdp-test_pomdp.obj `if test -f 'test_pomdp.cpp'; then $(CYGPATH_W) 'test_pomdp.cpp'; else $(CYGPATH_W) '$(srcdir)/test_pomdp.cpp'; fi`
-
-tst_serialize-test_serialize.o: test_serialize.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_serialize_CPPFLAGS) $(CPPFLAGS) $(tst_serialize_CXXFLAGS) $(CXXFLAGS) -MT tst_serialize-test_serialize.o -MD -MP -MF $(DEPDIR)/tst_serialize-test_serialize.Tpo -c -o tst_serialize-test_serialize.o `test -f 'test_serialize.cpp' || echo '$(srcdir)/'`test_serialize.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tst_serialize-test_serialize.Tpo $(DEPDIR)/tst_serialize-test_serialize.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_serialize.cpp' object='tst_serialize-test_serialize.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_serialize_CPPFLAGS) $(CPPFLAGS) $(tst_serialize_CXXFLAGS) $(CXXFLAGS) -c -o tst_serialize-test_serialize.o `test -f 'test_serialize.cpp' || echo '$(srcdir)/'`test_serialize.cpp
-
-tst_serialize-test_serialize.obj: test_serialize.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_serialize_CPPFLAGS) $(CPPFLAGS) $(tst_serialize_CXXFLAGS) $(CXXFLAGS) -MT tst_serialize-test_serialize.obj -MD -MP -MF $(DEPDIR)/tst_serialize-test_serialize.Tpo -c -o tst_serialize-test_serialize.obj `if test -f 'test_serialize.cpp'; then $(CYGPATH_W) 'test_serialize.cpp'; else $(CYGPATH_W) '$(srcdir)/test_serialize.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tst_serialize-test_serialize.Tpo $(DEPDIR)/tst_serialize-test_serialize.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_serialize.cpp' object='tst_serialize-test_serialize.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_serialize_CPPFLAGS) $(CPPFLAGS) $(tst_serialize_CXXFLAGS) $(CXXFLAGS) -c -o tst_serialize-test_serialize.obj `if test -f 'test_serialize.cpp'; then $(CYGPATH_W) 'test_serialize.cpp'; else $(CYGPATH_W) '$(srcdir)/test_serialize.cpp'; fi`
 
 tst_sim-test_simulation.o: test_simulation.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tst_sim_CPPFLAGS) $(CPPFLAGS) $(tst_sim_CXXFLAGS) $(CXXFLAGS) -MT tst_sim-test_simulation.o -MD -MP -MF $(DEPDIR)/tst_sim-test_simulation.Tpo -c -o tst_sim-test_simulation.o `test -f 'test_simulation.cpp' || echo '$(srcdir)/'`test_simulation.cpp
@@ -1729,13 +1690,6 @@ recheck: all $(check_PROGRAMS) $(dist_check_SCRIPTS)
 tst_jpol_index.log: tst_jpol_index$(EXEEXT)
 	@p='tst_jpol_index$(EXEEXT)'; \
 	b='tst_jpol_index'; \
-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
-	--log-file $$b.log --trs-file $$b.trs \
-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
-	"$$tst" $(AM_TESTS_FD_REDIRECT)
-tst_serialize.log: tst_serialize$(EXEEXT)
-	@p='tst_serialize$(EXEEXT)'; \
-	b='tst_serialize'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

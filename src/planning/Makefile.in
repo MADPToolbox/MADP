@@ -778,7 +778,8 @@ MADP_CFLAGS =
 # fao 2014-02-01: added $(INCLUDE) such that we can all add include paths, for e.g., cplex.
 MADP_INCLUDES = \
  $(INCLUDE) \
- $(LIBDAI_INCLUDES)
+ $(LIBDAI_INCLUDES)\
+ -I$(top_srcdir)/src/boost
 
 MADP_LD = 
 
@@ -817,8 +818,8 @@ INCLUDEPATH = -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
 
-AM_CPPFLAGS = -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH) \
-	$(am__append_1) $(am__append_3)
+AM_CPPFLAGS = -Wall -Wno-unused-local-typedefs -pipe $(MARCH_FLAGS) \
+	$(INCLUDEPATH) $(am__append_1) $(am__append_3)
 AM_LDFLAGS = $(am__append_2)
 AM_CXXFLAGS = $(CSTANDARD)
 SIMULATION_CPPFILES = SimulationResult.cpp\

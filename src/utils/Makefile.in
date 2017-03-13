@@ -500,7 +500,8 @@ MADP_CFLAGS =
 # fao 2014-02-01: added $(INCLUDE) such that we can all add include paths, for e.g., cplex.
 MADP_INCLUDES = \
  $(INCLUDE) \
- $(LIBDAI_INCLUDES)
+ $(LIBDAI_INCLUDES)\
+ -I$(top_srcdir)/src/boost
 
 MADP_LD = 
 
@@ -558,8 +559,8 @@ INCLUDEPATH = -I..\
 
 AM_LDFLAGS = 
 LDADD = 
-AM_CPPFLAGS = -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH) \
-	$(am__append_1)
+AM_CPPFLAGS = -Wall -Wno-unused-local-typedefs -pipe $(MARCH_FLAGS) \
+	$(INCLUDEPATH) $(am__append_1)
 additional_sources = 
 
 # Build analyzeTimings
