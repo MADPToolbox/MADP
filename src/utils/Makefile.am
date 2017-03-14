@@ -26,7 +26,7 @@ INCLUDEPATH		= -I..\
  $(MADP_INCLUDES)
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -Wno-unused-local-typedefs -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
+AM_CPPFLAGS		= -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 if DARWIN
 AM_CPPFLAGS += -DDARWIN
 endif

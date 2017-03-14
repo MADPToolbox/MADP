@@ -432,7 +432,7 @@ MARCH_FLAGS = -march=native  # automatically picks the correct settings for your
 @FOUND_LIBXML2_TRUE@XML2_CXXFLAGS = `xml2-config --cflags`
 
 #default flags throughout all MADP:
-MADP_CXXFLAGS = -Wall -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
+MADP_CXXFLAGS = -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
 MADP_CPPFLAGS = 
 MADP_CFLAGS = 
 
@@ -497,8 +497,7 @@ INCLUDE_PATH = -I..\
 
 AM_LDFLAGS = 
 LDADD = 
-AM_CPPFLAGS = -Wall -pipe $(MARCH_FLAGS) $(INCLUDE_PATH) \
-	$(am__append_1)
+AM_CPPFLAGS = -pipe $(MARCH_FLAGS) $(INCLUDE_PATH) $(am__append_1)
 
 # Build example_JESP
 example_JESP_SOURCES = example_JESP.cpp

@@ -418,7 +418,7 @@ MARCH_FLAGS = -march=native  # automatically picks the correct settings for your
 @FOUND_LIBXML2_TRUE@XML2_CXXFLAGS = `xml2-config --cflags`
 
 #default flags throughout all MADP:
-MADP_CXXFLAGS = -Wall -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
+MADP_CXXFLAGS = -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
 MADP_CPPFLAGS = 
 MADP_CFLAGS = 
 
@@ -593,7 +593,7 @@ CCFLAGS = -DWITH_BP -DWITH_TRW -DWITH_MF -DWITH_HAK -DWITH_LC -DWITH_LCLIN -DWIT
 INCLUDEPATH = -I. $(MADP_INCLUDES)
 AM_LDFLAGS = 
 LDADD = 
-AM_CPPFLAGS = -Wall -Wno-unused-local-typedefs -pipe $(MARCH_FLAGS) $(CCFLAGS) $(INCLUDEPATH)
+AM_CPPFLAGS = -pipe $(MARCH_FLAGS) $(CCFLAGS) $(INCLUDEPATH)
 AM_CXXFLAGS = $(CSTANDARD)
 DAI_CPPFILES = alldai.cpp bounds.cpp boxbp.cpp box.cpp bp.cpp clustergraph.cpp daialg.cpp exact.cpp exceptions.cpp factorgraph.cpp hak.cpp ijgp.cpp jtree.cpp lc.cpp lclin.cpp mf.cpp properties.cpp regiongraph.cpp treeep.cpp trw.cpp util.cpp weightedgraph.cpp \
 	     maxplus.cpp ndp.cpp MADP_util.cpp

@@ -742,7 +742,7 @@ MARCH_FLAGS = -march=native  # automatically picks the correct settings for your
 @FOUND_LIBXML2_TRUE@XML2_CXXFLAGS = `xml2-config --cflags`
 
 #default flags throughout all MADP:
-MADP_CXXFLAGS = -Wall -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
+MADP_CXXFLAGS = -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
 MADP_CPPFLAGS = 
 MADP_CFLAGS = 
 
@@ -841,7 +841,7 @@ INCLUDEPATH = -I..\
 
 AM_LDFLAGS = 
 LDADD = 
-AM_CPPFLAGS = -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
+AM_CPPFLAGS = -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 additional_test_sources = 
 
 # Build tst

@@ -769,7 +769,7 @@ MARCH_FLAGS = -march=native  # automatically picks the correct settings for your
 @FOUND_LIBXML2_TRUE@XML2_CXXFLAGS = `xml2-config --cflags`
 
 #default flags throughout all MADP:
-MADP_CXXFLAGS = -Wall -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
+MADP_CXXFLAGS = -pipe $(MARCH_FLAGS) $(CSTANDARD) $(XML2_CXXFLAGS)
 MADP_CPPFLAGS = 
 MADP_CFLAGS = 
 
@@ -818,8 +818,8 @@ INCLUDEPATH = -I$(top_srcdir)/src/base\
  -I$(top_srcdir)/src/parser \
  $(MADP_INCLUDES) 
 
-AM_CPPFLAGS = -Wall -Wno-unused-local-typedefs -pipe $(MARCH_FLAGS) \
-	$(INCLUDEPATH) $(am__append_1) $(am__append_3)
+AM_CPPFLAGS = -pipe $(MARCH_FLAGS) $(INCLUDEPATH) $(am__append_1) \
+	$(am__append_3)
 AM_LDFLAGS = $(am__append_2)
 AM_CXXFLAGS = $(CSTANDARD)
 SIMULATION_CPPFILES = SimulationResult.cpp\

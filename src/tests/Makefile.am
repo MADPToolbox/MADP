@@ -74,7 +74,7 @@ INCLUDEPATH		= -I..\
  $(MADP_INCLUDES)
 AM_LDFLAGS		= 
 LDADD			= 
-AM_CPPFLAGS		= -Wall -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
+AM_CPPFLAGS		= -pipe $(MARCH_FLAGS) $(INCLUDEPATH)
 
 # Don't install any of the test programs
 noinst_PROGRAMS = $(PROGRAMS_NORMAL) $(PROGRAMS_DEBUG) $(PROGRAMS_PROFILE)
