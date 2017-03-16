@@ -51,7 +51,8 @@ CSTD="-std=c++98"
 AC_SUBST(CSTD)
 #
 #overall standard we want to use:
-AC_SUBST(CSTANDARD,"-std=c++98")
+#AC_SUBST(CSTANDARD,"-std=c++98")
+#AC_SUBST(CSTANDARD,"-std=c++11")
 
 
 
