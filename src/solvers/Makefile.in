@@ -558,9 +558,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/src/Makefile.custom 
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/solvers/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/solvers/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/solvers/Makefile
+	  $(AUTOMAKE) --foreign src/solvers/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
