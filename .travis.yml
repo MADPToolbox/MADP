@@ -26,6 +26,14 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qy install gcc g++ liblpsolve55-dev libgmp3-dev libxml2-dev doxygen graphviz; fi
 
 script:
-    #    export CXXFLAGS="-std=c++11 -Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-but-set-variable -Wno-redeclared-class-member" &&   ./configure && make
+    # unfortunately, getting everything to compile is not a walk in the park... 
+    # -osx gives massive amounts of error messages *without* "-std=c++11", leading log files > 4MB, which causes travis to fail..
+    # -linux has g++ 4.8.4, and there compiling *with* "-std=c++11" leads to errors...
+    # 
+    # For now, I am resorting back to the c++99 standard, but try to workaround the large log files with a script
+    # found online...
+    #
+    # In case we want to try the other route again (surpressing warnings), this is what I was doing:
+    # export CXXFLAGS="-std=c++11 -Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-but-set-variable -Wno-redeclared-class-member" &&   ./configure && make
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis_build_workaround.sh; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./configure && make; fi
