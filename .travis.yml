@@ -26,5 +26,6 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qy install gcc g++ liblpsolve55-dev libgmp3-dev libxml2-dev doxygen graphviz; fi
 
 script:
-    export CXXFLAGS="-std=c++11 -Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-but-set-variable -Wno-redeclared-class-member" &&
-  ./configure && make
+    #    export CXXFLAGS="-std=c++11 -Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-but-set-variable -Wno-redeclared-class-member" &&   ./configure && make
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis_build_workaround.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./configure && make; fi
