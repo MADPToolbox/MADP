@@ -34,7 +34,7 @@ PING_LOOP_PID=$!
 #mvn clean install >> $BUILD_OUTPUT 2>&1
 # your_build_command_2 >> $BUILD_OUTPUT 2>&1
 export CXXFLAGS="-Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-but-set-variable -Wno-redeclared-class-member"
-configure 
+./configure 
 make >> $BUILD_OUTPUT 2>&1
 
 # The build finished without returning an error so dump a tail of the output
