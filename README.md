@@ -14,6 +14,7 @@ available at madp-users@isr.ist.utl.pt.
 Authors:
 * Frans Oliehoek,
 * Matthijs Spaan,
+* Bas Terwijn,
 * João Messias,
 * Philipp Robbel
 
