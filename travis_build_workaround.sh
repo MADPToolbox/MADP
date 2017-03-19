@@ -33,7 +33,7 @@ PING_LOOP_PID=$!
 # your_build_command_2 >> $BUILD_OUTPUT 2>&1
 #mvn clean install >> $BUILD_OUTPUT 2>&1
 # your_build_command_2 >> $BUILD_OUTPUT 2>&1
-export CXXFLAGS="-Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-but-set-variable -Wno-redeclared-class-member"
+export CXXFLAGS="-Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-const-variable -Wno-redeclared-class-member"
 ./configure 
 make >> $BUILD_OUTPUT 2>&1
 
