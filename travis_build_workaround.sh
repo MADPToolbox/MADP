@@ -36,6 +36,7 @@ PING_LOOP_PID=$!
 export CXXFLAGS="-Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-const-variable -Wno-redeclared-class-member"
 ./configure 
 make >> $BUILD_OUTPUT 2>&1
+make check >> $BUILD_OUTPUT 2>&1
 
 # The build finished without returning an error so dump a tail of the output
 dump_output
