@@ -2645,8 +2645,8 @@ test "$program_suffix" != NONE &&
 ac_script='s/[\\$]/&&/g;s/;s,x,x,$//'
 program_transform_name=`$as_echo "$program_transform_name" | sed "$ac_script"`
 
-# expand $ac_aux_dir to an absolute path
-am_aux_dir=`cd $ac_aux_dir && pwd`
+# Expand $ac_aux_dir to an absolute path.
+am_aux_dir=`cd "$ac_aux_dir" && pwd`
 
 if test x"${MISSING+set}" != xset; then
   case $am_aux_dir in
@@ -15538,15 +15538,24 @@ _ACEOF
 fi
 
 # check for lpsolve
-ac_fn_c_check_header_mongrel "$LINENO" "lpsolve/lp_lib.h" "ac_cv_header_lpsolve_lp_lib_h" "$ac_includes_default"
-if test "x$ac_cv_header_lpsolve_lp_lib_h" = xyes; then :
+for ac_header in lpsolve/lp_lib.h lp_lib.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
 
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: lpsolve not installed, required for pruning POMDP value functions" >&5
-$as_echo "$as_me: WARNING: lpsolve not installed, required for pruning POMDP value functions" >&2;}
 fi
 
+done
 
+if test x"$ac_cv_header_lpsolve_lp_lib_h" != xyes -a x"$ac_cv_header_lp_lib_h" != xyes
+then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: lpsolve not installed, required for pruning POMDP value functions" >&5
+$as_echo "$as_me: WARNING: lpsolve not installed, required for pruning POMDP value functions" >&2;}
+fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlopen in -ldl" >&5
 $as_echo_n "checking for dlopen in -ldl... " >&6; }
 if ${ac_cv_lib_dl_dlopen+:} false; then :
@@ -15637,13 +15646,12 @@ _ACEOF
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for make_lp in -llpsolve55_pic" >&5
-$as_echo_n "checking for make_lp in -llpsolve55_pic... " >&6; }
-if ${ac_cv_lib_lpsolve55_pic_make_lp+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing make_lp" >&5
+$as_echo_n "checking for library containing make_lp... " >&6; }
+if ${ac_cv_search_make_lp+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-llpsolve55_pic  $LIBS"
+  ac_func_search_save_LIBS=$LIBS
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -15662,29 +15670,37 @@ return make_lp ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_lpsolve55_pic_make_lp=yes
-else
-  ac_cv_lib_lpsolve55_pic_make_lp=no
+for ac_lib in '' lpsolve55_pic lpsolve55; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_make_lp=$ac_res
 fi
 rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
+    conftest$ac_exeext
+  if ${ac_cv_search_make_lp+:} false; then :
+  break
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lpsolve55_pic_make_lp" >&5
-$as_echo "$ac_cv_lib_lpsolve55_pic_make_lp" >&6; }
-if test "x$ac_cv_lib_lpsolve55_pic_make_lp" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBLPSOLVE55_PIC 1
-_ACEOF
-
-  LIBS="-llpsolve55_pic $LIBS"
+done
+if ${ac_cv_search_make_lp+:} false; then :
 
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: lpsolve not installed, required for pruning POMDP value functions" >&5
-$as_echo "$as_me: WARNING: lpsolve not installed, required for pruning POMDP value functions" >&2;}
+  ac_cv_search_make_lp=no
 fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_make_lp" >&5
+$as_echo "$ac_cv_search_make_lp" >&6; }
+ac_res=$ac_cv_search_make_lp
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
+fi
 
 
 # Checks for header files.
@@ -17894,8 +17910,6 @@ done
 case $host_os in
 *darwin*)
 	HOST_OS=darwin
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: \"Compiling on OSX. Some functionalities will not be available.\"" >&5
-$as_echo "$as_me: WARNING: \"Compiling on OSX. Some functionalities will not be available.\"" >&2;}
 	;;
 #Other os-specific instructions can go here.
 esac

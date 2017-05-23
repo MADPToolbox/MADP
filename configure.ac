@@ -84,7 +84,7 @@ then
 fi
 AC_CHECK_LIB(dl, dlopen)
 AC_CHECK_LIB(colamd, colamd)
-AC_CHECK_LIB([lpsolve55], [make_lp])
+AC_SEARCH_LIBS([make_lp],[lpsolve55_pic lpsolve55])
 
 # Checks for header files.
 AC_HEADER_STDC

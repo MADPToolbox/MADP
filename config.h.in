@@ -36,9 +36,6 @@
 /* Define to 1 if you have the `dl' library (-ldl). */
 #undef HAVE_LIBDL
 
-/* Define to 1 if you have the `lpsolve55_pic' library (-llpsolve55_pic). */
-#undef HAVE_LIBLPSOLVE55_PIC
-
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
 
@@ -50,6 +47,12 @@
 
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
+
+/* Define to 1 if you have the <lpsolve/lp_lib.h> header file. */
+#undef HAVE_LPSOLVE_LP_LIB_H
+
+/* Define to 1 if you have the <lp_lib.h> header file. */
+#undef HAVE_LP_LIB_H
 
 /* Define to 1 if your system has a GNU libc compatible `malloc' function, and
    to 0 otherwise. */
