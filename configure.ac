@@ -77,16 +77,14 @@ AC_CHECK_LIB([stdc++],[__cxa_free_exception])
 # IMPORTANT; check for math lib before lpsolve, otherwise lpsolve will fail (it needs '-lm')
 AC_CHECK_LIB([m], [main])
 # check for lpsolve
-AC_CHECK_HEADER(
-        [lpsolve/lp_lib.h],
-        [],
-        [AC_MSG_WARN([lpsolve not installed, required for pruning POMDP value functions])])
+AC_CHECK_HEADERS([lpsolve/lp_lib.h lp_lib.h])
+if test x"$ac_cv_header_lpsolve_lp_lib_h" != xyes -a x"$ac_cv_header_lp_lib_h" != xyes
+then
+        AC_MSG_WARN([lpsolve not installed, required for pruning POMDP value functions])
+fi
 AC_CHECK_LIB(dl, dlopen)
 AC_CHECK_LIB(colamd, colamd)
-AC_CHECK_LIB([lpsolve55_pic], [make_lp],
-        [],
-        [AC_MSG_WARN([lpsolve not installed, required for pruning POMDP value functions])])
-
+AC_CHECK_LIB([lpsolve55], [make_lp])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -183,7 +181,6 @@ AC_CANONICAL_HOST
 case $host_os in
 *darwin*)
 	HOST_OS=darwin
-	AC_MSG_WARN("Compiling on OSX. Some functionalities will not be available.")
 	;;
 #Other os-specific instructions can go here.
 esac

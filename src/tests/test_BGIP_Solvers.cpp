@@ -99,6 +99,21 @@ void testBGIP_Solvers()
         new BayesianGameIdenticalPayoff(
             BayesianGameIdenticalPayoff::GenerateRandomBG(nrAgents, acs, obs)));
 
+    if(args.testMode)
+    {
+        bgip->SetProbability(0,0.333966);
+        bgip->SetProbability(1,0.666034);
+
+        bgip->SetUtility(0, 0, 6.80375 );
+        bgip->SetUtility(0, 1, -2.11234 );
+        bgip->SetUtility(0, 2, 5.66198 );
+        bgip->SetUtility(0, 3,  5.9688 );
+        
+        bgip->SetUtility(1, 0, 8.23295 );
+        bgip->SetUtility(1, 1, -6.04897 );
+        bgip->SetUtility(1, 2, -3.29554 );
+        bgip->SetUtility(1, 3, 5.36459 );
+    }
 /*
   BayesianGameIdenticalPayoff bgip(nrAgents, acs, obs);
 

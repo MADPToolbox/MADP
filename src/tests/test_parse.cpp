@@ -128,20 +128,19 @@ void TestParsing(const ArgumentHandlers::Arguments& args)
     else
         JESPe.SetSeed(time(0));
     double Vsuboptimal = -DBL_MAX;
-    double max = -DBL_MAX;
-    for(int i=0; i<100; i++)
+    double Vmax = -DBL_MAX;
+    for(int i=0; i<1000; i++)
     {
         JESPe.Plan();
         Vsuboptimal = JESPe.GetExpectedReward();
-        cout << ", "<< Vsuboptimal;
-        if(Vsuboptimal > max)
+        if(Vsuboptimal > Vmax)
         {
-            max = Vsuboptimal;
+            Vmax = Vsuboptimal;
             //cout << "\n>>>new maximum!"<<endl;
         }
     }
+    cout << "Max. Expected value: " << Vmax<<"\n\n"<<endl;
     cout << "\n---------------------------------------"<<endl;
-//    cout << "Max. Expected value: " << max<<"\n\n"<<endl;
 //    cout << "press enter to continue...";
 //    cin.get();
 

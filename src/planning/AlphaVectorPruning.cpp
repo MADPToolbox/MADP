@@ -18,11 +18,13 @@
 #include <float.h>
 #include <config.h>
 
-#ifdef HAVE_LIBLPSOLVE55_PIC
 extern "C" {
+#if defined(HAVE_LPSOLVE_LP_LIB_H)
 #include <lpsolve/lp_lib.h>
-}
+#elif defined(HAVE_LP_LIB_H)
+#include <lp_lib.h>
 #endif
+}
 
 using namespace std;
 
@@ -189,7 +191,7 @@ bool AlphaVectorPruning::FindBelief(const AlphaVector &p,
 double AlphaVectorPruning::GetNormalObj(const AlphaVector &p,
                                     const ValueFunctionPOMDPDiscrete &uU)
 {
-#ifdef HAVE_LIBLPSOLVE55_PIC
+#if defined(HAVE_LPSOLVE_LP_LIB_H) || defined(HAVE_LP_LIB_H)
     // we use this function for debugging only
 
     size_t nrStates = p.GetNrValues();
@@ -229,10 +231,10 @@ double AlphaVectorPruning::GetNormalObj(const AlphaVector &p,
     solve(lp);
 
     return get_objective(lp);
-#else // HAVE_LIBLPSOLVE55_PIC
+#else
     throw(E("AlphaVectorPruning: lpsolve was not installed"));
     return(0);
-#endif // HAVE_LIBLPSOLVE55_PIC    
+#endif
 }
 
 bool AlphaVectorPruning::FindBeliefAccelerated(const AlphaVector &p,
@@ -243,7 +245,7 @@ bool AlphaVectorPruning::FindBeliefAccelerated(const AlphaVector &p,
     // In Proceedings of the 31st AAAI Conference on Artificial Intelligence.
 
     bool foundBelief=false;
-#ifdef HAVE_LIBLPSOLVE55_PIC
+#if defined(HAVE_LPSOLVE_LP_LIB_H) || defined(HAVE_LP_LIB_H)
     size_t nrStates = p.GetNrValues();
     belief=vector<double>(nrStates,0);
 
@@ -345,9 +347,9 @@ bool AlphaVectorPruning::FindBeliefAccelerated(const AlphaVector &p,
   
     // delete the problem and free memory
     delete_lp(lp);
-#else // HAVE_LIBLPSOLVE55_PIC
+#else
     throw(E("AlphaVectorPruning: lpsolve was not installed"));
-#endif // HAVE_LIBLPSOLVE55_PIC    
+#endif
     return(foundBelief);
 }
 
@@ -356,7 +358,7 @@ bool AlphaVectorPruning::FindBeliefNormal(const AlphaVector &p,
                                     vector<double> &belief)
 {
     bool foundBelief=false;
-#ifdef HAVE_LIBLPSOLVE55_PIC
+#if defined(HAVE_LPSOLVE_LP_LIB_H) || defined(HAVE_LP_LIB_H)
     size_t nrStates = p.GetNrValues();
     belief=vector<double>(nrStates,0);
 
@@ -443,9 +445,9 @@ bool AlphaVectorPruning::FindBeliefNormal(const AlphaVector &p,
     }    
     // delete the problem and free memory
     delete_lp(lp);
-#else // HAVE_LIBLPSOLVE55_PIC
+#else
     throw(E("AlphaVectorPruning: lpsolve was not installed"));
-#endif // HAVE_LIBLPSOLVE55_PIC    
+#endif
     return(foundBelief);
 }
 
