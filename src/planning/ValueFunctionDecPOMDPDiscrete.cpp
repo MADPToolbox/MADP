@@ -13,9 +13,10 @@
  * For contact information please see the included AUTHORS file.
  */
 
-#include "ValueFunctionDecPOMDPDiscrete.h"
-
 #define DEBUG_CALCV 0
+#define DEBUG_CALCV_CACHE 0
+
+#include "ValueFunctionDecPOMDPDiscrete.h"
 
 using namespace std;
 
@@ -24,8 +25,6 @@ ValueFunctionDecPOMDPDiscrete::ValueFunctionDecPOMDPDiscrete(
     _m_planningUnitDecPOMDPDiscrete(&p), //BAS is never used, _m_pu used instead
     _m_jointPolicyDiscretePure(&jp)
 {
-    _m_V_initialized = false;
-    _m_p_V = 0;
     _m_pu = &p;
     _m_jpol = &jp;
     _m_nrJOH = _m_pu->GetNrJointObservationHistories();
@@ -39,8 +38,6 @@ ValueFunctionDecPOMDPDiscrete::ValueFunctionDecPOMDPDiscrete(
     _m_planningUnitDecPOMDPDiscrete(p), //BAS is never used, _m_pu used instead
     _m_jointPolicyDiscretePure(jp)
 {
-    _m_V_initialized = false;
-    _m_p_V = 0;
     _m_pu = p;
     _m_jpol = jp;
     _m_nrJOH = _m_pu->GetNrJointObservationHistories();
@@ -54,8 +51,6 @@ ValueFunctionDecPOMDPDiscrete::ValueFunctionDecPOMDPDiscrete(
 ValueFunctionDecPOMDPDiscrete::ValueFunctionDecPOMDPDiscrete(
     const ValueFunctionDecPOMDPDiscrete& o) 
 {
-    _m_V_initialized = false;
-    _m_p_V = new Matrix(*o._m_p_V);//this makes a deep copy.
     _m_pu = o._m_pu;
     _m_jpol = o._m_jpol;
     _m_nrJOH = o._m_nrJOH;
@@ -69,92 +64,56 @@ ValueFunctionDecPOMDPDiscrete::~ValueFunctionDecPOMDPDiscrete()
 
 void ValueFunctionDecPOMDPDiscrete::DeleteV()
 {
-    if(_m_V_initialized)
-    {
-        delete(_m_p_V);
-        _m_V_initialized = false;
-    }
-    _m_cached.clear();
+    _m_cache.clear();
 }
 
-void ValueFunctionDecPOMDPDiscrete::CreateV()
+void ValueFunctionDecPOMDPDiscrete::SetCached(Index sI, Index JOHI, double val)
 {
-    if(_m_V_initialized)
-        DeleteV();
-
-    _m_p_V = new Matrix(_m_nrS, _m_nrJOH);
-    //GetPU()->GetNrStates(), _GetPU()->GetNrJointObservationHistories());
-    _m_p_V->clear();
-    _m_V_initialized = true;
+    _m_cache[GetCombinedIndex(sI, JOHI)]=val;
 }
 
-inline bool ValueFunctionDecPOMDPDiscrete::IsCached(Index sI, Index JOHI)
-{    
-    std::set<Index>::iterator it=_m_cached.find(GetCombinedIndex(sI, JOHI));
-    return it!=_m_cached.end();
-}
-
-inline void ValueFunctionDecPOMDPDiscrete::SetCached(Index sI, Index JOHI)
+double ValueFunctionDecPOMDPDiscrete::GetCached(Index sI, Index JOHI,bool &valid)
 {
-    _m_cached.insert(GetCombinedIndex(sI, JOHI));
+    CacheType::const_iterator it=_m_cache.find(GetCombinedIndex(sI, JOHI));
+    valid=(it!=_m_cache.end());
+    if (valid)
+        return it->second;
+    else
+        return 0;
 }
 
 template <bool CACHED>
 double ValueFunctionDecPOMDPDiscrete::CalculateV()
 {
-   CreateV();
 #if DEBUG_CALCV
-   cout << "CalculateV0Recursively::creating a new value function (cache:"<<CACHED<<")"<< endl;
-   cout << "evaluating joint policy:\n"; GetJPol()->Print();
-#endif                 
+    if(DEBUG_CALCV_CACHE)
+        std::cout << "CalculateV0Recursively::creating a new value function" << std::endl;
+    std::cout << "evaluating joint policy:\n"; GetJPol()->Print();
+#endif
 
     double val = 0;
     for(Index sI = 0; sI < _m_nrS; sI++)
     {
-        
-        double v_sI;
-        switch (CACHED)// compile time optimized as result of CACHED being a template variable
-        {
-        case true:  v_sI=CalculateVsjohRecursively_cached(sI, Globals::INITIAL_JOHI, 0 );break;
-        case false: v_sI=CalculateVsjohRecursively<false>(sI, Globals::INITIAL_JOHI, 0 );break;
-        }
-
+        double v_sI=CalculateVsjohRecursively<CACHED>(sI, Globals::INITIAL_JOHI, 0);
 #if DEBUG_CALCV
-        cout << ">>>ValueFunctionDecPOMDPDiscrete::CalculateV() -"
-             << " CalculateVsjohRecursively(sI=" << sI
-             << ", INITIAL_JOHI, cache="<< CACHED << ") = " << v_sI << endl; 
-#endif                 
+        std::cout << ">>>ValueFunctionDecPOMDPDiscrete::CalculateV() -"
+                  << " CalculateVsjohRecursively(sI=" << sI
+                  << ", INITIAL_JOHI, Cached ) = " << v_sI << std::endl;
+#endif
         val +=  _m_pu->GetInitialStateProbability(sI) * v_sI;
     }
 #if DEBUG_CALCV
-    cout << "This policy's V=" << val <<endl;
-#endif                 
+    std::cout << "This policy's V=" << val <<std::endl;
+#endif
     return val;
 }
 
-inline double ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively_cached(Index sI,Index johI,unsigned int stage)
-{
-    if( IsCached(sI, johI) )
-    {
-#if DEBUG_CALCV
-        cout << "returning cached result"<<endl;
-#endif                 
-        return ((*_m_p_V)(sI, johI));
-    }
-    else
-    {
-        double v=CalculateVsjohRecursively<true>(sI,johI,stage);
-        SetCached(sI, johI);
-        return v;
-    }
-}
-
 template <bool CACHED>
-double ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively(Index sI,Index johI,unsigned int stage)
+double ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively(Index sI,Index johI, Index stage)
 {
 #if DEBUG_CALCV
-    cout<< "\nValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively("
-         << sI << ", " << johI << ") called"<<endl;
+    std::cout<< "\nValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively("
+             << sI << ", " << johI << ") called"<<std::endl;
 #endif
 
     Index jaI = GetJPol()->GetJointActionIndex(johI);
@@ -165,52 +124,55 @@ double ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively(Index sI,Index j
     // t=0 - () - length=0 
     // ... 
     // t=h-1 - (o1,...,o{h-1}) - length h-1
-    if(stage >= _m_h - 1 )
+    if( ( CACHED && stage >= _m_h - 1) ||
+        (!CACHED && _m_pu->GetTimeStepForJOHI(johI) >= _m_h - 1 ) )
     {
 #if DEBUG_CALCV
-        {        cout << "ValueFunctionDecPOMDPDiscrete::CalculateVsjoh"
-                 << "Recursively("<< sI <<", " << johI << ") - V="<<R<<endl;} 
-#endif                 
+        std::cout << "ValueFunctionDecPOMDPDiscrete::CalculateVsjoh"
+                  << "Recursively("<< sI <<", " << johI << ") - V="<<R<<std::endl;
+#endif
         return(R);
     }
 
 #if DEBUG_CALCV
-    cout << "Calculating future reward"<<endl;
-#endif                 
+    std::cout << "Calculating future reward"<<std::endl;
+#endif
     for(Index sucSI = 0; sucSI < _m_nrS; sucSI++)
     {
         double probSucSI = _m_pu->GetTransitionProbability(sI, jaI,sucSI);
 #if DEBUG_CALCV
-        cout << "P(s"<<sucSI<<"|s"<<sI<<",ja"<<jaI<<")="<<probSucSI<<endl;
-#endif                 
+        std::cout << "P(s"<<sucSI<<"|s"<<sI<<",ja"<<jaI<<")="<<probSucSI<<std::endl;
+#endif
 
         for(Index joI = 0; joI < _m_nrJO; joI++)
         {
             double probJOI =  _m_pu->GetObservationProbability(jaI, sucSI, joI);
 #if DEBUG_CALCV
-            cout << "P(jo"<<joI<<"|ja"<<jaI<<",s"<<sucSI<<")="<<probJOI<<endl;
-#endif                 
+            std::cout << "P(jo"<<joI<<"|ja"<<jaI<<",s"<<sucSI<<")="<<probJOI<<std::endl;
+#endif
             Index sucJohI = _m_pu->GetSuccessorJOHI(johI, joI);
+
             double thisSucV;
-            switch (CACHED)// compile time optimized as result of CACHED being a template variable
-            {
-            case true:  thisSucV=CalculateVsjohRecursively_cached(sucSI,sucJohI,stage+1);break;
-            case false: thisSucV=CalculateVsjohRecursively<false>(sucSI,sucJohI,stage+1);break;
-            }
+            bool valid=false;
+            if (CACHED)
+                thisSucV=GetCached(sucSI,sucJohI,valid); // read from cache
+            if (!valid) // if not found in cache or cache is not used
+                thisSucV=CalculateVsjohRecursively<CACHED>(sucSI,sucJohI,stage+1);
             ExpFutureR += probSucSI * probJOI * thisSucV;
         }//end for each observation
     }//end for each potential succesor state
     double val = R + ExpFutureR;
-    (*_m_p_V)(sI, johI) = val;
+    if (CACHED)
+        SetCached(sI, johI, val); // write to cache
 #if DEBUG_CALCV
-    cout << "ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively("
-         << sI <<", " << johI << ") \n->immediate R="<<R<<
-        " \n->exp. future reward="<<ExpFutureR<<"\n->V="<<val<<endl;
-#endif                 
+    std::cout << "ValueFunctionDecPOMDPDiscrete::CalculateVsjohRecursively("
+              << sI <<", " << johI << ") \n->immediate R="<<R
+              << " \n->exp. future reward="<<ExpFutureR<<"\n->V="<<val<<std::endl;
+#endif
     return(val);
 }
 
-// instantiate both template options so we don't have to move the method definition to header file
+// instantiate both template options (true and false) so we don't  
+// have to move the method definition to header file
 template double ValueFunctionDecPOMDPDiscrete::CalculateV<true>();
 template double ValueFunctionDecPOMDPDiscrete::CalculateV<false>();
-
