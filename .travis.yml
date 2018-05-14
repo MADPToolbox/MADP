@@ -36,5 +36,6 @@ script:
     #
     # In case we want to try the other route again (surpressing warnings), this is what I was doing:
     # export CXXFLAGS="-std=c++11 -Wno-unused-local-typedefs -Wno-unused-variable -Wno-unused-but-set-variable -Wno-redeclared-class-member" &&   ./configure && make
+  - autoreconf -f -i
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis_build_workaround.sh; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./configure && make && make check; fi
