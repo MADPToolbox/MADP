@@ -7,8 +7,9 @@
  *
  * This file has been written and/or modified by the following people:
  *
- * Frans Oliehoek 
- * Matthijs Spaan 
+ * Frans Oliehoek
+ * Matthijs Spaan
+ * Robert Hand
  *
  * For contact information please see the included AUTHORS file.
  */
@@ -143,6 +144,13 @@ class JPolComponent_VectorImplementation
         /// Prints a description of this to a string.
         std::string SoftPrint() const; 
         std::string SoftPrintBrief() const;
+
+        /// Export the policy to a file of individual policies
+        /** Exports the policy to a file at the given path as
+         *  individual policies expressed as the actions for each
+         *  individual oh index.
+         */
+        void ExportPolicyToFile(const std::string& path, const Index& horizon) const;
 
         
         ///Returns the jaI taken by this policy for joint domain index johI.

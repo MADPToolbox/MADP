@@ -9,6 +9,7 @@
  *
  * Frans Oliehoek 
  * Matthijs Spaan 
+ * Robert Hand
  *
  * For contact information please see the included AUTHORS file.
  */
@@ -113,6 +114,12 @@ int main(int argc, char **argv)
             of.flush();
         }
     }
+
+    if(!args.dryrun && args.outputPolicy)
+    {
+        string outputFileName = filename + "_PolicyFile";
+        bfs.GetJointPolicyPureVector()->ExportPolicyToFile(outputFileName, bfs.GetHorizon());
     }
-    catch(E& e){ e.Print(); }
+
+    } catch(E& e){ e.Print(); }
 }
