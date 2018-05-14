@@ -71,6 +71,7 @@ struct Arguments
     int dryrun;
     char * description, * prefix;
     int noReCompute;
+    bool outputPolicy;
 
     //model options (modelOptions)
     bool cache_flat_models;
@@ -223,6 +224,7 @@ struct Arguments
         description = NULL;
         prefix = NULL;
         noReCompute = 0;
+        outputPolicy = false;
 
         // model
         cache_flat_models = false;

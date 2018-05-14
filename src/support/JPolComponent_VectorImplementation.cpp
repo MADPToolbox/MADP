@@ -7,14 +7,18 @@
  *
  * This file has been written and/or modified by the following people:
  *
- * Frans Oliehoek 
- * Matthijs Spaan 
+ * Frans Oliehoek
+ * Matthijs Spaan
+ * Robert Hand
  *
  * For contact information please see the included AUTHORS file.
  */
 
 #include "JPolComponent_VectorImplementation.h"
 #include "IndexTools.h"
+
+#include <fstream>
+
 using namespace std;
 
 
@@ -464,7 +468,7 @@ string JPolComponent_VectorImplementation::SoftPrint(void) const
            << _m_indivPols_PolicyPureVector.at(agentI)->SoftPrint();
     }
     return(ss.str());
-} 
+}
 
 string JPolComponent_VectorImplementation::SoftPrintBrief(void) const
 {
@@ -477,3 +481,46 @@ string JPolComponent_VectorImplementation::SoftPrintBrief(void) const
     return(ss.str());
 }
         
+void JPolComponent_VectorImplementation::ExportPolicyToFile(const std::string& path, const Index& horizon) const {
+    ofstream fp(path.c_str());
+
+    // Output horizon
+    fp << "Horizon : " << horizon << endl;
+
+    // Get nr agents and output to file
+    Index nrAgents = GetInterfacePTPDiscretePure()->GetNrAgents();
+    fp << "NrAgents : " << nrAgents << endl;
+
+
+    vector<Index> numObvsHistory(nrAgents);
+
+    // Get number of observation histories for each agent
+    for(Index i=0; i<nrAgents; ++i) {
+
+        numObvsHistory[i] = GetInterfacePTPDiscretePure()->GetNrPolicyDomainElements(
+            i, PolicyGlobals::OHIST_INDEX, _m_indivPols_PolicyPureVector[i]->GetDepth());
+
+        fp << i << " : " << numObvsHistory[i] << endl;
+    }
+
+    // Output policies for all agents
+    for(Index i=0; i<nrAgents; ++i) {
+
+        // Output policy
+        fp << endl << endl;
+
+        // Output first action
+        fp << _m_indivPols_PolicyPureVector[i]->GetActionIndex(0) << " ";
+
+        // Output rest
+        for(Index j=1; j<numObvsHistory[i]; ++j) {
+
+            // Break lines
+            if(j % 30 == 0) {
+                fp << endl;
+            }
+
+            fp << _m_indivPols_PolicyPureVector[i]->GetActionIndex(j) << " ";
+        }
+    }
+}

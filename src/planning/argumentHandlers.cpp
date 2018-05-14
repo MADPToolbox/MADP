@@ -168,7 +168,7 @@ extern const struct argp_child problemFile_child = {&problemFile_argp, 0, "Probl
 
 
 //global options (globalOptions)
-static const int GID_GLOBALOPTIONS=8;
+static const int GID_GLOBALOPTIONS=9;
 const char *globalOptions_argp_version = "global options parser 0.1";
 static const char *globalOptions_args_doc = 0;
 static const char *globalOptions_doc = 
@@ -226,6 +226,7 @@ not be shown)";
 /* Keys for options without short-options. */
 static const int OPT_PREFIX=1;
 static const int OPT_NORECOMPUTE=2;
+static const int OPT_OUTPUT_POLICY=3;
 static struct argp_option outputFileOptions_options[] = {
 {"dry-run",  'd', 0,       0, "Do not actually create any output files." },
 {"description",  'D', "DESCR",       0, 
@@ -234,6 +235,7 @@ in the output file's names." },
 {"prefix",    OPT_PREFIX, "PREFIX",      0, 
 "Use PREFIX as a prefix for the output result files." },
 {"dontReCompute",  OPT_NORECOMPUTE, 0,       0, "Check if the output file already exists, if so don't re-compute the result, but exit immediately." },
+{"outputPolicy", OPT_OUTPUT_POLICY, 0, 0, "Output the individual policies to a file"},
 { 0 }
 };
 error_t
@@ -256,6 +258,9 @@ outputFileOptions_parse_argument (int key, char *arg, struct argp_state *state)
             break;
         case OPT_NORECOMPUTE:
             theArgumentsStruc->noReCompute = 1;
+            break;
+        case OPT_OUTPUT_POLICY:
+            theArgumentsStruc->outputPolicy = true;
             break;
         default:
             return ARGP_ERR_UNKNOWN;
