@@ -144,7 +144,7 @@ INCLUDEPATH		= -I. $(MADP_INCLUDES)
 AM_LDFLAGS		= 
 LDADD			= 
 AM_CPPFLAGS		= -pipe $(MARCH_FLAGS) $(CCFLAGS) $(INCLUDEPATH)
-AM_CXXFLAGS 		= $(CSTANDARD)
+AM_CXXFLAGS 		= $(CSTANDARD) -fpermissive
 
 
 DAI_CPPFILES=alldai.cpp bounds.cpp boxbp.cpp box.cpp bp.cpp clustergraph.cpp daialg.cpp exact.cpp exceptions.cpp factorgraph.cpp hak.cpp ijgp.cpp jtree.cpp lc.cpp lclin.cpp mf.cpp properties.cpp regiongraph.cpp treeep.cpp trw.cpp util.cpp weightedgraph.cpp \
