@@ -1,13 +1,13 @@
-/* This file is part of the Multiagent Decision Process (MADP) Toolbox. 
+/* This file is part of the Multiagent Decision Process (MADP) Toolbox.
  *
  * The majority of MADP is free software released under GNUP GPL v.3. However,
- * some of the included libraries are released under a different license. For 
- * more information, see the included COPYING file. For other information, 
+ * some of the included libraries are released under a different license. For
+ * more information, see the included COPYING file. For other information,
  * please refer to the included README file.
  *
  * This file has been written and/or modified by the following people:
  *
- * Frans Oliehoek 
+ * Frans Oliehoek
  *
  * For contact information please see the included AUTHORS file.
  */
@@ -20,7 +20,7 @@ using namespace std;
 
 namespace DPOMDPFormatParsing{
 
-/**Outputs the file_position structure info (gotten from 
+/**Outputs the file_position structure info (gotten from
  * postion_iterator::get_position() ). */
 std::ostream& operator<<(std::ostream& out, file_position const& lc)
 {
@@ -52,8 +52,8 @@ ParserDPOMDPFormat_Spirit::ParserDPOMDPFormat_Spirit(DecPOMDPDiscrete* problem) 
 }
 
 /*
-//Copy assignment constructor.        
-ParserDPOMDPFormat_Spirit::ParserDPOMDPFormat_Spirit(const ParserDPOMDPFormat_Spirit& o) 
+//Copy assignment constructor.
+ParserDPOMDPFormat_Spirit::ParserDPOMDPFormat_Spirit(const ParserDPOMDPFormat_Spirit& o)
 {
 }
 //Destructor
@@ -66,7 +66,7 @@ ParserDPOMDPFormat_Spirit::~ParserDPOMDPFormat_Spirit()
 bool ParserDPOMDPFormat_Spirit::Parse()
 {
     string pf = GetDecPOMDPDiscrete()->GetProblemFile();
-    
+
 
 
 }
@@ -113,7 +113,7 @@ void ParserDPOMDPFormat_Spirit::Parse()
 
     DecPOMDPFileParser dpomdp(this);
     comment_cobp::CommentOrBlankParser skip_parser;
-    parse_info<iterator_t> info; 
+    parse_info<iterator_t> info;
     // Parse
     try{
         // Spirit changed when upgrading from 1.33.1 to 1.34.0:
@@ -131,13 +131,13 @@ void ParserDPOMDPFormat_Spirit::Parse()
             iterator_t st2 = info.stop;
             for(Index i=1;i<200 && st2 != last ;i++)st2++;
             string unparsed(st, st2);
-            cout << "stopped at: " << info.stop.get_position() 
+            cout << "stopped at: " << info.stop.get_position()
                 << "-> unparsed : "<< "\"" << unparsed << "\"\n";
             cout << "partial match? hit: \"" << info.hit << "\"\n";
             cout << "consumed chars - length: \"" << info.length << "\"\n";
             throw E("Parsing failed");
         }
-    }    
+    }
     catch(E& e)
     {
         e.Print();
@@ -200,7 +200,7 @@ void ParserDPOMDPFormat_Spirit::StoreLastParsedElement::operator()(const double 
 }
 
 void ParserDPOMDPFormat_Spirit::StoreLastParsedElement::operator()(iterator_t str, iterator_t end) const
-{ 
+{
     _m_po->_m_lp_string.clear();
     _m_po->_m_lp_string = string(str, end);
     if(DEBUG_PARSE) cout << "Stored Last Parsed: string "<<
@@ -210,7 +210,7 @@ void ParserDPOMDPFormat_Spirit::StoreLastParsedElement::operator()(iterator_t st
 
 
 void ParserDPOMDPFormat_Spirit::SetNrAgents::operator()(iterator_t first, iterator_t last) const
-{    
+{
     if (_m_po->_m_lp_type != UINT)
     {
         stringstream msg;
@@ -219,26 +219,26 @@ void ParserDPOMDPFormat_Spirit::SetNrAgents::operator()(iterator_t first, iterat
         throw EParse(msg);
     }
     size_t nrA = _m_po->_m_lp_uint;
-    if(DEBUG_PARSE){cout <<"agt_SetNrAgents - nrA="<<nrA<<endl;} 
+    if(DEBUG_PARSE){cout <<"agt_SetNrAgents - nrA="<<nrA<<endl;}
     _m_po->GetDecPOMDPDiscrete()->SetNrAgents(nrA);
     _m_po->_m_nrA = nrA;
 }
 
 void ParserDPOMDPFormat_Spirit::SetNrAgents::operator()(const int& i) const
-{   
+{
     if(DEBUG_PARSE){cout << "i="<<i<< endl;}
-    size_t nrA = i;     
-    if(DEBUG_PARSE){cout <<"agt_SetNrAgents - nrA="<<nrA<<endl;} 
+    size_t nrA = i;
+    if(DEBUG_PARSE){cout <<"agt_SetNrAgents - nrA="<<nrA<<endl;}
     _m_po->GetDecPOMDPDiscrete()->SetNrAgents(nrA);
     _m_po->_m_nrA = nrA;
 
 }
 /*
 void ParserDPOMDPFormat_Spirit::SetNrAgents::operator()(iterator_t first, iterator_t last) const
-{   
+{
     if(DEBUG_PARSE){string  s(first, last);cout << "s="<<s << endl;}
     size_t nrA = _m_po->_m_lp_int;
-    if(DEBUG_PARSE){cout <<"agt_SetNrAgents - nrA="<<nrA<<endl;} 
+    if(DEBUG_PARSE){cout <<"agt_SetNrAgents - nrA="<<nrA<<endl;}
     _m_po->GetDecPOMDPDiscrete()->SetNrAgents(nrA);
     _m_po->_m_nrA = nrA;
 
@@ -258,7 +258,7 @@ void ParserDPOMDPFormat_Spirit::WildCardJointAction::operator()(iterator_t str, 
     }
 }
 /*
-void ParserDPOMDPFormat_Spirit::StoreLPJointAction::operator()(iterator_t str, iterator_t end) const    
+void ParserDPOMDPFormat_Spirit::StoreLPJointAction::operator()(iterator_t str, iterator_t end) const
 {
     _m_po->_m_lp_JAI.clear();
     if(_m_isJointActionIndex)
@@ -288,7 +288,7 @@ void ParserDPOMDPFormat_Spirit::StoreLPJointAction::operator()(const unsigned in
         _m_po->_m_lp_JAI.push_back(_m_po->_m_lp_int);
         return;
     }
-    MatchingJointActions(0,_m_po->_m_lp_JA); 
+    MatchingJointActions(0,_m_po->_m_lp_JA);
     _m_po->_m_lp_JA.clear();
 }
 */
@@ -310,7 +310,7 @@ void ParserDPOMDPFormat_Spirit::StoreLPJointAction::Store() const
         _m_po->_m_lp_JAI.push_back(_m_po->_m_lp_uint);
         return;
     }
-    MatchingJointActions(0,_m_po->_m_lp_JA); 
+    MatchingJointActions(0,_m_po->_m_lp_JA);
     _m_po->_m_lp_JA.clear();
 }
 void ParserDPOMDPFormat_Spirit::StoreLPJointAction::MatchingJointActions (Index curAgent, vector<Index> indIndices) const
@@ -337,7 +337,7 @@ void ParserDPOMDPFormat_Spirit::StoreLPJointAction::MatchingJointActions (Index 
             stringstream ss; ss << e.SoftPrint() << "(at "<< _m_po->_m_first->
                 get_position()<<")"<<endl;
             throw(EParse(ss));
-        }        
+        }
         if(DEBUG_PARSE)
         {
             cout<<"MatchingJointActions: joint action index for < ";
@@ -371,12 +371,12 @@ void ParserDPOMDPFormat_Spirit::WildCardJointObservation::operator()(iterator_t 
     //this (can) contain elements from a failed indiv_action parse.
     _m_po->_m_lp_JO.clear();
     _m_po->_m_lp_JOI.clear();
-    //this is different from how we handle joint actions: joint actions are 
+    //this is different from how we handle joint actions: joint actions are
     //immediately expanded (i.e. '*'/ANY_INDEX is replaced by all matching
-    //indices.) 
+    //indices.)
     //For joint observations, this is not practical, as for most common reward
     //forms, this is not required. I.e., one will typically specify
-    //R: ja : s : * : * : prob 
+    //R: ja : s : * : * : prob
     //then we want to call addReward(ja,s) and not expand the succesor states
     //and joint observations...
 
@@ -410,7 +410,7 @@ void ParserDPOMDPFormat_Spirit::StoreLPJointObservation::Store() const
         _m_po->_m_lp_JOI.push_back(_m_po->_m_lp_uint);
         return;
     }
-    MatchingJointObservations(0,_m_po->_m_lp_JO); 
+    MatchingJointObservations(0,_m_po->_m_lp_JO);
     _m_po->_m_lp_JO.clear();
 }
 /*
@@ -439,8 +439,8 @@ void ParserDPOMDPFormat_Spirit::StoreLPJointObservation::MatchingJointObservatio
     if(_m_po->_m_nrA != indIndices.size())
     {
         stringstream msg;
-        msg << "individual obs indices vector has wrong size. ("<<indIndices.size() << 
-            " while nrAgents is " <<_m_po->_m_nrA << ")" << "at(" << 
+        msg << "individual obs indices vector has wrong size. ("<<indIndices.size() <<
+            " while nrAgents is " <<_m_po->_m_nrA << ")" << "at(" <<
             _m_po->_m_first->get_position() << ")" << endl;;
         throw EParse(msg);
     }
@@ -498,7 +498,7 @@ void ParserDPOMDPFormat_Spirit::StoreLPFromState::operator()(iterator_t str, ite
         unsigned int index = _m_po->_m_lp_uint;
         size_t nrS =  _m_po->GetDecPOMDPDiscrete()->GetNrStates();
         if(index >= nrS)
-        {            
+        {
             stringstream ss; ss<<"StoreLPFromState: '"<< index<< "' is not a valid state index!? Number of states is " << nrS <<" (at " <<str.get_position()<<")"<<endl; throw E(ss);
         }
 
@@ -514,7 +514,7 @@ void ParserDPOMDPFormat_Spirit::StoreLPFromState::operator()(iterator_t str, ite
         }
         catch(E e)
         {
-            stringstream ermsg; ermsg << e.SoftPrint() << " (at " << 
+            stringstream ermsg; ermsg << e.SoftPrint() << " (at " <<
                 str.get_position() << ")"<<endl;
             throw E(ermsg);
         }
@@ -538,7 +538,7 @@ void ParserDPOMDPFormat_Spirit::StoreLPToState::operator()(iterator_t str, itera
         unsigned int index = _m_po->_m_lp_uint;
         size_t nrS =  _m_po->GetDecPOMDPDiscrete()->GetNrStates();
         if(index >= nrS)
-        {            
+        {
             stringstream ss; ss<<"StoreLPToState: '"<< index<< "' is not a valid state index!? Number of states is " << nrS <<" (at " <<str.get_position()<<")"<<endl; throw E(ss);
         }
 
@@ -554,7 +554,7 @@ void ParserDPOMDPFormat_Spirit::StoreLPToState::operator()(iterator_t str, itera
         }
         catch(E e)
         {
-            stringstream ermsg; ermsg << e.SoftPrint() << " (at " << 
+            stringstream ermsg; ermsg << e.SoftPrint() << " (at " <<
                 str.get_position() << ")"<<endl;
             throw E(ermsg);
         }
@@ -573,7 +573,7 @@ void ParserDPOMDPFormat_Spirit::ProcessTProb::operator()(iterator_t str, iterato
     }
 
     double prob = _m_po->_m_lp_double;
-    if( _m_po->_m_lp_fromSI.size() != 1 || 
+    if( _m_po->_m_lp_fromSI.size() != 1 ||
         _m_po-> _m_lp_toSI.size() != 1 )
     {
         stringstream ss; ss<<"ProcessTProb:_m_lp_fromSI or _m_lp_toSI has size != 1. (at " <<str.get_position()<<")"<<endl; throw E(ss);
@@ -583,10 +583,10 @@ void ParserDPOMDPFormat_Spirit::ProcessTProb::operator()(iterator_t str, iterato
     Index jaI = 0;
     if( sI != _m_po->_m_anyStateIndex &&
         sucSI != _m_po->_m_anyStateIndex &&
-        _m_po->_m_lp_JAI.size() != 1 )
+        _m_po->_m_lp_JAI.size() == 1 )
     {
         jaI = _m_po->_m_lp_JAI[0];
-        _m_po->GetDecPOMDPDiscrete()->SetTransitionProbability(sI, jaI, 
+        _m_po->GetDecPOMDPDiscrete()->SetTransitionProbability(sI, jaI,
                 sucSI, prob);
         if(DEBUG_PARSE)
             cout << "Setting T("<<sI<<","<<jaI<<","<<sucSI<<") = "
@@ -620,8 +620,8 @@ void ParserDPOMDPFormat_Spirit::ProcessTProb::operator()(iterator_t str, iterato
             vector<Index>::iterator sucSI_last = _m_po->_m_lp_toSI.end();
             while(sucSI_it != sucSI_last)
             {
-                sucSI = *sucSI_it; 
-                _m_po->GetDecPOMDPDiscrete()->SetTransitionProbability(sI, jaI, sucSI, 
+                sucSI = *sucSI_it;
+                _m_po->GetDecPOMDPDiscrete()->SetTransitionProbability(sI, jaI, sucSI,
                         prob);
                 if(DEBUG_PARSE)
                     cout << "Setting T("<<sI<<","<<jaI<<","<<sucSI<<") = "<<
@@ -717,7 +717,7 @@ void ParserDPOMDPFormat_Spirit::ProcessTMatrix::operator()(iterator_t str, itera
             }
         }
     }
-    else if(_m_po->_m_lp_type == IDENTITY)    
+    else if(_m_po->_m_lp_type == IDENTITY)
     {
         Index jaI = 0;
         for(Index sI = 0; sI < nrS; sI++)
@@ -787,7 +787,7 @@ void ParserDPOMDPFormat_Spirit::ProcessOProb::operator()(iterator_t str, iterato
     if(        _m_po-> _m_lp_toSI.size() != 1 )
     {
         stringstream ss; ss<<"ProcessOProb: _m_lp_toSI has size != 1. (at " <<str.get_position()<<")"<<endl; throw E(ss);
-    }    
+    }
     if(        _m_po->_m_lp_JOI.size() <= 0 )
     {
         stringstream ss; ss<<"ProcessOProb: _m_lp_JOI has size <= 0. (at " <<str.get_position()<<")"<<endl; throw E(ss);
@@ -799,7 +799,7 @@ void ParserDPOMDPFormat_Spirit::ProcessOProb::operator()(iterator_t str, iterato
         _m_po->_m_lp_toSI.clear();
         for(Index si=0; si < _m_po->GetDecPOMDPDiscrete()->GetNrStates();si++)
             _m_po->_m_lp_toSI.push_back(si);
-    }    
+    }
     if( joI == _m_po->_m_anyJOIndex ) //if '*' -> replace by list of all joint obs.indices
     {
         _m_po->_m_lp_JOI.clear();
@@ -823,7 +823,7 @@ void ParserDPOMDPFormat_Spirit::ProcessOProb::operator()(iterator_t str, iterato
                 _m_lp_toSI.end();
             while(sucSI_it != sucSI_last)
             {
-                sucSI = *sucSI_it; 
+                sucSI = *sucSI_it;
                 _m_po->GetDecPOMDPDiscrete()->SetObservationProbability
                     (jaI, sucSI, joI, prob);
                 if(DEBUG_PARSE)
@@ -859,7 +859,7 @@ void ParserDPOMDPFormat_Spirit::ProcessORow::operator()(iterator_t str, iterator
         _m_po->_m_lp_toSI.clear();
         for(Index si=0; si < nrS; si++)
             _m_po->_m_lp_toSI.push_back(si);
-    }    
+    }
     vector<Index>::iterator sI_it = _m_po->_m_lp_toSI.begin();
     vector<Index>::iterator sI_last = _m_po->_m_lp_toSI.end();
     while(sI_it != sI_last)
@@ -961,27 +961,27 @@ void ParserDPOMDPFormat_Spirit::ProcessR::operator()(iterator_t str, iterator_t 
     if(        _m_po-> _m_lp_fromSI.size() != 1 )
     {
         stringstream ss; ss<<"ProcessR: _m_lp_fromSI has size != 1. (at " <<str.get_position()<<")"<<endl; throw E(ss);
-    }   
+    }
     if(        _m_po-> _m_lp_toSI.size() != 1 )
     {
         stringstream ss; ss<<"ProcessR: _m_lp_toSI has size != 1. (at " <<str.get_position()<<")"<<endl; throw E(ss);
-    }    
+    }
     size_t nrS =  _m_po->GetDecPOMDPDiscrete()->GetNrStates();
     //size_t nrJO = _m_po->GetDecPOMDPDiscrete()->GetNrJointObservations();
     Index sucSI = _m_po-> _m_lp_toSI[0];
     Index joI = _m_po->_m_lp_JOI[0];
-    if( sucSI == _m_po->_m_anyStateIndex && joI == _m_po->_m_anyJOIndex) 
+    if( sucSI == _m_po->_m_anyStateIndex && joI == _m_po->_m_anyJOIndex)
     {
         // rewards of the form R: ja : s : * : * : %f, so we can simply do
         // AddReward()
-    
+
         if(_m_po->_m_lp_fromSI[0] == _m_po->_m_anyStateIndex)
         {
             _m_po->_m_lp_fromSI.clear();
             for(Index si=0; si < nrS; si++)
                 _m_po->_m_lp_fromSI.push_back(si);
-        }            
-        
+        }
+
         vector<Index>::iterator sI_it = _m_po->_m_lp_fromSI.begin();
         vector<Index>::iterator sI_last = _m_po->_m_lp_fromSI.end();
         while(sI_it != sI_last)
@@ -999,7 +999,7 @@ void ParserDPOMDPFormat_Spirit::ProcessR::operator()(iterator_t str, iterator_t 
             }
             sI_it++;
         }
-    }    
+    }
     else if( joI == _m_po->_m_anyJOIndex ) //but end-state is not ANY_INDEX
     {
         if( _m_po->_m_lp_fromSI[0] == _m_po->_m_anyStateIndex )
@@ -1029,7 +1029,7 @@ void ParserDPOMDPFormat_Spirit::ProcessR::operator()(iterator_t str, iterator_t 
                 vector<Index>::iterator sucSI_last = _m_po->_m_lp_toSI.end();
                 while(sucSI_it != sucSI_last)
                 {
-                    sucSI = *sucSI_it; 
+                    sucSI = *sucSI_it;
                     _m_po->GetDecPOMDPDiscrete()->SetReward(sI, jaI, sucSI, reward);
                     if(DEBUG_PARSE)
                         cout << "Setting R("<<sI<<","<<jaI<<","<<sucSI<<") = "<<
@@ -1077,8 +1077,8 @@ void ParserDPOMDPFormat_Spirit::ProcessR::operator()(iterator_t str, iterator_t 
                     vector<Index>::iterator sucSI_last = _m_po->_m_lp_toSI.end();
                     while(sucSI_it != sucSI_last)
                     {
-                        sucSI = *sucSI_it; 
-                        _m_po->GetDecPOMDPDiscrete()->SetReward(sI, jaI, sucSI,joI, 
+                        sucSI = *sucSI_it;
+                        _m_po->GetDecPOMDPDiscrete()->SetReward(sI, jaI, sucSI,joI,
                             reward);
                         if(DEBUG_PARSE)
                             cout << "Setting R("<<sI<<","<<jaI<<","<<sucSI<<
@@ -1099,7 +1099,7 @@ void ParserDPOMDPFormat_Spirit::ProcessRRow::operator()(iterator_t str, iterator
     if(_m_po->_m_lp_type != DOUBLE)
     {
         stringstream ss; ss<<"ProcessRRow:last parsed type should be a double. (at " <<str.get_position()<<")"<<endl; throw E(ss);
-    }   
+    }
     //an actual matrix was parsed, check curMatrix size
     if( _m_po->_m_lp_toSI.size() != 1 )
     {
@@ -1128,7 +1128,7 @@ void ParserDPOMDPFormat_Spirit::ProcessRRow::operator()(iterator_t str, iterator
         _m_po->_m_lp_toSI.clear();
         for(Index si=0; si < nrS; si++)
             _m_po->_m_lp_toSI.push_back(si);
-    }    
+    }
 
     vector<Index>::iterator sI_it = _m_po->_m_lp_fromSI.begin();
     vector<Index>::iterator sI_last = _m_po->_m_lp_fromSI.end();
@@ -1145,9 +1145,9 @@ void ParserDPOMDPFormat_Spirit::ProcessRRow::operator()(iterator_t str, iterator
             while(sucSI_it != sucSI_last)
             {
                 Index sucSI = *sucSI_it;
-                for(Index joI=0; joI < nrJO; joI++) 
+                for(Index joI=0; joI < nrJO; joI++)
                 {
-                    _m_po->GetDecPOMDPDiscrete()->SetReward(sI, jaI, sucSI,joI, 
+                    _m_po->GetDecPOMDPDiscrete()->SetReward(sI, jaI, sucSI,joI,
                         row[joI]);
                     if(DEBUG_PARSE)
                         cout << "Setting R("<<sI<<","<<jaI<<","<<sucSI<<
@@ -1168,7 +1168,7 @@ void ParserDPOMDPFormat_Spirit::ProcessRMatrix::operator()(iterator_t str, itera
     if(_m_po->_m_lp_type != DOUBLE)
     {
         stringstream ss; ss<<"ProcessRMatrix:last parsed type should be a double. (at " <<str.get_position()<<")"<<endl; throw E(ss);
-    }   
+    }
     //an actual matrix was parsed, check curMatrix size
     if(!_m_po->IsDimensionOfMatrix(nrS,nrJO))
     {
@@ -1195,14 +1195,14 @@ void ParserDPOMDPFormat_Spirit::ProcessRMatrix::operator()(iterator_t str, itera
             Index jaI = *jaI_it;
             for(Index sucSI=0; sucSI<nrS; sucSI++)
             {
-                for(Index joI=0; joI < nrJO; joI++) 
+                for(Index joI=0; joI < nrJO; joI++)
                 {
-                    _m_po->GetDecPOMDPDiscrete()->SetReward(sI, jaI, sucSI,joI, 
+                    _m_po->GetDecPOMDPDiscrete()->SetReward(sI, jaI, sucSI,joI,
                         _m_po->_m_curMatrix[sucSI][joI]);
                     if(DEBUG_PARSE)
                     {
                         cout << "Setting R(" << sI << "," << jaI <<"," << sucSI;
-                        cout << "," << joI << ") = " << 
+                        cout << "," << joI << ") = " <<
                             _m_po->_m_curMatrix[sucSI][joI] << endl;
                     }
                 }
@@ -1214,4 +1214,4 @@ void ParserDPOMDPFormat_Spirit::ProcessRMatrix::operator()(iterator_t str, itera
 }
 
 
-}// end namespace DPOMDPFormatParsing 
+}// end namespace DPOMDPFormatParsing
