@@ -581,18 +581,21 @@ void ParserDPOMDPFormat_Spirit::ProcessTProb::operator()(iterator_t str, iterato
     Index sI = _m_po->_m_lp_fromSI[0];
     Index sucSI = _m_po-> _m_lp_toSI[0];
     Index jaI = 0;
+    /* redundant - this simple setting is dealt with appropriately with the complex situation
+     * code below.
     if( sI != _m_po->_m_anyStateIndex &&
         sucSI != _m_po->_m_anyStateIndex &&
-        _m_po->_m_lp_JAI.size() != 1 )
+        _m_po->_m_lp_JAI.size() == 1 )
     {
         jaI = _m_po->_m_lp_JAI[0];
         _m_po->GetDecPOMDPDiscrete()->SetTransitionProbability(sI, jaI, 
                 sucSI, prob);
         if(DEBUG_PARSE)
-            cout << "Setting T("<<sI<<","<<jaI<<","<<sucSI<<") = "
+            cout << "Setting T(sI="<<sI<<",jaI="<<jaI<<",sucSI="<<sucSI<<") = "
                 <<prob<<endl;
         return;
     }
+     * */
     //one or more wildcards: complex situation
     if( sI == _m_po->_m_anyStateIndex )
     {
