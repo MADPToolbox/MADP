@@ -138,12 +138,12 @@ void BayesianGameBase::Initialize()
         GetNrJointPolicies();
     }
     catch(EOverflow& e){ 
-        cout << "Warning, joint policy indices are overflowing" << endl;
+        cout << "BayesianGameBase::Initialize: Warning, joint policy indices are overflowing (don't rely on enumaration of all joint policies!)" << endl;
     }
     if(_m_JToverflow)
-        cout << "Warning, joint types are overflowing" << endl;
+        cout << "BayesianGameBase::Initialize: Warning, joint types are overflowing" << endl;
     if(_m_JAoverflow)
-        cout << "Warning, joint actions are overflowing" << endl;
+        cout << "BayesianGameBase::Initialize: Warning, joint actions are overflowing" << endl;
 
     _m_initialized=true;
 }

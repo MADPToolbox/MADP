@@ -304,7 +304,7 @@ class GeneralizedMAAStarPlanner :
                 _m_max_expanded_childs.at(ts) += bgips->GetBGIPI()->GetNrJointPolicies();
             }
             catch(EOverflow& e){ 
-                std::cout << "Warning, joint policy indices are overflowing, max expanded children will be set to 0" << std::endl;
+                std::cout << "GeneralizedMAAStarPlanner: Warning, joint policy indices are overflowing, max expanded children will be set to 0" << std::endl;
                 _m_max_expanded_childs.at(ts) = 0;
             }
 
