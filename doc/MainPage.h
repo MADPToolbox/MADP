@@ -1,3 +1,5 @@
+// $Id$
+
 // This file contains the text of the first page of the
 // Doxygen-generated documentation. The file is called .h so doxygen
 // will process it.
