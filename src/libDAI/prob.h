@@ -528,7 +528,7 @@ namespace libDAI {
             bool hasNaNs() const {
                 bool NaNs = false;
                 for( size_t i = 0; i < size() && !NaNs; i++ ) 
-                    if( isnan( _p[i] ) )
+                    if( std::isnan( _p[i] ) )
                         NaNs = true;
                 return NaNs;
             }
